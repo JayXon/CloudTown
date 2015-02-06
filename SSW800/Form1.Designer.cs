@@ -45,7 +45,7 @@
             this.Quit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Quit.Font = new System.Drawing.Font("Courier New", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Quit.ForeColor = System.Drawing.Color.Goldenrod;
-            this.Quit.Location = new System.Drawing.Point(540, 563);
+            this.Quit.Location = new System.Drawing.Point(168, 495);
             this.Quit.Name = "Quit";
             this.Quit.Size = new System.Drawing.Size(200, 48);
             this.Quit.TabIndex = 0;
@@ -61,7 +61,7 @@
             this.Credits.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Credits.Font = new System.Drawing.Font("Courier New", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Credits.ForeColor = System.Drawing.Color.Goldenrod;
-            this.Credits.Location = new System.Drawing.Point(540, 474);
+            this.Credits.Location = new System.Drawing.Point(168, 406);
             this.Credits.Name = "Credits";
             this.Credits.Size = new System.Drawing.Size(200, 48);
             this.Credits.TabIndex = 1;
@@ -76,7 +76,7 @@
             this.Settings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Settings.Font = new System.Drawing.Font("Courier New", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Settings.ForeColor = System.Drawing.Color.Goldenrod;
-            this.Settings.Location = new System.Drawing.Point(540, 364);
+            this.Settings.Location = new System.Drawing.Point(168, 311);
             this.Settings.Name = "Settings";
             this.Settings.Size = new System.Drawing.Size(200, 48);
             this.Settings.TabIndex = 2;
@@ -92,7 +92,7 @@
             this.Play.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Play.Font = new System.Drawing.Font("Courier New", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Play.ForeColor = System.Drawing.Color.Goldenrod;
-            this.Play.Location = new System.Drawing.Point(540, 258);
+            this.Play.Location = new System.Drawing.Point(168, 220);
             this.Play.Name = "Play";
             this.Play.Size = new System.Drawing.Size(200, 48);
             this.Play.TabIndex = 3;
@@ -112,9 +112,11 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel1.Controls.Add(this.Quit);
+            this.panel1.Controls.Add(this.Credits);
+            this.panel1.Controls.Add(this.Settings);
+            this.panel1.Controls.Add(this.Play);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(372, 59);
             this.panel1.Name = "panel1";
@@ -123,15 +125,11 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
             this.CancelButton = this.Quit;
             this.ClientSize = new System.Drawing.Size(1254, 649);
-            this.Controls.Add(this.Play);
-            this.Controls.Add(this.Settings);
-            this.Controls.Add(this.Credits);
-            this.Controls.Add(this.Quit);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form1";
