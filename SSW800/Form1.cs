@@ -115,6 +115,7 @@ namespace SSW800
             {
                 fs = new FileStream(file, FileMode.Create);
                 BinaryFormatter formatter = new BinaryFormatter();
+                formatter.TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded;
                 formatter.Serialize(fs, quizes);
             }
             catch (Exception e)
