@@ -88,6 +88,7 @@
             this.Settings.TabIndex = 2;
             this.Settings.Text = "SETTINGS";
             this.Settings.UseVisualStyleBackColor = false;
+            this.Settings.Click += new System.EventHandler(this.Settings_Click);
             // 
             // Play
             // 

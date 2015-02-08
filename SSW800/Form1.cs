@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,8 +16,9 @@ namespace SSW800
 {
     public partial class Form1 : Form
     {
-        private List<quiz> quizes = new List<quiz>();
+        private List<quiz> quizes = null;
 
+        [Serializable()]
         struct quiz
         {
             public int ID;
@@ -42,9 +45,10 @@ namespace SSW800
             try
             {
                 Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
-                Workbook workbook = app.Workbooks.Open(System.IO.Directory.GetCurrentDirectory() + "\\" + file);
+                Workbook workbook = app.Workbooks.Open(file);
                 Worksheet worksheet = workbook.Worksheets[1];
                 int rows = worksheet.Rows.CurrentRegion.EntireRow.Count;
+                quizes = new List<quiz>();
                 for (int i = 2; i <= rows; i++)
                 {
                     quiz Quiz = new quiz();
@@ -73,6 +77,59 @@ namespace SSW800
                 MessageBox.Show(e.Message);
             }
         } // End LoadQuizFromExcelFile
+
+        /// <summary>
+        /// Read quiz from binary file
+        /// </summary>
+        /// <param name="file"></param>
+        private void LoadQuizFromBinaryFile(string file)
+        {
+            FileStream fs = null;
+            try
+            {
+                fs = new FileStream(file, FileMode.Open);
+                BinaryFormatter formatter = new BinaryFormatter();
+                quizes = (List<quiz>)formatter.Deserialize(fs);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            finally
+            {
+                if (fs != null)
+                {
+                    fs.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save quiz to binary file
+        /// </summary>
+        /// <param name="file"></param>
+        private void SaveQuizToBinaryFile(string file)
+        {
+            FileStream fs = null;
+            try
+            {
+                fs = new FileStream(file, FileMode.Create);
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(fs, quizes);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            finally
+            {
+                if (fs != null)
+                {
+                    fs.Close();
+                }
+            }
+        }
+
 
         /// <summary>
         /// Show a quiz on screen
@@ -134,9 +191,34 @@ namespace SSW800
 
         private void Play_Click(object sender, EventArgs e)
         {
-            LoadQuizFromExcelFile("Questions.xlsx");
+            if (quizes == null)
+            {
+                LoadQuizFromBinaryFile("quiz.dat");
+                if (quizes == null)
+                {
+                    return;
+                }
+            }
             MenuPanel.Hide();
             ShowQuiz();
+        }
+
+        private void Settings_Click(object sender, EventArgs e)
+        {
+            // convert quizes in Excel to binary file
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Excel files (xls, xlsx)|*.xls;*.xlsx|All files|*.*";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                LoadQuizFromExcelFile(openFileDialog1.FileName);
+                if (quizes == null)
+                {
+                    return;
+                }
+                SaveQuizToBinaryFile("quiz.dat");
+
+                MessageBox.Show("Done.");
+            }
         }
 
         private void Exit_Click(object sender, EventArgs e)
