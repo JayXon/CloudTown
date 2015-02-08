@@ -1,5 +1,4 @@
-﻿//SLAVIK
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,146 +9,139 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Office.Interop.Excel;
+
 namespace SSW800
 {
     public partial class Form1 : Form
     {
-        private Microsoft.Office.Interop.Excel.Application app = null;
-        private Workbook workbook = null;
-        private Worksheet worksheet = null;
+        private List<quiz> quizes = new List<quiz>();
 
-        ArrayList quizes = new ArrayList();
-        /// <summary>
-        /// Opens a given Excel file.
-        /// </summary>
-        /// <param name="file"></param>
         struct quiz
         {
-           
-           public int ID;
+            public int ID;
             public string topic;
             public string question;
             public string hint;
             public int difficulty;
-            public ArrayList correctAnswers;
-            public ArrayList wrongAnswers;
+            public List<string> correctAnswers;
+            public List<string> wrongAnswers;
         }
-        private void openExcelApp(string file)
-        {
-            try
-            {
-                app = new Microsoft.Office.Interop.Excel.Application();
-                app.Visible = false;
-                workbook = app.Workbooks.Open(System.IO.Directory.GetCurrentDirectory() + "\\" + file); 
-                worksheet = (Worksheet)workbook.Worksheets[1];
-                readFromExcelFile();
-            }
 
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        } // End  openExcelApp  
-
-        /// <summary>
-        /// Reads info from Questions.xlsx file
-        /// </summary>
-        private void readFromExcelFile()
-        {
-          int rows = worksheet.Rows.CurrentRegion.EntireRow.Count;
-          for (int i = 2; i <= rows ; i++)
-          {
-              quiz Quiz = new quiz();
-              Quiz.ID = (int)(worksheet.Cells[i, 1] as Range).Value;
-              Quiz.topic = (string)(worksheet.Cells[i, 2] as Range).Value;
-              Quiz.question = (string)(worksheet.Cells[i, 3] as Range).Value;
-              Quiz.hint = (string)(worksheet.Cells[i, 4] as Range).Value;
-              Quiz.difficulty = (int)(worksheet.Cells[i, 1] as Range).Value;
-              int numberOfCorrect = (int)(worksheet.Cells[i, 1] as Range).Value;
-              Quiz.correctAnswers = new ArrayList();
-              for (int j = 7; j < 7 + numberOfCorrect; j++)
-              {
-                  Quiz.correctAnswers.Add((string)(worksheet.Cells[i, j] as Range).Value);
-              }
-              Quiz.wrongAnswers = new ArrayList();
-              for (int j = 7 + numberOfCorrect; (worksheet.Cells[i, j] as Range).Value != null ; j++)
-              {
-                  Quiz.wrongAnswers.Add((string)(worksheet.Cells[i, j] as Range).Value);
-              }
-
-              //MessageBox.Show("Everything is alright");
-
-              quizes.Add(Quiz);
-             
-          }
-        }// End readFromExcelFile
-
-        private void showQuiz()
-        {
-            System.Windows.Forms.Label question = new System.Windows.Forms.Label();
-            question.AutoSize = true;
-            question.Text = ((quiz)quizes[0]).question;
-            question.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            question.ForeColor = System.Drawing.Color.Goldenrod;
-            question.Location = new System.Drawing.Point(64, 48);
-            Controls.Add(question);
-
-            Random rnd = new Random();
-            System.Windows.Forms.Button []answer = new System.Windows.Forms.Button[4];
-            int numberOfCorrect = rnd.Next(1, 3);
-            numberOfCorrect = Math.Min(numberOfCorrect, ((quiz)quizes[0]).correctAnswers.Count);
-            string[] selectedAnswers = new string[4];
-            HashSet<int> selectedCorrectAnswersIndex = new HashSet<int>();
-            HashSet<int> selectedWrongAnswersIndex = new HashSet<int>();
-            for (int i = 0; i < numberOfCorrect; i++)
-            {
-                int j = rnd.Next(0, 4);
-                while (selectedAnswers[j] != null)
-                    j = (j + 1) % 4;
-                int k = rnd.Next(0, ((quiz)quizes[0]).correctAnswers.Count);
-                while (selectedCorrectAnswersIndex.Contains(k))
-                    k = (k + 1) % ((quiz)quizes[0]).correctAnswers.Count;
-                selectedCorrectAnswersIndex.Add(k);
-                selectedAnswers[j] = (string)((quiz)quizes[0]).correctAnswers[k];
-            }
-            for (int i = numberOfCorrect; i < 4; i++)
-            {
-                int j = rnd.Next(0, 4);
-                while (selectedAnswers[j] != null)
-                    j = (j + 1) % 4;
-                int k = rnd.Next(0, ((quiz)quizes[0]).wrongAnswers.Count);
-                while (selectedWrongAnswersIndex.Contains(k))
-                    k = (k + 1) % ((quiz)quizes[0]).wrongAnswers.Count;
-                selectedWrongAnswersIndex.Add(k);
-                selectedAnswers[j] = (string)((quiz)quizes[0]).wrongAnswers[k];
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                answer[i] = new System.Windows.Forms.Button();
-                answer[i].AutoSize = true;
-                answer[i].Text = selectedAnswers[i];
-                answer[i].Font = new System.Drawing.Font("Courier New", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                answer[i].ForeColor = System.Drawing.Color.Goldenrod;
-                answer[i].Location = new System.Drawing.Point(64, 48 + 96 + 48 * i);
-                Controls.Add(answer[i]);
-
-            }
-        }
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void Exit_Click(object sender, EventArgs e)
+
+        /// <summary>
+        /// Reads quiz from Excel file
+        /// </summary>
+        /// <param name="file"></param>
+        private void LoadQuizFromExcelFile(string file)
         {
-            this.Close();
+            try
+            {
+                Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                Workbook workbook = app.Workbooks.Open(System.IO.Directory.GetCurrentDirectory() + "\\" + file);
+                Worksheet worksheet = workbook.Worksheets[1];
+                int rows = worksheet.Rows.CurrentRegion.EntireRow.Count;
+                for (int i = 2; i <= rows; i++)
+                {
+                    quiz Quiz = new quiz();
+                    Quiz.ID = (int)worksheet.Cells[i, 1].Value;
+                    Quiz.topic = worksheet.Cells[i, 2].Value;
+                    Quiz.question = worksheet.Cells[i, 3].Value;
+                    Quiz.hint = worksheet.Cells[i, 4].Value;
+                    Quiz.difficulty = (int)(worksheet.Cells[i, 5].Value ?? -1);
+                    int numberOfCorrect = (int)(worksheet.Cells[i, 6].Value ?? -1);
+                    Quiz.correctAnswers = new List<string>();
+                    for (int j = 7; j < 7 + numberOfCorrect; j++)
+                    {
+                        Quiz.correctAnswers.Add(worksheet.Cells[i, j].Value);
+                    }
+                    Quiz.wrongAnswers = new List<string>();
+                    for (int j = 7 + numberOfCorrect; worksheet.Cells[i, j].Value != null; j++)
+                    {
+                        Quiz.wrongAnswers.Add(worksheet.Cells[i, j].Value);
+                    }
+
+                    quizes.Add(Quiz);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        } // End LoadQuizFromExcelFile
+
+        /// <summary>
+        /// Show a quiz on screen
+        /// </summary>
+        private void ShowQuiz()
+        {
+            // Show question
+            System.Windows.Forms.Label question = new System.Windows.Forms.Label();
+            question.AutoSize = true;
+            question.Text = quizes[0].question;
+            question.Font = new System.Drawing.Font("Courier New", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            question.ForeColor = System.Drawing.Color.Goldenrod;
+            question.Location = new System.Drawing.Point(64, 48);
+            Controls.Add(question);
+
+            // Randomly select answers, at most 2 correct answers will be selected
+            string[] selectedAnswers = new string[4];
+            Random rnd = new Random();
+            int numberOfCorrect = rnd.Next(1, Math.Min(3, quizes[0].correctAnswers.Count + 1));
+            HashSet<int> selectedIndex = new HashSet<int>();
+            List<string> answerList = quizes[0].correctAnswers;
+            for (int i = 0; i < 4; i++)
+            {
+                int j = rnd.Next(0, 4);
+                while (selectedAnswers[j] != null)
+                {
+                    j = (j + 1) % 4;
+                }
+                if (i == numberOfCorrect)
+                {
+                    selectedIndex.Clear();
+                    answerList = quizes[0].wrongAnswers;
+                }
+                int k = rnd.Next(0, answerList.Count);
+                while (selectedIndex.Contains(k))
+                {
+                    k = (k + 1) % answerList.Count;
+                }
+                selectedIndex.Add(k);
+                selectedAnswers[j] = answerList[k];
+            }
+
+            // Show answers button
+            System.Windows.Forms.Button[] answersButton = new System.Windows.Forms.Button[4];
+            for (int i = 0; i < 4; i++)
+            {
+                answersButton[i] = new System.Windows.Forms.Button();
+                answersButton[i].AutoSize = true;
+                answersButton[i].Text = selectedAnswers[i];
+                answersButton[i].Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                answersButton[i].ForeColor = System.Drawing.Color.Goldenrod;
+                answersButton[i].BackColor = System.Drawing.Color.Transparent;
+                answersButton[i].FlatAppearance.BorderSize = 0;
+                answersButton[i].FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                answersButton[i].Location = new System.Drawing.Point(64, 48 + 96 + 48 * i);
+                Controls.Add(answersButton[i]);
+            }
         }
 
         private void Play_Click(object sender, EventArgs e)
         {
-            openExcelApp("Questions.xlsx");
-            panel1.Hide();
-            showQuiz();
+            LoadQuizFromExcelFile("Questions.xlsx");
+            MenuPanel.Hide();
+            ShowQuiz();
+        }
+
+        private void Exit_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
