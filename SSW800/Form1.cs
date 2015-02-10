@@ -10,7 +10,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Office.Interop.Excel;
 
 namespace SSW800
 {
@@ -35,7 +34,7 @@ namespace SSW800
             InitializeComponent();
         }
 
-
+#if DEBUG
         /// <summary>
         /// Reads quiz from Excel file
         /// </summary>
@@ -45,8 +44,8 @@ namespace SSW800
             try
             {
                 Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
-                Workbook workbook = app.Workbooks.Open(file);
-                Worksheet worksheet = workbook.Worksheets[1];
+                Microsoft.Office.Interop.Excel.Workbook workbook = app.Workbooks.Open(file);
+                Microsoft.Office.Interop.Excel.Worksheet worksheet = workbook.Worksheets[1];
                 int rows = worksheet.Rows.CurrentRegion.EntireRow.Count;
                 quizes = new List<quiz>();
                 for (int i = 2; i <= rows; i++)
@@ -78,31 +77,6 @@ namespace SSW800
             }
         } // End LoadQuizFromExcelFile
 
-        /// <summary>
-        /// Read quiz from binary file
-        /// </summary>
-        /// <param name="file"></param>
-        private void LoadQuizFromBinaryFile(string file)
-        {
-            FileStream fs = null;
-            try
-            {
-                fs = new FileStream(file, FileMode.Open);
-                BinaryFormatter formatter = new BinaryFormatter();
-                quizes = (List<quiz>)formatter.Deserialize(fs);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            finally
-            {
-                if (fs != null)
-                {
-                    fs.Close();
-                }
-            }
-        }
 
         /// <summary>
         /// Save quiz to binary file
@@ -117,6 +91,34 @@ namespace SSW800
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded;
                 formatter.Serialize(fs, quizes);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            finally
+            {
+                if (fs != null)
+                {
+                    fs.Close();
+                }
+            }
+        }
+#endif
+
+
+        /// <summary>
+        /// Read quiz from binary file
+        /// </summary>
+        /// <param name="file"></param>
+        private void LoadQuizFromBinaryFile(string file)
+        {
+            FileStream fs = null;
+            try
+            {
+                fs = new FileStream(file, FileMode.Open);
+                BinaryFormatter formatter = new BinaryFormatter();
+                quizes = (List<quiz>)formatter.Deserialize(fs);
             }
             catch (Exception e)
             {
@@ -206,6 +208,7 @@ namespace SSW800
 
         private void Settings_Click(object sender, EventArgs e)
         {
+#if DEBUG
             // convert quizes in Excel to binary file
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.Filter = "Excel files (xls, xlsx)|*.xls;*.xlsx|All files|*.*";
@@ -220,6 +223,7 @@ namespace SSW800
 
                 MessageBox.Show("Done.");
             }
+#endif
         }
 
         private void Exit_Click(object sender, EventArgs e)
