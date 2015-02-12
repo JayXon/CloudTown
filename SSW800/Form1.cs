@@ -15,9 +15,10 @@ namespace SSW800
 {
     public partial class Form1 : Form
     {
-        private List<quiz> quizes = null;
+        private List<quiz> questions = null;
         System.Windows.Forms.Label question;
         System.Windows.Forms.Button[] answersButton;
+        HashSet<int> AskedQuestions;
 
         [Serializable()]
         struct quiz
@@ -49,7 +50,7 @@ namespace SSW800
                 Microsoft.Office.Interop.Excel.Workbook workbook = app.Workbooks.Open(file);
                 Microsoft.Office.Interop.Excel.Worksheet worksheet = workbook.Worksheets[1];
                 int rows = worksheet.Rows.CurrentRegion.EntireRow.Count;
-                quizes = new List<quiz>();
+                questions = new List<quiz>();
                 for (int i = 2; i <= rows; i++)
                 {
                     quiz Quiz = new quiz();
@@ -70,7 +71,7 @@ namespace SSW800
                         Quiz.wrongAnswers.Add(worksheet.Cells[i, j].Value);
                     }
 
-                    quizes.Add(Quiz);
+                    questions.Add(Quiz);
                 }
             }
             catch (Exception e)
@@ -92,7 +93,7 @@ namespace SSW800
                 fs = new FileStream(file, FileMode.Create);
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.TypeFormat = System.Runtime.Serialization.Formatters.FormatterTypeStyle.TypesWhenNeeded;
-                formatter.Serialize(fs, quizes);
+                formatter.Serialize(fs, questions);
             }
             catch (Exception e)
             {
@@ -121,7 +122,7 @@ namespace SSW800
             {
                 fs = new FileStream(file, FileMode.Open);
                 BinaryFormatter formatter = new BinaryFormatter();
-                quizes = (List<quiz>)formatter.Deserialize(fs);
+                questions = (List<quiz>)formatter.Deserialize(fs);
             }
             catch (Exception e)
             {
@@ -158,11 +159,13 @@ namespace SSW800
                 answersButton[i].BackColor = System.Drawing.Color.Transparent;
                 answersButton[i].FlatAppearance.BorderSize = 0;
                 answersButton[i].FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                answersButton[i].Location = new System.Drawing.Point(64, 48 + 96 + 48 * i);
+                answersButton[i].Location = new System.Drawing.Point(64, 48 + 96 + 64 * i);
                 answersButton[i].Click += new System.EventHandler(this.Answer_Click);
                 answersButton[i].TextAlign = ContentAlignment.MiddleLeft;
                 Controls.Add(answersButton[i]);
             }
+
+            AskedQuestions = new HashSet<int>();
         }
 
 
@@ -171,36 +174,27 @@ namespace SSW800
         /// </summary>
         private void NewQuestion()
         {
-            /*
-            // Show question
-            System.Windows.Forms.Label question = new System.Windows.Forms.Label();
-            question.AutoSize = true;
-            question.Text = quizes[0].question;
-            question.Font = new System.Drawing.Font("Courier New", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            question.ForeColor = System.Drawing.Color.Goldenrod;
-            question.Location = new System.Drawing.Point(64, 48);
-            Controls.Add(question); */
+            Random rnd = new Random();
+            int questionIndex = rnd.Next(0, questions.Count);
 
+            while (AskedQuestions.Contains(questionIndex))
+            {
+                questionIndex = (questionIndex + 1) % questions.Count;
+            }
+            AskedQuestions.Add(questionIndex);
 
-            question.Text = quizes[0].question;
+            question.Text = questions[questionIndex].question;
 
             // Randomly select answers, at most 2 correct answers will be selected
-            string[] selectedAnswers = new string[4];
-            Random rnd = new Random();
-            int numberOfCorrect = rnd.Next(1, Math.Min(3, quizes[0].correctAnswers.Count + 1));
+            int numberOfCorrect = rnd.Next(1, Math.Min(3, questions[questionIndex].correctAnswers.Count + 1));
             HashSet<int> selectedIndex = new HashSet<int>();
-            List<string> answerList = quizes[0].correctAnswers;
+            List<string> answerList = questions[questionIndex].correctAnswers;
             for (int i = 0; i < 4; i++)
             {
-                int j = rnd.Next(0, 4);
-                while (selectedAnswers[j] != null)
-                {
-                    j = (j + 1) % 4;
-                }
                 if (i == numberOfCorrect)
                 {
                     selectedIndex.Clear();
-                    answerList = quizes[0].wrongAnswers;
+                    answerList = questions[questionIndex].wrongAnswers;
                 }
                 int k = rnd.Next(0, answerList.Count);
                 while (selectedIndex.Contains(k))
@@ -208,13 +202,7 @@ namespace SSW800
                     k = (k + 1) % answerList.Count;
                 }
                 selectedIndex.Add(k);
-                selectedAnswers[j] = answerList[k];
-            }
-
-
-            for (int i = 0; i < 4; i++)
-            {
-                answersButton[i].Text = selectedAnswers[i];
+                answersButton[i].Text = answerList[k];
             }
 
             // CHECK Button
@@ -224,10 +212,10 @@ namespace SSW800
 
         private void Play_Click(object sender, EventArgs e)
         {
-            if (quizes == null)
+            if (questions == null)
             {
                 LoadQuizFromBinaryFile("quiz.dat");
-                if (quizes == null)
+                if (questions == null)
                 {
                     return;
                 }
@@ -246,7 +234,7 @@ namespace SSW800
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 LoadQuizFromExcelFile(openFileDialog1.FileName);
-                if (quizes == null)
+                if (questions == null)
                 {
                     return;
                 }
