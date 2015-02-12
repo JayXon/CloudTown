@@ -34,6 +34,7 @@
             this.Play = new System.Windows.Forms.Button();
             this.Title = new System.Windows.Forms.Label();
             this.MenuPanel = new System.Windows.Forms.Panel();
+            this.Check = new System.Windows.Forms.Button();
             this.MenuPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -136,6 +137,16 @@
             this.MenuPanel.Size = new System.Drawing.Size(512, 600);
             this.MenuPanel.TabIndex = 5;
             // 
+            // Check
+            // 
+            this.Check.Location = new System.Drawing.Point(44, 38);
+            this.Check.Name = "Check";
+            this.Check.Size = new System.Drawing.Size(75, 23);
+            this.Check.TabIndex = 6;
+            this.Check.Text = "Check";
+            this.Check.UseVisualStyleBackColor = true;
+            this.Check.Click += new System.EventHandler(this.Check_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -143,6 +154,7 @@
             this.BackColor = System.Drawing.Color.Black;
             this.CancelButton = this.Quit;
             this.ClientSize = new System.Drawing.Size(1280, 720);
+            this.Controls.Add(this.Check);
             this.Controls.Add(this.MenuPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -163,6 +175,7 @@
         private System.Windows.Forms.Button Play;
         private System.Windows.Forms.Label Title;
         private System.Windows.Forms.Panel MenuPanel;
+        private System.Windows.Forms.Button Check;
     }
 }
 

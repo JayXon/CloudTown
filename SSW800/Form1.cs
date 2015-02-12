@@ -16,6 +16,8 @@ namespace SSW800
     public partial class Form1 : Form
     {
         private List<quiz> quizes = null;
+        System.Windows.Forms.Label question;
+        System.Windows.Forms.Button[] answersButton;
 
         [Serializable()]
         struct quiz
@@ -108,7 +110,8 @@ namespace SSW800
 
 
         /// <summary>
-        /// Read quiz from binary file
+        /// Read quiz from binary file.
+        /// Called when the user presses PLAY.
         /// </summary>
         /// <param name="file"></param>
         private void LoadQuizFromBinaryFile(string file)
@@ -133,12 +136,42 @@ namespace SSW800
             }
         }
 
+        private void InitializeQuiz()
+        {
+            // Show question
+            question = new System.Windows.Forms.Label();
+            question.AutoSize = true;
+            question.Font = new System.Drawing.Font("Courier New", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            question.ForeColor = System.Drawing.Color.Goldenrod;
+            question.Location = new System.Drawing.Point(64, 48);
+            Controls.Add(question);
+
+
+            // Show answers button
+            answersButton = new System.Windows.Forms.Button[4];
+            for (int i = 0; i < 4; i++)
+            {
+                answersButton[i] = new System.Windows.Forms.Button();
+                answersButton[i].AutoSize = true;
+                answersButton[i].Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                answersButton[i].ForeColor = System.Drawing.Color.Goldenrod;
+                answersButton[i].BackColor = System.Drawing.Color.Transparent;
+                answersButton[i].FlatAppearance.BorderSize = 0;
+                answersButton[i].FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+                answersButton[i].Location = new System.Drawing.Point(64, 48 + 96 + 48 * i);
+                answersButton[i].Click += new System.EventHandler(this.Answer_Click);
+                answersButton[i].TextAlign = ContentAlignment.MiddleLeft;
+                Controls.Add(answersButton[i]);
+            }
+        }
+
 
         /// <summary>
-        /// Show a quiz on screen
+        /// Shows a Question on screen.
         /// </summary>
-        private void ShowQuiz()
+        private void NewQuestion()
         {
+            /*
             // Show question
             System.Windows.Forms.Label question = new System.Windows.Forms.Label();
             question.AutoSize = true;
@@ -146,7 +179,10 @@ namespace SSW800
             question.Font = new System.Drawing.Font("Courier New", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             question.ForeColor = System.Drawing.Color.Goldenrod;
             question.Location = new System.Drawing.Point(64, 48);
-            Controls.Add(question);
+            Controls.Add(question); */
+
+
+            question.Text = quizes[0].question;
 
             // Randomly select answers, at most 2 correct answers will be selected
             string[] selectedAnswers = new string[4];
@@ -175,21 +211,15 @@ namespace SSW800
                 selectedAnswers[j] = answerList[k];
             }
 
-            // Show answers button
-            System.Windows.Forms.Button[] answersButton = new System.Windows.Forms.Button[4];
+
             for (int i = 0; i < 4; i++)
             {
-                answersButton[i] = new System.Windows.Forms.Button();
-                answersButton[i].AutoSize = true;
                 answersButton[i].Text = selectedAnswers[i];
-                answersButton[i].Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                answersButton[i].ForeColor = System.Drawing.Color.Goldenrod;
-                answersButton[i].BackColor = System.Drawing.Color.Transparent;
-                answersButton[i].FlatAppearance.BorderSize = 0;
-                answersButton[i].FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                answersButton[i].Location = new System.Drawing.Point(64, 48 + 96 + 48 * i);
-                Controls.Add(answersButton[i]);
             }
+
+            // CHECK Button
+            //System.Windows.Forms.Button checkButton = new System.Windows.Forms.Button();
+            //Controls.Add(checkButton);
         }
 
         private void Play_Click(object sender, EventArgs e)
@@ -203,7 +233,8 @@ namespace SSW800
                 }
             }
             MenuPanel.Hide();
-            ShowQuiz();
+            InitializeQuiz();
+            NewQuestion();
         }
 
         private void Settings_Click(object sender, EventArgs e)
@@ -229,6 +260,17 @@ namespace SSW800
         private void Exit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void Check_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("hello");
+        }
+
+        private void Answer_Click(object sender, EventArgs e)
+        {
+            // MessageBox.Show("WRONG!");
+            NewQuestion();
         }
     }
 }
