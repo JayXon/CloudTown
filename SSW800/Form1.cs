@@ -17,6 +17,9 @@ namespace SSW800
     {
         private List<quiz> questions = null;
         HashSet<int> AskedQuestions;
+        private bool[] correctAnswers = new bool[4];
+        private static int gameWindowX;
+        private static int gameWindowY;
 
         [Serializable()]
         struct quiz
@@ -33,6 +36,11 @@ namespace SSW800
         public Form1()
         {
             InitializeComponent();
+
+            // Get Screen Resolution
+            gameWindowX = Screen.PrimaryScreen.WorkingArea.Width;
+            gameWindowY = Screen.PrimaryScreen.WorkingArea.Height;
+            // MessageBox.Show("Width is " + gameWindowX + ", height is " + gameWindowY);
         }
 
 #if DEBUG
@@ -145,10 +153,11 @@ namespace SSW800
 
 
         /// <summary>
-        /// Shows a Question on screen.
+        /// Generates a new Question on the screen.
         /// </summary>
         private void NewQuestion()
         {
+            // Have we asked too many questions?
             if (AskedQuestions.Count == questions.Count)
             {
                 MessageBox.Show("Run out of questions!");
@@ -157,45 +166,84 @@ namespace SSW800
                 return;
             }
 
+            // Randomly select a question from questions List.
             Random rnd = new Random();
-
-            // Randomly select a question
             int questionIndex = rnd.Next(0, questions.Count);
 
+            // Have we asked this question before?
             while (AskedQuestions.Contains(questionIndex))
             {
                 questionIndex = (questionIndex + 1) % questions.Count;
             }
+            // This question has now been asked, so we add it to AskedQuestions.
             AskedQuestions.Add(questionIndex);
 
+            // Display the Question to the screen.
             question.Text = questions[questionIndex].question;
-
 
             // Randomly select answers, at most 2 correct answers will be selected
             int numberOfCorrect = rnd.Next(1, Math.Min(3, questions[questionIndex].correctAnswers.Count + 1));
             HashSet<int> selectedIndex = new HashSet<int>();
             List<string> answerList = questions[questionIndex].correctAnswers;
 
-            //answersCheckedListBox.Items.Clear();
+            // Clear the previous answers. Add four empty answers.
             AnswersGrid.Rows.Clear();
+            AnswersGrid.Rows.Add(4);
+
+            // Select an index in the grid row and then select an index from the correct answers list.
+            // Put the answers to the grid row.
+            // Then, repeat for wrong answers.
             for (int i = 0; i < 4; i++)
             {
+                int gridRowIndex = rnd.Next(0, 4);
+                while (AnswersGrid.Rows[gridRowIndex].Cells[0].Value != null)
+                {
+                    gridRowIndex = (gridRowIndex + 1) % 4;
+                }
+                correctAnswers[gridRowIndex] = i < numberOfCorrect;
                 if (i == numberOfCorrect)
                 {
                     selectedIndex.Clear();
                     answerList = questions[questionIndex].wrongAnswers;
                 }
-                int k = rnd.Next(0, answerList.Count);
-                while (selectedIndex.Contains(k))
+                int answerListIndex = rnd.Next(0, answerList.Count);
+                while (selectedIndex.Contains(answerListIndex))
                 {
-                    k = (k + 1) % answerList.Count;
+                    answerListIndex = (answerListIndex + 1) % answerList.Count;
                 }
-                selectedIndex.Add(k);
+                selectedIndex.Add(answerListIndex);
 
-                //answersCheckedListBox.Items.Add(answerList[k]);
-                AnswersGrid.Rows.Add(false, answerList[k]);
+                AnswersGrid.Rows[gridRowIndex].Cells[0].Value = false;
+                AnswersGrid.Rows[gridRowIndex].Cells[1].Value = answerList[answerListIndex];
             }
 
+        }
+
+        /// <summary>
+        /// Checks your answer.
+        /// </summary>
+        private void VerifyAnswer()
+        {
+            /* WE NEED...
+             * 
+             * to know what the player chose
+             *      - That's in the DataGrid
+             * to know the correct answers
+             *      - we need an array for that
+             * */
+            bool IsCorrect = true;
+            for (int i = 0; i < 4; i++)
+            {
+                if ((bool)AnswersGrid.Rows[i].Cells[0].Value != correctAnswers[i])
+                {
+                    IsCorrect = false;
+                    break;
+                }
+
+            }
+            MessageBox.Show("" + IsCorrect);
+            // temporary
+            NewQuestion();
         }
 
         private void Play_Click(object sender, EventArgs e)
@@ -240,7 +288,8 @@ namespace SSW800
 
         private void Check_Click(object sender, EventArgs e)
         {
-            NewQuestion();
+            VerifyAnswer();
+            // NewQuestion();
         }
 
         void AnswersGrid_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
