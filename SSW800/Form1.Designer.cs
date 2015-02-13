@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Quit = new System.Windows.Forms.Button();
             this.Credits = new System.Windows.Forms.Button();
             this.Settings = new System.Windows.Forms.Button();
@@ -35,7 +36,15 @@
             this.Title = new System.Windows.Forms.Label();
             this.MenuPanel = new System.Windows.Forms.Panel();
             this.Check = new System.Windows.Forms.Button();
+            this.answersCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.QuestionPanel = new System.Windows.Forms.Panel();
+            this.AnswersGrid = new System.Windows.Forms.DataGridView();
+            this.Checkbox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Answer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.question = new System.Windows.Forms.Label();
             this.MenuPanel.SuspendLayout();
+            this.QuestionPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AnswersGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // Quit
@@ -47,10 +56,10 @@
             this.Quit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Quit.Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Quit.ForeColor = System.Drawing.Color.Goldenrod;
-            this.Quit.Location = new System.Drawing.Point(198, 482);
+            this.Quit.Location = new System.Drawing.Point(173, 480);
             this.Quit.Margin = new System.Windows.Forms.Padding(2);
             this.Quit.Name = "Quit";
-            this.Quit.Size = new System.Drawing.Size(100, 40);
+            this.Quit.Size = new System.Drawing.Size(163, 69);
             this.Quit.TabIndex = 0;
             this.Quit.Text = "QUIT";
             this.Quit.UseVisualStyleBackColor = false;
@@ -65,10 +74,10 @@
             this.Credits.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Credits.Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Credits.ForeColor = System.Drawing.Color.Goldenrod;
-            this.Credits.Location = new System.Drawing.Point(183, 389);
+            this.Credits.Location = new System.Drawing.Point(124, 388);
             this.Credits.Margin = new System.Windows.Forms.Padding(2);
             this.Credits.Name = "Credits";
-            this.Credits.Size = new System.Drawing.Size(135, 40);
+            this.Credits.Size = new System.Drawing.Size(259, 69);
             this.Credits.TabIndex = 1;
             this.Credits.Text = "CREDITS";
             this.Credits.UseVisualStyleBackColor = false;
@@ -82,10 +91,10 @@
             this.Settings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Settings.Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Settings.ForeColor = System.Drawing.Color.Goldenrod;
-            this.Settings.Location = new System.Drawing.Point(173, 296);
+            this.Settings.Location = new System.Drawing.Point(110, 294);
             this.Settings.Margin = new System.Windows.Forms.Padding(2);
             this.Settings.Name = "Settings";
-            this.Settings.Size = new System.Drawing.Size(151, 40);
+            this.Settings.Size = new System.Drawing.Size(291, 69);
             this.Settings.TabIndex = 2;
             this.Settings.Text = "SETTINGS";
             this.Settings.UseVisualStyleBackColor = false;
@@ -102,10 +111,10 @@
             this.Play.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Play.Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Play.ForeColor = System.Drawing.Color.Goldenrod;
-            this.Play.Location = new System.Drawing.Point(198, 205);
+            this.Play.Location = new System.Drawing.Point(173, 198);
             this.Play.Margin = new System.Windows.Forms.Padding(2);
             this.Play.Name = "Play";
-            this.Play.Size = new System.Drawing.Size(100, 40);
+            this.Play.Size = new System.Drawing.Size(163, 69);
             this.Play.TabIndex = 3;
             this.Play.Text = "PLAY";
             this.Play.UseVisualStyleBackColor = false;
@@ -131,7 +140,7 @@
             this.MenuPanel.Controls.Add(this.Settings);
             this.MenuPanel.Controls.Add(this.Play);
             this.MenuPanel.Controls.Add(this.Title);
-            this.MenuPanel.Location = new System.Drawing.Point(384, 60);
+            this.MenuPanel.Location = new System.Drawing.Point(372, 44);
             this.MenuPanel.Margin = new System.Windows.Forms.Padding(2);
             this.MenuPanel.Name = "MenuPanel";
             this.MenuPanel.Size = new System.Drawing.Size(512, 600);
@@ -139,13 +148,118 @@
             // 
             // Check
             // 
-            this.Check.Location = new System.Drawing.Point(44, 38);
+            this.Check.BackColor = System.Drawing.Color.Transparent;
+            this.Check.FlatAppearance.BorderSize = 0;
+            this.Check.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Check.Font = new System.Drawing.Font("Courier New", 19.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Check.ForeColor = System.Drawing.Color.Goldenrod;
+            this.Check.Location = new System.Drawing.Point(1024, 564);
             this.Check.Name = "Check";
-            this.Check.Size = new System.Drawing.Size(75, 23);
+            this.Check.Size = new System.Drawing.Size(162, 70);
             this.Check.TabIndex = 6;
             this.Check.Text = "Check";
-            this.Check.UseVisualStyleBackColor = true;
+            this.Check.UseVisualStyleBackColor = false;
             this.Check.Click += new System.EventHandler(this.Check_Click);
+            // 
+            // answersCheckedListBox
+            // 
+            this.answersCheckedListBox.BackColor = System.Drawing.Color.Black;
+            this.answersCheckedListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.answersCheckedListBox.CheckOnClick = true;
+            this.answersCheckedListBox.Font = new System.Drawing.Font("Courier New", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.answersCheckedListBox.ForeColor = System.Drawing.Color.Goldenrod;
+            this.answersCheckedListBox.FormattingEnabled = true;
+            this.answersCheckedListBox.Location = new System.Drawing.Point(58, 134);
+            this.answersCheckedListBox.Margin = new System.Windows.Forms.Padding(2);
+            this.answersCheckedListBox.Name = "answersCheckedListBox";
+            this.answersCheckedListBox.Size = new System.Drawing.Size(915, 210);
+            this.answersCheckedListBox.TabIndex = 7;
+            this.answersCheckedListBox.ThreeDCheckBoxes = true;
+            // 
+            // QuestionPanel
+            // 
+            this.QuestionPanel.Controls.Add(this.AnswersGrid);
+            this.QuestionPanel.Controls.Add(this.question);
+            this.QuestionPanel.Controls.Add(this.answersCheckedListBox);
+            this.QuestionPanel.Controls.Add(this.Check);
+            this.QuestionPanel.Location = new System.Drawing.Point(18, 22);
+            this.QuestionPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.QuestionPanel.Name = "QuestionPanel";
+            this.QuestionPanel.Size = new System.Drawing.Size(1234, 674);
+            this.QuestionPanel.TabIndex = 8;
+            this.QuestionPanel.Visible = false;
+            // 
+            // AnswersGrid
+            // 
+            this.AnswersGrid.AllowUserToAddRows = false;
+            this.AnswersGrid.AllowUserToDeleteRows = false;
+            this.AnswersGrid.AllowUserToResizeColumns = false;
+            this.AnswersGrid.AllowUserToResizeRows = false;
+            this.AnswersGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.AnswersGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.AnswersGrid.BackgroundColor = System.Drawing.Color.Black;
+            this.AnswersGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.AnswersGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.AnswersGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
+            this.AnswersGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.AnswersGrid.ColumnHeadersVisible = false;
+            this.AnswersGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Checkbox,
+            this.Answer});
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Courier New", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Goldenrod;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Goldenrod;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.AnswersGrid.DefaultCellStyle = dataGridViewCellStyle1;
+            this.AnswersGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.AnswersGrid.Location = new System.Drawing.Point(58, 158);
+            this.AnswersGrid.Margin = new System.Windows.Forms.Padding(2);
+            this.AnswersGrid.Name = "AnswersGrid";
+            this.AnswersGrid.ReadOnly = true;
+            this.AnswersGrid.RowHeadersVisible = false;
+            this.AnswersGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.AnswersGrid.RowTemplate.Height = 33;
+            this.AnswersGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.AnswersGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.AnswersGrid.ShowCellErrors = false;
+            this.AnswersGrid.ShowCellToolTips = false;
+            this.AnswersGrid.ShowEditingIcon = false;
+            this.AnswersGrid.ShowRowErrors = false;
+            this.AnswersGrid.Size = new System.Drawing.Size(1090, 358);
+            this.AnswersGrid.TabIndex = 9;
+            this.AnswersGrid.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AnswersGrid_CellMouseClick);
+            // 
+            // Checkbox
+            // 
+            this.Checkbox.FillWeight = 30F;
+            this.Checkbox.HeaderText = "";
+            this.Checkbox.Name = "Checkbox";
+            this.Checkbox.ReadOnly = true;
+            this.Checkbox.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // Answer
+            // 
+            this.Answer.FillWeight = 800F;
+            this.Answer.HeaderText = "";
+            this.Answer.Name = "Answer";
+            this.Answer.ReadOnly = true;
+            this.Answer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // question
+            // 
+            this.question.AutoSize = true;
+            this.question.Font = new System.Drawing.Font("Courier New", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.question.ForeColor = System.Drawing.Color.Goldenrod;
+            this.question.Location = new System.Drawing.Point(48, 28);
+            this.question.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.question.MaximumSize = new System.Drawing.Size(1200, 0);
+            this.question.Name = "question";
+            this.question.Size = new System.Drawing.Size(254, 50);
+            this.question.TabIndex = 8;
+            this.question.Text = "Question";
             // 
             // Form1
             // 
@@ -154,8 +268,8 @@
             this.BackColor = System.Drawing.Color.Black;
             this.CancelButton = this.Quit;
             this.ClientSize = new System.Drawing.Size(1280, 720);
-            this.Controls.Add(this.Check);
             this.Controls.Add(this.MenuPanel);
+            this.Controls.Add(this.QuestionPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
@@ -163,6 +277,9 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.MenuPanel.ResumeLayout(false);
             this.MenuPanel.PerformLayout();
+            this.QuestionPanel.ResumeLayout(false);
+            this.QuestionPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AnswersGrid)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -176,6 +293,12 @@
         private System.Windows.Forms.Label Title;
         private System.Windows.Forms.Panel MenuPanel;
         private System.Windows.Forms.Button Check;
+        private System.Windows.Forms.CheckedListBox answersCheckedListBox;
+        private System.Windows.Forms.Panel QuestionPanel;
+        private System.Windows.Forms.Label question;
+        private System.Windows.Forms.DataGridView AnswersGrid;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Checkbox;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Answer;
     }
 }
 

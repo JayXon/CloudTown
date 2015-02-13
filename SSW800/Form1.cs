@@ -16,8 +16,6 @@ namespace SSW800
     public partial class Form1 : Form
     {
         private List<quiz> questions = null;
-        System.Windows.Forms.Label question;
-        System.Windows.Forms.Button[] answersButton;
         HashSet<int> AskedQuestions;
 
         [Serializable()]
@@ -139,34 +137,11 @@ namespace SSW800
 
         private void InitializeQuiz()
         {
-            // Show question
-            question = new System.Windows.Forms.Label();
-            question.AutoSize = true;
-            question.Font = new System.Drawing.Font("Courier New", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            question.ForeColor = System.Drawing.Color.Goldenrod;
-            question.Location = new System.Drawing.Point(64, 48);
-            Controls.Add(question);
-
-
-            // Show answers button
-            answersButton = new System.Windows.Forms.Button[4];
-            for (int i = 0; i < 4; i++)
-            {
-                answersButton[i] = new System.Windows.Forms.Button();
-                answersButton[i].AutoSize = true;
-                answersButton[i].Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                answersButton[i].ForeColor = System.Drawing.Color.Goldenrod;
-                answersButton[i].BackColor = System.Drawing.Color.Transparent;
-                answersButton[i].FlatAppearance.BorderSize = 0;
-                answersButton[i].FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                answersButton[i].Location = new System.Drawing.Point(64, 48 + 96 + 64 * i);
-                answersButton[i].Click += new System.EventHandler(this.Answer_Click);
-                answersButton[i].TextAlign = ContentAlignment.MiddleLeft;
-                Controls.Add(answersButton[i]);
-            }
-
             AskedQuestions = new HashSet<int>();
+
+            QuestionPanel.Show();
         }
+
 
 
         /// <summary>
@@ -174,7 +149,17 @@ namespace SSW800
         /// </summary>
         private void NewQuestion()
         {
+            if (AskedQuestions.Count == questions.Count)
+            {
+                MessageBox.Show("Run out of questions!");
+                QuestionPanel.Hide();
+                MenuPanel.Show();
+                return;
+            }
+
             Random rnd = new Random();
+
+            // Randomly select a question
             int questionIndex = rnd.Next(0, questions.Count);
 
             while (AskedQuestions.Contains(questionIndex))
@@ -185,10 +170,14 @@ namespace SSW800
 
             question.Text = questions[questionIndex].question;
 
+
             // Randomly select answers, at most 2 correct answers will be selected
             int numberOfCorrect = rnd.Next(1, Math.Min(3, questions[questionIndex].correctAnswers.Count + 1));
             HashSet<int> selectedIndex = new HashSet<int>();
             List<string> answerList = questions[questionIndex].correctAnswers;
+
+            //answersCheckedListBox.Items.Clear();
+            AnswersGrid.Rows.Clear();
             for (int i = 0; i < 4; i++)
             {
                 if (i == numberOfCorrect)
@@ -202,12 +191,11 @@ namespace SSW800
                     k = (k + 1) % answerList.Count;
                 }
                 selectedIndex.Add(k);
-                answersButton[i].Text = answerList[k];
+
+                //answersCheckedListBox.Items.Add(answerList[k]);
+                AnswersGrid.Rows.Add(false, answerList[k]);
             }
 
-            // CHECK Button
-            //System.Windows.Forms.Button checkButton = new System.Windows.Forms.Button();
-            //Controls.Add(checkButton);
         }
 
         private void Play_Click(object sender, EventArgs e)
@@ -252,13 +240,13 @@ namespace SSW800
 
         private void Check_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("hello");
+            NewQuestion();
         }
 
-        private void Answer_Click(object sender, EventArgs e)
+        void AnswersGrid_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            // MessageBox.Show("WRONG!");
-            NewQuestion();
+            DataGridViewCell chk = AnswersGrid.Rows[e.RowIndex].Cells[0];
+            chk.Value = !(bool)chk.Value;
         }
     }
 }
