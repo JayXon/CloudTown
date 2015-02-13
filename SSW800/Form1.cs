@@ -297,5 +297,11 @@ namespace SSW800
             DataGridViewCell chk = AnswersGrid.Rows[e.RowIndex].Cells[0];
             chk.Value = !(bool)chk.Value;
         }
+
+        private void Hint_Button_Click(object sender, EventArgs e)
+        {
+            // woo!
+            MessageBox.Show(questions);
+        }
     }
 }

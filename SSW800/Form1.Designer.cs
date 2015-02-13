@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Quit = new System.Windows.Forms.Button();
             this.Credits = new System.Windows.Forms.Button();
             this.Settings = new System.Windows.Forms.Button();
@@ -36,12 +36,12 @@
             this.Title = new System.Windows.Forms.Label();
             this.MenuPanel = new System.Windows.Forms.Panel();
             this.Check = new System.Windows.Forms.Button();
-            this.answersCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.QuestionPanel = new System.Windows.Forms.Panel();
             this.AnswersGrid = new System.Windows.Forms.DataGridView();
             this.Checkbox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Answer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.question = new System.Windows.Forms.Label();
+            this.Hint_Button = new System.Windows.Forms.Button();
             this.MenuPanel.SuspendLayout();
             this.QuestionPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnswersGrid)).BeginInit();
@@ -161,26 +161,11 @@
             this.Check.UseVisualStyleBackColor = false;
             this.Check.Click += new System.EventHandler(this.Check_Click);
             // 
-            // answersCheckedListBox
-            // 
-            this.answersCheckedListBox.BackColor = System.Drawing.Color.Black;
-            this.answersCheckedListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.answersCheckedListBox.CheckOnClick = true;
-            this.answersCheckedListBox.Font = new System.Drawing.Font("Courier New", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.answersCheckedListBox.ForeColor = System.Drawing.Color.Goldenrod;
-            this.answersCheckedListBox.FormattingEnabled = true;
-            this.answersCheckedListBox.Location = new System.Drawing.Point(58, 134);
-            this.answersCheckedListBox.Margin = new System.Windows.Forms.Padding(2);
-            this.answersCheckedListBox.Name = "answersCheckedListBox";
-            this.answersCheckedListBox.Size = new System.Drawing.Size(915, 210);
-            this.answersCheckedListBox.TabIndex = 7;
-            this.answersCheckedListBox.ThreeDCheckBoxes = true;
-            // 
             // QuestionPanel
             // 
+            this.QuestionPanel.Controls.Add(this.Hint_Button);
             this.QuestionPanel.Controls.Add(this.AnswersGrid);
             this.QuestionPanel.Controls.Add(this.question);
-            this.QuestionPanel.Controls.Add(this.answersCheckedListBox);
             this.QuestionPanel.Controls.Add(this.Check);
             this.QuestionPanel.Location = new System.Drawing.Point(18, 22);
             this.QuestionPanel.Margin = new System.Windows.Forms.Padding(2);
@@ -206,14 +191,14 @@
             this.AnswersGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Checkbox,
             this.Answer});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Courier New", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Goldenrod;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Goldenrod;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.AnswersGrid.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Courier New", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Goldenrod;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Goldenrod;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.AnswersGrid.DefaultCellStyle = dataGridViewCellStyle2;
             this.AnswersGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.AnswersGrid.Location = new System.Drawing.Point(58, 158);
             this.AnswersGrid.Margin = new System.Windows.Forms.Padding(2);
@@ -261,6 +246,21 @@
             this.question.TabIndex = 8;
             this.question.Text = "Question";
             // 
+            // Hint_Button
+            // 
+            this.Hint_Button.BackColor = System.Drawing.Color.Transparent;
+            this.Hint_Button.FlatAppearance.BorderSize = 0;
+            this.Hint_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Hint_Button.Font = new System.Drawing.Font("Courier New", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Hint_Button.ForeColor = System.Drawing.Color.Goldenrod;
+            this.Hint_Button.Location = new System.Drawing.Point(1047, 502);
+            this.Hint_Button.Name = "Hint_Button";
+            this.Hint_Button.Size = new System.Drawing.Size(120, 46);
+            this.Hint_Button.TabIndex = 10;
+            this.Hint_Button.Text = "Hint";
+            this.Hint_Button.UseVisualStyleBackColor = false;
+            this.Hint_Button.Click += new System.EventHandler(this.Hint_Button_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -293,12 +293,12 @@
         private System.Windows.Forms.Label Title;
         private System.Windows.Forms.Panel MenuPanel;
         private System.Windows.Forms.Button Check;
-        private System.Windows.Forms.CheckedListBox answersCheckedListBox;
         private System.Windows.Forms.Panel QuestionPanel;
         private System.Windows.Forms.Label question;
         private System.Windows.Forms.DataGridView AnswersGrid;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Checkbox;
         private System.Windows.Forms.DataGridViewTextBoxColumn Answer;
+        private System.Windows.Forms.Button Hint_Button;
     }
 }
 
