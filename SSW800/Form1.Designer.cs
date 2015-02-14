@@ -40,9 +40,9 @@
             this.QuestionPanel = new System.Windows.Forms.Panel();
             this.Hint_Button = new System.Windows.Forms.Button();
             this.AnswersGrid = new System.Windows.Forms.DataGridView();
-            this.question = new System.Windows.Forms.Label();
             this.Checkbox = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Answer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.question = new System.Windows.Forms.Label();
             this.MenuPanel.SuspendLayout();
             this.QuestionPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnswersGrid)).BeginInit();
@@ -136,6 +136,7 @@
             // MenuPanel
             // 
             this.MenuPanel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.MenuPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MenuPanel.Controls.Add(this.Quit);
             this.MenuPanel.Controls.Add(this.Credits);
             this.MenuPanel.Controls.Add(this.Settings);
@@ -241,19 +242,6 @@
             this.AnswersGrid.TabIndex = 9;
             this.AnswersGrid.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AnswersGrid_CellMouseClick);
             // 
-            // question
-            // 
-            this.question.AutoSize = true;
-            this.question.Font = new System.Drawing.Font("Courier New", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.question.ForeColor = System.Drawing.Color.Goldenrod;
-            this.question.Location = new System.Drawing.Point(48, 28);
-            this.question.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.question.MaximumSize = new System.Drawing.Size(1200, 0);
-            this.question.Name = "question";
-            this.question.Size = new System.Drawing.Size(254, 50);
-            this.question.TabIndex = 8;
-            this.question.Text = "Question";
-            // 
             // Checkbox
             // 
             this.Checkbox.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -275,6 +263,19 @@
             this.Answer.Name = "Answer";
             this.Answer.ReadOnly = true;
             this.Answer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // question
+            // 
+            this.question.AutoSize = true;
+            this.question.Font = new System.Drawing.Font("Courier New", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.question.ForeColor = System.Drawing.Color.Goldenrod;
+            this.question.Location = new System.Drawing.Point(48, 28);
+            this.question.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.question.MaximumSize = new System.Drawing.Size(1200, 0);
+            this.question.Name = "question";
+            this.question.Size = new System.Drawing.Size(254, 50);
+            this.question.TabIndex = 8;
+            this.question.Text = "Question";
             // 
             // Form1
             // 
