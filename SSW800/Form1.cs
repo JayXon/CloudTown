@@ -20,11 +20,11 @@ namespace SSW800
         private bool[] correctAnswers = new bool[4];
         private static int gameWindowX;
         private static int gameWindowY;
+        private int questionIndex;
 
         [Serializable()]
         struct quiz
         {
-            public int ID;
             public string topic;
             public string question;
             public string hint;
@@ -60,25 +60,27 @@ namespace SSW800
                 for (int i = 2; i <= rows; i++)
                 {
                     quiz Quiz = new quiz();
-                    Quiz.ID = (int)worksheet.Cells[i, 1].Value;
-                    Quiz.topic = worksheet.Cells[i, 2].Value;
-                    Quiz.question = worksheet.Cells[i, 3].Value;
-                    Quiz.hint = worksheet.Cells[i, 4].Value;
-                    Quiz.difficulty = (int)(worksheet.Cells[i, 5].Value ?? -1);
-                    int numberOfCorrect = (int)(worksheet.Cells[i, 6].Value ?? -1);
+                    Quiz.topic = worksheet.Cells[i, 1].Value;
+                    Quiz.question = worksheet.Cells[i, 2].Value;
+                    Quiz.hint = worksheet.Cells[i, 3].Value;
+                    Quiz.difficulty = (int)(worksheet.Cells[i, 4].Value ?? -1);
+                    int numberOfCorrect = (int)(worksheet.Cells[i, 5].Value ?? -1);
                     Quiz.correctAnswers = new List<string>();
-                    for (int j = 7; j < 7 + numberOfCorrect; j++)
+                    for (int j = 6; j < 6 + numberOfCorrect; j++)
                     {
                         Quiz.correctAnswers.Add(worksheet.Cells[i, j].Value);
                     }
                     Quiz.wrongAnswers = new List<string>();
-                    for (int j = 7 + numberOfCorrect; worksheet.Cells[i, j].Value != null; j++)
+                    for (int j = 6 + numberOfCorrect; worksheet.Cells[i, j].Value != null; j++)
                     {
                         Quiz.wrongAnswers.Add(worksheet.Cells[i, j].Value);
                     }
 
                     questions.Add(Quiz);
                 }
+
+                workbook.Close(false);
+                app.Quit();
             }
             catch (Exception e)
             {
@@ -147,6 +149,8 @@ namespace SSW800
         {
             AskedQuestions = new HashSet<int>();
 
+            question.MaximumSize = new Size(QuestionPanel.Width - 96, 0);
+
             QuestionPanel.Show();
         }
 
@@ -168,7 +172,7 @@ namespace SSW800
 
             // Randomly select a question from questions List.
             Random rnd = new Random();
-            int questionIndex = rnd.Next(0, questions.Count);
+            questionIndex = rnd.Next(0, questions.Count);
 
             // Have we asked this question before?
             while (AskedQuestions.Contains(questionIndex))
@@ -181,14 +185,20 @@ namespace SSW800
             // Display the Question to the screen.
             question.Text = questions[questionIndex].question;
 
-            // Randomly select answers, at most 2 correct answers will be selected
-            int numberOfCorrect = rnd.Next(1, Math.Min(3, questions[questionIndex].correctAnswers.Count + 1));
-            HashSet<int> selectedIndex = new HashSet<int>();
-            List<string> answerList = questions[questionIndex].correctAnswers;
+            // Hide the Hint Button if there are no hint
+            Hint_Button.Visible = questions[questionIndex].hint != null;
+
+            // Move the location of the AnswersGrid based on the height of question label
+            AnswersGrid.Location = new Point(AnswersGrid.Location.X, question.Location.Y + question.Height + 64);
 
             // Clear the previous answers. Add four empty answers.
             AnswersGrid.Rows.Clear();
             AnswersGrid.Rows.Add(4);
+
+            // Randomly select answers, at most 2 correct answers will be selected
+            int numberOfCorrect = rnd.Next(1, Math.Min(3, questions[questionIndex].correctAnswers.Count + 1));
+            HashSet<int> selectedIndex = new HashSet<int>();
+            List<string> answerList = questions[questionIndex].correctAnswers;
 
             // Select an index in the grid row and then select an index from the correct answers list.
             // Put the answers to the grid row.
@@ -224,13 +234,6 @@ namespace SSW800
         /// </summary>
         private void VerifyAnswer()
         {
-            /* WE NEED...
-             * 
-             * to know what the player chose
-             *      - That's in the DataGrid
-             * to know the correct answers
-             *      - we need an array for that
-             * */
             bool IsCorrect = true;
             for (int i = 0; i < 4; i++)
             {
@@ -301,7 +304,7 @@ namespace SSW800
         private void Hint_Button_Click(object sender, EventArgs e)
         {
             // woo!
-            MessageBox.Show(questions);
+            MessageBox.Show(questions[questionIndex].hint);
         }
     }
 }
