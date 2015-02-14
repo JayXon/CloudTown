@@ -256,7 +256,7 @@
             // 
             // Checkbox
             // 
-            this.Checkbox.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Checkbox.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
             dataGridViewCellStyle1.NullValue = false;
             dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
@@ -266,6 +266,7 @@
             this.Checkbox.Name = "Checkbox";
             this.Checkbox.ReadOnly = true;
             this.Checkbox.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Checkbox.Width = 30;
             // 
             // Answer
             // 
