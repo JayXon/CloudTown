@@ -195,8 +195,15 @@ namespace SSW800
             AnswersGrid.Rows.Clear();
             AnswersGrid.Rows.Add(4);
 
+            // Make sure we have enough answers
+            if (questions[questionIndex].correctAnswers.Count + questions[questionIndex].wrongAnswers.Count < 4)
+            {
+                MessageBox.Show("Question: " + questions[questionIndex].question + "\ndoes not have enough answers!");
+                return;
+            }
+
             // Randomly select answers, at most 2 correct answers will be selected
-            int numberOfCorrect = rnd.Next(1, Math.Min(3, questions[questionIndex].correctAnswers.Count + 1));
+            int numberOfCorrect = rnd.Next(Math.Max(1, 4 - questions[questionIndex].wrongAnswers.Count), Math.Min(3, questions[questionIndex].correctAnswers.Count + 1));
             HashSet<int> selectedIndex = new HashSet<int>();
             List<string> answerList = questions[questionIndex].correctAnswers;
 
