@@ -313,5 +313,21 @@ namespace SSW800
             // woo!
             MessageBox.Show(questions[questionIndex].hint);
         }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                if (MenuPanel.Visible)
+                {
+                    this.Close();
+                }
+                else
+                {
+                    QuestionPanel.Hide();
+                    MenuPanel.Show();
+                }
+            }
+        }
     }
 }
