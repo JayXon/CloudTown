@@ -26,7 +26,7 @@ pc.script.create('Question', function (app)
         },
 
         present: function () {
-            alert("<Question goes here>");
+            alert("NOT EVEN CLOSE BAYBEEE");
         },
 
         generate: function () {
