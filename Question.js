@@ -18,19 +18,20 @@ pc.script.create('Question', function (app)
         // Called once after all resources are loaded and before the first update
         initialize: function ()
         {
-            this.generate();
+            // this.generate();
         },
 
         // Called every frame, dt is time in seconds since last update
         update: function (dt) {
         },
 
-        present: function () {
-            alert("NOT EVEN CLOSE BAYBEEE");
+        present: function (question) {
+            alert(question);
         },
 
         generate: function () {
             // TO DO: Retrieve question from database
+            this.entity.script.Client.getQuestion();
         }
     };
 

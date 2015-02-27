@@ -29,7 +29,7 @@ pc.script.create('Treasure_Box', function (app)
             if (result.other.name === "Player")
             {
                 // TO DO: This should pass information along to Question (i.e. the Player Object)
-                this.entity.script.Question.present();
+                this.entity.script.Question.generate();
             }
         }
     };
