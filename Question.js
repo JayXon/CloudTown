@@ -31,7 +31,7 @@ pc.script.create('Question', function (app)
 
         generate: function () {
             // TO DO: Retrieve question from database
-            this.entity.script.Client.getQuestion();
+            app.root.getChildren()[0].script.Client.getQuestion();
         }
     };
 
