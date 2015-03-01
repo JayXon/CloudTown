@@ -26,7 +26,7 @@ pc.script.create('Question', function (app)
         },
 
         present: function (question) {
-            alert(question);
+            console.log(question);
         },
 
         generate: function () {

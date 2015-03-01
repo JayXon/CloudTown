@@ -19,8 +19,7 @@ pc.script.create('Client', function (app)
             this.socket = io('http://ssw800.jayxon.com:40500');
 
             this.socket.on('question_received', function(data) {
-                //app.root.getChildren()[0].script.Question.present(data);
-                console.log(data);
+                app.root.getChildren()[0].script.Question.present(data);
             });
         },
 
