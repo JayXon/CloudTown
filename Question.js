@@ -18,6 +18,20 @@ pc.script.create('Question', function (app)
         // Called once after all resources are loaded and before the first update
         initialize: function ()
         {
+            var panel = document.createElement('div');
+            panel.id = 'question';
+            panel.style.top = '10%';
+            panel.style.height = '75%';
+            panel.style.width = '800px';
+            panel.style.margin = 'auto';
+            panel.style.zIndex = 999;
+            panel.style.visibility = 'hidden';
+            panel.style.position = 'relative';
+            panel.style.color = '#DAA520';
+            panel.style.backgroundColor = 'rgba(0,0,0,0.8)';
+            panel.style.boxShadow = '6px 12px 14px 2px rgba(0,0,0,0.64)';
+
+            document.querySelector('body').appendChild(panel);
             // this.generate();
         },
 
@@ -26,6 +40,9 @@ pc.script.create('Question', function (app)
         },
 
         present: function (question) {
+            var panel = document.querySelector('#question');
+            panel.innerHTML = question[0].question;
+            panel.style.visibility = 'visible';
             console.log(question);
         },
 
