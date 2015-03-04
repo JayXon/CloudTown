@@ -18,6 +18,8 @@ pc.script.create('Question', function (app)
         // Called once after all resources are loaded and before the first update
         initialize: function ()
         {
+            this.Client = app.root.getChildren()[0].script.Client;
+            
             var panel = document.createElement('div');
             panel.id = 'panel';
             panel.style.top = '10%';
@@ -90,8 +92,7 @@ pc.script.create('Question', function (app)
         },
 
         generate: function () {
-            // TO DO: Retrieve question from database
-            app.root.getChildren()[0].script.Client.getQuestion();
+            this.Client.getQuestion();
         }
     };
 

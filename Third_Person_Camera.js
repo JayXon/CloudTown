@@ -31,6 +31,10 @@ pc.script.create('Third_Person_Camera', function (app)
 
     Third_Person_Camera.prototype =
     {
+        initialize: function ()
+        {
+            this.Question = app.root.getChildren()[0].script.Question;
+        },
         // Called every frame, dt is time in seconds since last update
         update: function (dt)
         {
@@ -54,7 +58,7 @@ pc.script.create('Third_Person_Camera', function (app)
 
         onMouseDown: function (event)
         {
-            if ( !pc.input.Mouse.isPointerLocked() && !app.root.getChildren()[0].script.Question.isPanelVisible() )
+            if ( !pc.input.Mouse.isPointerLocked() && !this.Question.isPanelVisible() )
             {
                 app.mouse.enablePointerLock();
             }

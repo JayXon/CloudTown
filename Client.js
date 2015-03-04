@@ -18,9 +18,7 @@ pc.script.create('Client', function (app)
         initialize: function () {
             this.socket = io('http://ssw800.jayxon.com:40500');
 
-            this.socket.on('question_received', function(data) {
-                app.root.getChildren()[0].script.Question.present(data);
-            });
+            this.socket.on('question_received', this.entity.script.Question.present);
         },
 
         // Called every frame, dt is time in seconds since last update
