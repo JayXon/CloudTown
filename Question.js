@@ -33,11 +33,11 @@ pc.script.create('Question', function (app)
             panel.style.backgroundColor = 'rgba(0,0,0,0.8)';
             panel.style.boxShadow = '6px 12px 14px 2px rgba(0,0,0,0.64)';
 
-            var topic = document.createElement('div');
-            topic.id = 'topic';
-            topic.style.color = 'gray';
-            topic.style.padding = '8px';
-            panel.appendChild(topic);
+            var title = document.createElement('div');
+            title.id = 'title';
+            title.style.color = 'gray';
+            title.style.padding = '8px';
+            panel.appendChild(title);
 
             var question = document.createElement('div');
             question.id = 'question';
@@ -70,9 +70,20 @@ pc.script.create('Question', function (app)
         present: function (data) {
             console.log(data);
 
-            document.querySelector('#topic').innerHTML = data[0].topic;
-            document.querySelector('#question').innerHTML = data[0].question;
-            document.querySelector('#answer').innerHTML = data[0].correctAnswer;
+            document.querySelector('#title').innerHTML = data.title;
+            document.querySelector('#question').innerHTML = data.question;
+            var answer_div = document.querySelector('#answer');
+            answer_div.innerHTML = "";
+
+            data.correct_answers.forEach(function(answer) {
+                var label = document.createElement('label');
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                label.innerHTML = answer.text + '<br/>';
+
+                label.insertBefore(checkbox, label.childNodes[0]);
+                answer_div.appendChild(label);
+            });
 
             document.querySelector('#panel').style.visibility = 'visible';
 
