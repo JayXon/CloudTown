@@ -54,7 +54,7 @@ pc.script.create('Third_Person_Camera', function (app)
 
         onMouseDown: function (event)
         {
-            if ( !pc.input.Mouse.isPointerLocked() )
+            if ( !pc.input.Mouse.isPointerLocked() && !app.root.getChildren()[0].script.Question.isPanelVisible() )
             {
                 app.mouse.enablePointerLock();
             }

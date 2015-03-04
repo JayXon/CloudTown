@@ -19,7 +19,7 @@ pc.script.create('Question', function (app)
         initialize: function ()
         {
             var panel = document.createElement('div');
-            panel.id = 'question';
+            panel.id = 'panel';
             panel.style.top = '10%';
             panel.style.height = '75%';
             panel.style.width = '800px';
@@ -31,6 +31,32 @@ pc.script.create('Question', function (app)
             panel.style.backgroundColor = 'rgba(0,0,0,0.8)';
             panel.style.boxShadow = '6px 12px 14px 2px rgba(0,0,0,0.64)';
 
+            var topic = document.createElement('div');
+            topic.id = 'topic';
+            topic.style.color = 'gray';
+            topic.style.padding = '8px';
+            panel.appendChild(topic);
+
+            var question = document.createElement('div');
+            question.id = 'question';
+            question.style.fontSize = '24px';
+            question.style.padding = '8px';
+            panel.appendChild(question);
+
+            var answer = document.createElement('div');
+            answer.id = 'answer';
+            answer.style.padding = '4px 8px';
+            panel.appendChild(answer);
+
+            var cancelButton = document.createElement('button');
+            cancelButton.innerHTML = 'Cancel';
+            cancelButton.style.bottom = 0;
+            cancelButton.style.right = 0;
+            cancelButton.style.position = 'absolute';
+            cancelButton.style.margin = '16px';
+            cancelButton.onclick = this.closePanel;
+            panel.appendChild(cancelButton);
+
             document.querySelector('body').appendChild(panel);
             // this.generate();
         },
@@ -39,11 +65,28 @@ pc.script.create('Question', function (app)
         update: function (dt) {
         },
 
-        present: function (question) {
-            var panel = document.querySelector('#question');
-            panel.innerHTML = question[0].question;
-            panel.style.visibility = 'visible';
-            console.log(question);
+        present: function (data) {
+            console.log(data);
+
+            document.querySelector('#topic').innerHTML = data[0].topic;
+            document.querySelector('#question').innerHTML = data[0].question;
+            document.querySelector('#answer').innerHTML = data[0].correctAnswer;
+
+            document.querySelector('#panel').style.visibility = 'visible';
+
+            if ( pc.input.Mouse.isPointerLocked() )
+            {
+                app.mouse.disablePointerLock();
+            }
+        },
+
+        closePanel : function () {
+            document.querySelector('#panel').style.visibility = 'hidden';
+            app.mouse.enablePointerLock();
+        },
+
+        isPanelVisible : function () {
+            return document.querySelector('#panel').style.visibility === 'visible';
         },
 
         generate: function () {
