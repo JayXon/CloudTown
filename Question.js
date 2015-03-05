@@ -75,7 +75,7 @@ pc.script.create('Question', function (app)
             var answer_div = document.querySelector('#answer');
             answer_div.innerHTML = "";
 
-            data.correct_answers.forEach(function(answer) {
+            data.answers.forEach(function(answer) {
                 var label = document.createElement('label');
                 var checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
