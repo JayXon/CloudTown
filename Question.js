@@ -51,13 +51,23 @@ pc.script.create('Question', function (app)
             panel.appendChild(answer);
 
             var cancelButton = document.createElement('button');
-            cancelButton.innerHTML = 'Cancel';
-            cancelButton.style.bottom = 0;
+            cancelButton.innerHTML = 'X';
+            cancelButton.style.top = 0;
             cancelButton.style.right = 0;
             cancelButton.style.position = 'absolute';
             cancelButton.style.margin = '16px';
             cancelButton.onclick = this.closePanel;
             panel.appendChild(cancelButton);
+
+            var submitButton = document.createElement('button');
+            submitButton.id = 'submit'
+            submitButton.innerHTML = 'Submit';
+            submitButton.style.bottom = 0;
+            submitButton.style.right = 0;
+            submitButton.style.position = 'absolute';
+            submitButton.style.margin = '16px';
+            submitButton.onclick = this.submit.bind(this);
+            panel.appendChild(submitButton);
 
             document.querySelector('body').appendChild(panel);
             // this.generate();
@@ -69,6 +79,7 @@ pc.script.create('Question', function (app)
 
         present: function (data) {
             console.log(data);
+            this.data = data;
 
             document.querySelector('#title').innerHTML = data.title;
             document.querySelector('#question').innerHTML = data.question;
@@ -79,7 +90,7 @@ pc.script.create('Question', function (app)
                 var label = document.createElement('label');
                 var checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
-                label.innerHTML = answer.text + '<br/>';
+                label.innerHTML = answer + '<br/>';
 
                 label.insertBefore(checkbox, label.childNodes[0]);
                 answer_div.appendChild(label);
@@ -87,10 +98,36 @@ pc.script.create('Question', function (app)
 
             document.querySelector('#panel').style.visibility = 'visible';
 
+            // var self = this;
+            // document.getElementById('submit').onclick = function () {
+            //     this.submit(data);
+            // }.bind(this);
+
+
             if ( pc.input.Mouse.isPointerLocked() )
             {
                 app.mouse.disablePointerLock();
             }
+        },
+
+        submit : function () {
+            var submit_data = {
+                id : this.data.id,
+                answers : this.data.answers,
+                selected : []
+            }
+            var checkboxes = document.getElementById('answer').childNodes;
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].firstChild.checked) {
+                    submit_data.selected.push(i);
+                }
+            }
+            this.Client.send('submit_answer', submit_data);
+        },
+
+        feedback : function (data) {
+            alert(data.correct);
+            this.closePanel();
         },
 
         closePanel : function () {
