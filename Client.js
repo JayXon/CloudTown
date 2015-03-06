@@ -26,10 +26,6 @@ pc.script.create('Client', function (app)
         update: function (dt) {
         },
 
-        getQuestion: function () {
-            this.socket.emit('new_question');
-        },
-
         send : function (msg, data) {
             this.socket.emit(msg, data);
         }

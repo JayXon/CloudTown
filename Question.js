@@ -140,7 +140,7 @@ pc.script.create('Question', function (app)
         },
 
         generate: function () {
-            this.Client.getQuestion();
+            this.Client.send('new_question');
         }
     };
 
