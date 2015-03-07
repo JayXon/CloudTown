@@ -81,9 +81,9 @@ pc.script.create('Question', function (app)
             console.log(data);
             this.data = data;
 
-            document.querySelector('#title').innerHTML = data.title;
-            document.querySelector('#question').innerHTML = data.question;
-            var answer_div = document.querySelector('#answer');
+            document.getElementById('title').innerHTML = data.title;
+            document.getElementById('question').innerHTML = data.question;
+            var answer_div = document.getElementById('answer');
             answer_div.innerHTML = "";
 
             data.answers.forEach(function(answer) {
@@ -96,12 +96,7 @@ pc.script.create('Question', function (app)
                 answer_div.appendChild(label);
             });
 
-            document.querySelector('#panel').style.visibility = 'visible';
-
-            // var self = this;
-            // document.getElementById('submit').onclick = function () {
-            //     this.submit(data);
-            // }.bind(this);
+            document.getElementById('panel').style.visibility = 'visible';
 
 
             if ( pc.input.Mouse.isPointerLocked() )
@@ -131,12 +126,12 @@ pc.script.create('Question', function (app)
         },
 
         closePanel : function () {
-            document.querySelector('#panel').style.visibility = 'hidden';
+            document.getElementById('panel').style.visibility = 'hidden';
             app.mouse.enablePointerLock();
         },
 
         isPanelVisible : function () {
-            return document.querySelector('#panel').style.visibility === 'visible';
+            return document.getElementById('panel').style.visibility === 'visible';
         },
 
         generate: function () {
