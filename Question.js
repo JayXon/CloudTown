@@ -50,14 +50,24 @@ pc.script.create('Question', function (app)
             answer.style.padding = '4px 8px';
             panel.appendChild(answer);
 
-            var cancelButton = document.createElement('button');
-            cancelButton.innerHTML = 'X';
-            cancelButton.style.top = 0;
-            cancelButton.style.right = 0;
-            cancelButton.style.position = 'absolute';
-            cancelButton.style.margin = '16px';
-            cancelButton.onclick = this.closePanel;
-            panel.appendChild(cancelButton);
+            var closeButton = document.createElement('button');
+            closeButton.innerHTML = 'X';
+            closeButton.style.top = 0;
+            closeButton.style.right = 0;
+            closeButton.style.position = 'absolute';
+            closeButton.style.margin = '16px';
+            closeButton.onclick = this.closePanel;
+            panel.appendChild(closeButton);
+
+            var hintButton = document.createElement('button');
+            hintButton.id = 'hint'
+            hintButton.innerHTML = 'Hint';
+            hintButton.style.bottom = 0;
+            hintButton.style.right = '80px';
+            hintButton.style.position = 'absolute';
+            hintButton.style.margin = '16px';
+            hintButton.onclick = this.hint.bind(this);
+            panel.appendChild(hintButton);
 
             var submitButton = document.createElement('button');
             submitButton.id = 'submit'
@@ -96,6 +106,12 @@ pc.script.create('Question', function (app)
                 answer_div.appendChild(label);
             });
 
+            if (data.hint.length !== 0) {
+                document.getElementById('hint').style.visibility = 'visible';
+            } else {
+                document.getElementById('hint').style.visibility = 'hidden';
+            }
+
             document.getElementById('panel').style.visibility = 'visible';
 
 
@@ -118,6 +134,10 @@ pc.script.create('Question', function (app)
                 }
             }
             this.Client.send('submit_answer', submit_data);
+        },
+
+        hint : function () {
+            alert(this.data.hint);
         },
 
         feedback : function (data) {
