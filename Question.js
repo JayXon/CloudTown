@@ -88,6 +88,11 @@ pc.script.create('Question', function (app)
         },
 
         present: function (data) {
+            // prevent panel from changing question
+            if (this.isPanelVisible()) {
+                return;
+            }
+
             console.log(data);
             this.data = data;
 
@@ -155,7 +160,9 @@ pc.script.create('Question', function (app)
         },
 
         generate: function () {
-            this.Client.send('new_question');
+            if (!this.isPanelVisible()) {
+                this.Client.send('new_question');
+            }
         }
     };
 
