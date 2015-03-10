@@ -105,6 +105,9 @@ pc.script.create('Question', function (app)
                 var label = document.createElement('label');
                 var checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
+                label.style.width = '720px';
+                label.style.margin = '6px';
+                label.style.display = 'block';
                 label.innerHTML = answer + '<br/>';
 
                 label.insertBefore(checkbox, label.childNodes[0]);
@@ -117,6 +120,8 @@ pc.script.create('Question', function (app)
                 document.getElementById('hint').style.visibility = 'hidden';
             }
 
+            document.getElementById('submit').disabled = false;
+
             document.getElementById('panel').style.visibility = 'visible';
 
 
@@ -127,18 +132,15 @@ pc.script.create('Question', function (app)
         },
 
         submit : function () {
-            var submit_data = {
-                id : this.data.id,
-                answers : this.data.answers,
-                selected : []
-            }
+            var selected = [];
             var checkboxes = document.getElementById('answer').childNodes;
             for (var i = 0; i < checkboxes.length; i++) {
                 if (checkboxes[i].firstChild.checked) {
-                    submit_data.selected.push(i);
+                    selected.push(i);
                 }
             }
-            this.Client.send('submit_answer', submit_data);
+            this.Client.send('submit_answer', selected);
+            document.getElementById('submit').disabled = true;
         },
 
         hint : function () {
@@ -146,8 +148,22 @@ pc.script.create('Question', function (app)
         },
 
         feedback : function (data) {
-            alert(data.correct);
-            this.closePanel();
+            // alert(data.correct);
+            // this.closePanel();
+
+            var checkboxes = document.getElementById('answer').childNodes;
+            if (data.length === 0) {
+                var label = document.createElement('label');
+                label.style.color = 'green';
+                label.innerHTML = 'Correct!'
+                document.getElementById('answer').appendChild(label);
+            } else {
+                data.forEach(function(i) {
+                    checkboxes[i].style.color = '#fff';
+                    checkboxes[i].style.backgroundColor = 'red';
+                });
+            }
+
         },
 
         closePanel : function () {
