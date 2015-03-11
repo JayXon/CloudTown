@@ -27,6 +27,9 @@ pc.script.create('Third_Person_Camera', function (app)
         app.mouse.disableContextMenu();
         app.mouse.on(pc.input.EVENT_MOUSEMOVE, this.onMouseMove, this);
         app.mouse.on(pc.input.EVENT_MOUSEDOWN, this.onMouseDown, this);
+        
+        // For locking input when menus appear and the mouse is needed
+        this.isInputLocked = false;
     };
 
     Third_Person_Camera.prototype =
@@ -35,11 +38,13 @@ pc.script.create('Third_Person_Camera', function (app)
         {
             this.Question = app.root.getChildren()[0].script.Question;
         },
-        // Called every frame, dt is time in seconds since last update
+
         update: function (dt)
         {
             // Update our Player's angles
-            this.entity.setEulerAngles(this.ex, this.ey, 0);
+            if ( !this.isInputLocked ) {
+                this.entity.setEulerAngles(this.ex, this.ey, 0);
+            }
         },
 
         onMouseMove: function (event)
@@ -62,6 +67,14 @@ pc.script.create('Third_Person_Camera', function (app)
             {
                 app.mouse.enablePointerLock();
             }
+        },
+        
+        lockInput: function () {
+            this.isInputLocked = true;
+        },
+        
+        unlockInput: function () {
+            this.isInputLocked = false;
         }
     };
 

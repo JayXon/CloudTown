@@ -21,18 +21,18 @@ pc.script.create('Character_Controller', function (context) {
     };
 
     Character_Controller.prototype = {
-        // Called once after all resources are loaded and before the first update
+
         initialize: function () {
+            console.log("Character_Controller... Initialized.");
         },
 
-        // Called every frame, dt is time in seconds since last update
         update: function (dt) {
             this._checkGround();
         },
 
         // Move the character in the direction supplied
         move: function (direction) {
-            if ( this.onGround ) {
+            if ( this.onGround && !this.isControlLocked ) {
                 this.entity.rigidbody.activate();
                 direction.scale(this.moveSpeed);
                 this.entity.rigidbody.linearVelocity = direction;

@@ -17,6 +17,7 @@ pc.script.create('Treasure_Box', function (app)
     Treasure_Box.prototype = {
         // Called once after all resources are loaded and before the first update
         initialize: function () {
+            console.log("Treasure_Box... Initialized.");
             this.entity.collision.on('collisionstart', this.onCollisionStart, this);
         },
 
@@ -28,8 +29,17 @@ pc.script.create('Treasure_Box', function (app)
         {
             if (result.other.name === "Player")
             {
+                // TO DO: Save a reference to THIS Player
+
                 // TO DO: This should pass information along to Question (i.e. the Player Object)
+                
+                // COMMENT NEEDED
                 app.root.getChildren()[0].script.Question.generate();
+                
+                // Stop the Player that touched us from moving. (Should be it's own function, probably)
+                console.log(result.other.name + " should be unable to move now.");
+                result.other.script.Player_Input.lockInput();
+                result.other.script.Third_Person_Camera.lockInput();
             }
         }
     };

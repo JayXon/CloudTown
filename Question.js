@@ -18,6 +18,9 @@ pc.script.create('Question', function (app)
         // Called once after all resources are loaded and before the first update
         initialize: function ()
         {
+            console.log("Question... Initialized.");
+
+
             this.Client = app.root.getChildren()[0].script.Client;
             
             var panel = document.createElement('div');
@@ -169,6 +172,12 @@ pc.script.create('Question', function (app)
         closePanel : function () {
             document.getElementById('panel').style.visibility = 'hidden';
             app.mouse.enablePointerLock();
+
+            // Let the Player move again
+            this.PlayerWhoHasAPanelOpen = app.root.getChildren()[0].getChildren()[2];
+            this.PlayerWhoHasAPanelOpen.script.Player_Input.unlockInput();
+            this.PlayerWhoHasAPanelOpen.script.Third_Person_Camera.unlockInput();
+            console.log(this.PlayerWhoHasAPanelOpen.name + " should be able to move now.");
         },
 
         isPanelVisible : function () {

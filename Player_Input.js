@@ -19,23 +19,30 @@ pc.script.create('Player_Input', function (context) {
 
         this.controller = new pc.input.Controller(window);
 
+        // Movement Controls
         this.controller.registerKeys('forward', [pc.input.KEY_UP, pc.input.KEY_W]);
         this.controller.registerKeys('back', [pc.input.KEY_DOWN, pc.input.KEY_S]);
         this.controller.registerKeys('left', [pc.input.KEY_LEFT, pc.input.KEY_A]);
         this.controller.registerKeys('right', [pc.input.KEY_RIGHT, pc.input.KEY_D]);
         this.controller.registerKeys('jump', [pc.input.KEY_SPACE]);
+        
+        // Debug Controls
+        this.controller.registerKeys('debug_01', [pc.input.KEY_N]);
+        this.controller.registerKeys('debug_02', [pc.input.KEY_M]);
     };
 
     Player_Input.prototype = {
-        // Called once after all resources are loaded and before the first update
+
         initialize: function ()
         {
+            console.log("Player_Input... Initialized.");
+
             this.camera = context.root.findByName('Camera');
             this.character = this.entity;
             this.characterController = 'Character_Controller';
+            this.isInputLocked = false;
         },
 
-        // Called every frame, dt is time in seconds since last update
         update: function (dt)
         {
             var input = false;
@@ -81,13 +88,33 @@ pc.script.create('Player_Input', function (context) {
             {
                 this.heading.normalize();
             }
+            
+            if ( this.controller.isPressed('debug_01') ) {
+                this.lockInput();
+            }
 
-            // Attempt to fix slowfalling
-            // this.heading.y = -1;
-            this.character.script.Character_Controller.move(this.heading);
+            if ( this.controller.isPressed('debug_02') ) {
+                this.unlockInput();
+            }
+            
+            // Finally, if we aren't Input Locked, move!
+            if ( !this.isInputLocked )
+            {
+                this.character.script.Character_Controller.move(this.heading);
+            }
 
+        },
+        
+        lockInput: function ()
+        {
+            this.isInputLocked = true;
+        },
+        
+        unlockInput: function ()
+        {
+            this.isInputLocked = false;
         }
-    } // ;???
+    }
 
     return Player_Input;
 });
