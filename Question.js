@@ -115,7 +115,7 @@ pc.script.create('Question', function (app)
             });
 
             if (data.hint.length !== 0) {
-                document.getElementById('hint').style.visibility = 'visible';
+                document.getElementById('hint').style.visibility = 'inherit';
             } else {
                 document.getElementById('hint').style.visibility = 'hidden';
             }
