@@ -11,7 +11,7 @@ pc.script.attribute("moveSpeed", "number", 10, {displayName: "Move Speed"}); // 
 
 pc.script.create('Character_Controller', function (context) {
 
-    var groundCheckRay = new pc.Vec3(0, -5.01, 0);
+    var groundCheckRay = new pc.Vec3(0, -6.5, 0);      // > 5.78
     var rayEnd = new pc.Vec3();
 
     // Creates a new Character_Controller instance
