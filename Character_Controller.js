@@ -1,4 +1,4 @@
-pc.script.attribute("moveSpeed", "number", 10, {displayName: "Move Speed"}); // Running speed
+// pc.script.attribute("moveSpeed", "number", 10, {displayName: "Move Speed"}); // Running speed
 
 // Character Controller
 // - Move the player, play animations, handle death and respawning
@@ -18,6 +18,8 @@ pc.script.create('Character_Controller', function (context) {
     var Character_Controller = function (entity) {
         this.entity = entity;
         this.onGround = false;
+
+        this.moveSpeed = 30;
     };
 
     Character_Controller.prototype = {
@@ -33,7 +35,7 @@ pc.script.create('Character_Controller', function (context) {
         // Move the character in the direction supplied
         move: function (direction) {
             if ( this.onGround && !this.isControlLocked ) {
-                this.entity.rigidbody.activate();
+                // this.entity.rigidbody.activate();
                 direction.scale(this.moveSpeed);
                 this.entity.rigidbody.linearVelocity = direction;
             }

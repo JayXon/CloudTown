@@ -37,7 +37,8 @@ pc.script.create('Player_Input', function (context) {
         {
             console.log("Player_Input... Initialized.");
 
-            this.camera = context.root.findByName('Camera');
+            // this.camera = context.root.findByName('Camera');
+            this.camera = this.entity.findByName('Camera');
             this.character = this.entity;
             this.characterController = 'Character_Controller';
             this.isInputLocked = false;
@@ -46,7 +47,6 @@ pc.script.create('Player_Input', function (context) {
         update: function (dt)
         {
             var input = false;
-
             // Calculate our heading in the XZ plane
             var transform = this.camera.getWorldTransform();
 
@@ -101,8 +101,8 @@ pc.script.create('Player_Input', function (context) {
             if ( !this.isInputLocked )
             {
                 this.character.script.Character_Controller.move(this.heading);
+                // this.entity.findByName('Body').script.Character_Controller.move(this.heading);
             }
-
         },
         
         lockInput: function ()

@@ -20,6 +20,9 @@ pc.script.create('Client', function (app)
             var question = this.entity.script.Question;
             this.socket.on('question_received', question.present.bind(question));
             this.socket.on('answer_received', question.feedback.bind(question));
+
+            var network_manager = this.entity.script.Network_Manager;
+            this.socket.on('player_joined', network_manager.newPlayer);
         },
 
         // Called every frame, dt is time in seconds since last update
