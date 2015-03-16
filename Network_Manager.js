@@ -24,6 +24,11 @@ pc.script.create('Network_Manager', function (app) {
             // create new player
             var player = app.root.findByName('Player').clone();
 
+            var x = Math.random() * 150 - 75;
+            var y = Math.random() * 25;
+            var z = Math.random() * 150 - 75;
+            var ey = Math.random() * 360;
+
             var camera = new pc.Entity();
             camera.setName('Camera');
             camera.addComponent('camera');
@@ -41,7 +46,8 @@ pc.script.create('Network_Manager', function (app) {
                 }]
             });
 
-            player.setPosition(0, 25, 50);
+            player.setPosition(x, y, z);
+            player.setEulerAngles(0, ey, 0);
             player.enabled = true;
 
             app.root.addChild(player);
@@ -49,9 +55,10 @@ pc.script.create('Network_Manager', function (app) {
             console.log(app.root);
 
             var data = {
-                x : 0,
-                y : 25,
-                z : 0
+                x : x,
+                y : y,
+                z : z,
+                ey : ey
             }
             this.Client.send('player_joined', data);
         },
@@ -64,6 +71,7 @@ pc.script.create('Network_Manager', function (app) {
 
             var player = app.root.findByName('Player').clone();
             player.setPosition(data.x, data.y, data.z);
+            player.setEulerAngles(0, data.ey, 0);
             player.enabled = true;
 
             app.root.addChild(player);

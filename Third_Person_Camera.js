@@ -45,6 +45,9 @@ pc.script.create('Third_Person_Camera', function (app)
         initialize: function ()
         {
             this.Question = app.root.getChildren()[0].script.Question;
+
+            var angles = this.entity.getEulerAngles();
+            this.ey = angles.y;
         },
 
         update: function (dt)
