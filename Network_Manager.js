@@ -24,11 +24,13 @@ pc.script.create('Network_Manager', function (app) {
             // create new player
             var player = app.root.findByName('Player').clone();
 
+            // random position and angle
             var x = Math.random() * 150 - 75;
             var y = Math.random() * 25;
             var z = Math.random() * 150 - 75;
             var ey = Math.random() * 360;
 
+            // attach camera to player
             var camera = new pc.Entity();
             camera.setName('Camera');
             camera.addComponent('camera');
@@ -36,6 +38,7 @@ pc.script.create('Network_Manager', function (app) {
             camera.setLocalPosition(0, 15, -35);
             camera.setLocalEulerAngles(160, 0, 180);
 
+            // add script to player
             app.systems.script.addComponent(player, {
                 scripts : [{
                     url : 'Character_Controller.js'
@@ -52,7 +55,7 @@ pc.script.create('Network_Manager', function (app) {
 
             app.root.addChild(player);
 
-            console.log(app.root);
+            // console.log(app.root);
 
             var data = {
                 x : x,
@@ -60,6 +63,7 @@ pc.script.create('Network_Manager', function (app) {
                 z : z,
                 ey : ey
             }
+            // send join message to server
             this.Client.send('player_joined', data);
         },
 
@@ -67,9 +71,10 @@ pc.script.create('Network_Manager', function (app) {
         },
 
         newPlayer : function (data) {
-            console.log(data);
-
+            // console.log(data);
+            // a new player has joined
             var player = app.root.findByName('Player').clone();
+            player.setName('Player_' + data.id);
             player.setPosition(data.x, data.y, data.z);
             player.setEulerAngles(0, data.ey, 0);
             player.enabled = true;

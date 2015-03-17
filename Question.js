@@ -117,17 +117,19 @@ pc.script.create('Question', function (app)
                 answer_div.appendChild(label);
             });
 
+            // hide or show hint button
             if (data.hint.length !== 0) {
                 document.getElementById('hint').style.visibility = 'inherit';
             } else {
                 document.getElementById('hint').style.visibility = 'hidden';
             }
 
+            // enable submit button
             document.getElementById('submit').disabled = false;
 
             document.getElementById('panel').style.visibility = 'visible';
 
-
+            // unlock mouse
             if ( pc.input.Mouse.isPointerLocked() )
             {
                 app.mouse.disablePointerLock();
@@ -135,6 +137,7 @@ pc.script.create('Question', function (app)
         },
 
         submit : function () {
+            // send the index of selected answers to server
             var selected = [];
             var checkboxes = document.getElementById('answer').childNodes;
             for (var i = 0; i < checkboxes.length; i++) {
@@ -143,6 +146,7 @@ pc.script.create('Question', function (app)
                 }
             }
             this.Client.send('submit_answer', selected);
+            // disable submit button
             document.getElementById('submit').disabled = true;
         },
 
@@ -156,11 +160,14 @@ pc.script.create('Question', function (app)
 
             var checkboxes = document.getElementById('answer').childNodes;
             if (data.length === 0) {
+                // the answers are correct!
                 var label = document.createElement('label');
                 label.style.color = 'green';
                 label.innerHTML = 'Correct!'
                 document.getElementById('answer').appendChild(label);
             } else {
+                // the answers are wrong :(
+                // mark the wrong answers as red
                 data.forEach(function(i) {
                     checkboxes[i].style.color = '#fff';
                     checkboxes[i].style.backgroundColor = 'red';

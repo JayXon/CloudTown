@@ -19,6 +19,8 @@ pc.script.create('Treasure_Box', function (app)
         initialize: function () {
             console.log("Treasure_Box... Initialized.");
             this.entity.collision.on('collisionstart', this.onCollisionStart, this);
+
+            this.Question = app.root.getChildren()[0].script.Question;
         },
 
         // Called every frame, dt is time in seconds since last update
@@ -33,8 +35,8 @@ pc.script.create('Treasure_Box', function (app)
 
                 // TO DO: This should pass information along to Question (i.e. the Player Object)
                 
-                // COMMENT NEEDED
-                app.root.getChildren()[0].script.Question.generate();
+                // generate a new question
+                this.Question.generate();
                 
                 // Stop the Player that touched us from moving. (Should be it's own function, probably)
                 console.log(result.other.name + " should be unable to move now.");

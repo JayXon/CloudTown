@@ -46,6 +46,7 @@ pc.script.create('Third_Person_Camera', function (app)
         {
             this.Question = app.root.getChildren()[0].script.Question;
 
+            // set initial angle
             var angles = this.entity.getEulerAngles();
             this.ey = angles.y;
         },
@@ -74,7 +75,7 @@ pc.script.create('Third_Person_Camera', function (app)
 
         onMouseDown: function (event)
         {
-            if ( !pc.input.Mouse.isPointerLocked() && !this.Question.isPanelVisible() )
+            if ( !pc.input.Mouse.isPointerLocked() && !this.isInputLocked )
             {
                 app.mouse.enablePointerLock();
             }
