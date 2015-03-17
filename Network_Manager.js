@@ -80,6 +80,13 @@ pc.script.create('Network_Manager', function (app) {
             player.enabled = true;
 
             app.root.addChild(player);
+        },
+
+        deletePlayer : function (data) {
+            // a player has quit
+            var player = app.root.findByName('Player_' + data);
+            // console.log(player);
+            player.destroy();
         }
     };
 
