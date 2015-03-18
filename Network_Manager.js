@@ -22,7 +22,7 @@ pc.script.create('Network_Manager', function (app) {
             this.Client = app.root.getChildren()[0].script.Client;
 
             // create new player
-            var player = app.root.findByName('Player').clone();
+            var player = this.player = app.root.findByName('Player').clone();
 
             // random position and angle
             var x = Math.random() * 150 - 75;
@@ -55,9 +55,9 @@ pc.script.create('Network_Manager', function (app) {
 
             app.root.addChild(player);
 
-            // console.log(app.root);
+            // console.log(player);
 
-            var data = {
+            var data = this.playerLocation = {
                 x : x,
                 y : y,
                 z : z,
@@ -68,6 +68,25 @@ pc.script.create('Network_Manager', function (app) {
         },
 
         update: function (dt) {
+            if (!this.player) {
+                return;
+            }
+            var position = this.player.getPosition();
+            var angle = this.player.getEulerAngles();
+            // only send message to server if the location has changed
+            if (position.x !== this.playerLocation.x ||
+                position.y !== this.playerLocation.y ||
+                position.z !== this.playerLocation.z ||
+                angle.y !== this.playerLocation.ey) {
+                // console.log(angle.x + ', ' + angle.y + ', ' + angle.z);
+                this.playerLocation = {
+                    x : position.x,
+                    y : position.y,
+                    z : position.z,
+                    ey : angle.y
+                };
+                this.Client.send('player_moved', this.playerLocation);
+            }
         },
 
         newPlayer : function (data) {
@@ -77,14 +96,30 @@ pc.script.create('Network_Manager', function (app) {
             player.setName('Player_' + data.id);
             player.setPosition(data.x, data.y, data.z);
             player.setEulerAngles(0, data.ey, 0);
+            // disable the rigidbody for other player for now to prevent collision with other player
+            player.rigidbody.enabled = false;
             player.enabled = true;
 
             app.root.addChild(player);
         },
 
+        movePlayer : function (data) {
+            // a player has moved
+            var player = app.root.findByName('Player_' + data.id);
+            if (!player) {
+                return;
+            }
+            // console.log(data.ey);
+            player.setPosition(data.x, data.y, data.z);
+            player.setEulerAngles(0, data.ey, 0);
+        },
+
         deletePlayer : function (data) {
             // a player has quit
             var player = app.root.findByName('Player_' + data);
+            if (!player) {
+                return;
+            }
             // console.log(player);
             player.destroy();
         }

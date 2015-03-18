@@ -24,6 +24,7 @@ pc.script.create('Client', function (app)
             var network_manager = this.entity.script.Network_Manager;
             this.socket.on('player_joined', network_manager.newPlayer);
             this.socket.on('player_quit', network_manager.deletePlayer);
+            this.socket.on('player_moved', network_manager.movePlayer);
         },
 
         // Called every frame, dt is time in seconds since last update
