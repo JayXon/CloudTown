@@ -55,6 +55,8 @@ pc.script.create('Network_Manager', function (app) {
 
             app.root.addChild(player);
 
+            this.camera_script = player.script.Third_Person_Camera;
+
             // console.log(player);
 
             var data = this.playerLocation = {
@@ -68,22 +70,26 @@ pc.script.create('Network_Manager', function (app) {
         },
 
         update: function (dt) {
-            if (!this.player) {
+            if (!this.player || !this.camera_script) {
                 return;
             }
             var position = this.player.getPosition();
-            var angle = this.player.getEulerAngles();
+            // var angle = this.player.getEulerAngles();
+            // getEulerAngles doesn't seems to work properly
+            // have to get the correct angle from Third_Person_Camera
+            var ey = this.camera_script.ey;
+
             // only send message to server if the location has changed
             if (position.x !== this.playerLocation.x ||
                 position.y !== this.playerLocation.y ||
                 position.z !== this.playerLocation.z ||
-                angle.y !== this.playerLocation.ey) {
+                ey !== this.playerLocation.ey) {
                 // console.log(angle.x + ', ' + angle.y + ', ' + angle.z);
                 this.playerLocation = {
                     x : position.x,
                     y : position.y,
                     z : position.z,
-                    ey : angle.y
+                    ey : ey
                 };
                 this.Client.send('player_moved', this.playerLocation);
             }
