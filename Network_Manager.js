@@ -55,8 +55,6 @@ pc.script.create('Network_Manager', function (app) {
 
             app.root.addChild(player);
 
-            this.camera_script = player.script.Third_Person_Camera;
-
             // console.log(player);
 
             var data = this.playerLocation = {
@@ -70,9 +68,14 @@ pc.script.create('Network_Manager', function (app) {
         },
 
         update: function (dt) {
-            if (!this.player || !this.camera_script) {
+            if (!this.player) {
                 return;
             }
+            if (!this.camera_script) {
+                this.camera_script = this.player.script.Third_Person_Camera;
+                return;
+            }
+
             var position = this.player.getPosition();
             // var angle = this.player.getEulerAngles();
             // getEulerAngles doesn't seems to work properly
