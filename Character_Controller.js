@@ -42,8 +42,13 @@ pc.script.create('Character_Controller', function (context) {
             // Cast a ray
             var self = this;
             var pos = self.entity.getPosition();
-            shootRayEnd.add2(pos, self.entity.forward);
-            shootRayEnd.scale(1000000);
+            
+            // Vinnie says that shootRayEnd should be
+            // the forward vector * (distance + posVector)
+            shootRayEnd.mul(self.entity.forward, pos);
+
+            // shootRayEnd.add2(pos, self.entity.forward);
+            // shootRayEnd.scale(1000000);
             context.systems.rigidbody.raycastFirst(pos, shootRayEnd, function(result) 
             {
                 // Spawn a box
@@ -51,8 +56,7 @@ pc.script.create('Character_Controller', function (context) {
                 spawnedBox.addComponent("model", { type: 'box', });
                 context.root.addChild(spawnedBox);
                 spawnedBox.setPosition(result.point);
-                spawnedBox.setLocalScale(10, 10, 10);
-                console.log(result.entity.name);
+                spawnedBox.setLocalScale(5, 5, 5);
             });
         },
 
