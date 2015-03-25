@@ -26,6 +26,9 @@ pc.script.create('Player_Input', function (context) {
         this.controller.registerKeys('right', [pc.input.KEY_RIGHT, pc.input.KEY_D]);
         this.controller.registerKeys('jump', [pc.input.KEY_SPACE]);
         
+        // Mouse Controls
+        context.mouse.on(pc.EVENT_MOUSEDOWN, this.onMouseDown, this);
+
         // Debug Controls
         this.controller.registerKeys('debug_01', [pc.input.KEY_N]);
         this.controller.registerKeys('debug_02', [pc.input.KEY_M]);
@@ -89,6 +92,7 @@ pc.script.create('Player_Input', function (context) {
                 this.heading.normalize();
             }
             
+
             if ( this.controller.isPressed('debug_01') ) {
                 this.lockInput();
             }
@@ -98,13 +102,11 @@ pc.script.create('Player_Input', function (context) {
             }
             
             // Finally, if we aren't Input Locked, move!
-            if ( !this.isInputLocked )
-            {
+            if ( !this.isInputLocked ) {
                 this.character.script.Character_Controller.move(this.heading);
-                // this.entity.findByName('Body').script.Character_Controller.move(this.heading);
             }
         },
-        
+
         lockInput: function ()
         {
             this.isInputLocked = true;
@@ -113,6 +115,24 @@ pc.script.create('Player_Input', function (context) {
         unlockInput: function ()
         {
             this.isInputLocked = false;
+        },
+
+        onMouseDown: function (event) {
+            
+            if ( !this.isInputLocked ) {
+                
+                // Left Button
+                if ( event.button ===  pc.MOUSEBUTTON_LEFT ) {
+                    this.character.script.Character_Controller.attack();
+                }
+
+                if ( event.button === pc.MOUSEBUTTON_MIDDLE )
+                    console.log("Middle!");
+                
+                if ( event.button === pc.MOUSEBUTTON_RIGHT )
+                    console.log("Right!");
+                
+            }
         }
     }
 
