@@ -111,7 +111,7 @@ pc.script.create('Player_Input', function (context) {
         {
             this.isInputLocked = true;
         },
-        
+
         unlockInput: function ()
         {
             this.isInputLocked = false;

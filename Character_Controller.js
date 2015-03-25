@@ -12,8 +12,8 @@
 pc.script.create('Character_Controller', function (context) {
 
     var groundCheckRay = new pc.Vec3(0, -6.5, 0);      // > 5.78
-    var attackCheckRay = new pc.Vec3(0, 0, 100);
     var rayEnd = new pc.Vec3();
+    var shootRayEnd = new pc.Vec3();
 
     // Creates a new Character_Controller instance
     var Character_Controller = function (entity) {
@@ -37,17 +37,23 @@ pc.script.create('Character_Controller', function (context) {
         // the character is facing.
         attack: function ()
         {
-            console.log("Bang!");
+            // console.log("Shoot: " + this.entity.forward.toString());
             
             // Cast a ray
             var self = this;
-            var pos =  self.entity.getPosition();
-            rayEnd.add2(pos, attackCheckRay);   // RayEnd should be like 10 units in front of the player in local space
-            context.systems.rigidbody.raycastFirst(pos, rayEnd, function(result) {
-                    console.log(result.entity);
-                });
-
-            // Spawn a box there
+            var pos = self.entity.getPosition();
+            shootRayEnd.add2(pos, self.entity.forward);
+            shootRayEnd.scale(1000000);
+            context.systems.rigidbody.raycastFirst(pos, shootRayEnd, function(result) 
+            {
+                // Spawn a box
+                var spawnedBox = new pc.Entity();
+                spawnedBox.addComponent("model", { type: 'box', });
+                context.root.addChild(spawnedBox);
+                spawnedBox.setPosition(result.point);
+                spawnedBox.setLocalScale(10, 10, 10);
+                console.log(result.entity.name);
+            });
         },
 
         // Move the character in the direction supplied
