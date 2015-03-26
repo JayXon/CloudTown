@@ -9,7 +9,7 @@
 // Authors: Frank DiCola
 
 
-pc.script.create('Character_Controller', function (context) {
+pc.script.create('Character_Controller', function (app) {
 
     var groundCheckRay = new pc.Vec3(0, -6.5, 0);      // > 5.78
     var rayEnd = new pc.Vec3();
@@ -55,15 +55,31 @@ pc.script.create('Character_Controller', function (context) {
             shootRayEnd.z = Math.cos(y_redian);
             shootRayEnd.scale(1000000);
 
-            context.systems.rigidbody.raycastFirst(pos, shootRayEnd, function(result) 
+            /*app.systems.rigidbody.raycastFirst(pos, shootRayEnd, function(result)
             {
                 // Spawn a box
                 var spawnedBox = new pc.Entity();
                 spawnedBox.addComponent("model", { type: 'box', });
-                context.root.addChild(spawnedBox);
+                app.root.addChild(spawnedBox);
                 spawnedBox.setPosition(result.point);
                 spawnedBox.setLocalScale(5, 5, 5);
+            });*/
+            
+            var projectile = new pc.Entity();
+            projectile.setPosition( pos.add2(pos, new pc.Vec3(Math.sin(y_redian) * 5, 5, Math.cos(y_redian) * 5) ) );
+            projectile.setLocalScale( 3, 3, 3 );
+            projectile.addComponent("model", { type: 'sphere', });
+            projectile.addComponent("collision", { type: 'sphere', radius: 1.5, });
+            projectile.addComponent("rigidbody", { type: 'dynamic', });
+            projectile.rigidbody.applyForce( Math.sin(y_redian) * 20000, 0, Math.cos(y_redian) * 20000 );
+            app.root.addChild(projectile);
+            app.systems.script.addComponent(projectile, {
+                scripts : [{
+                    url : 'Projectile.js'
+                }]
             });
+
+
         },
 
         // Move the character in the direction supplied
@@ -84,7 +100,7 @@ pc.script.create('Character_Controller', function (context) {
             var pos = self.entity.getPosition();
             rayEnd.add2(pos, groundCheckRay);
             self.onGround = false;
-            context.systems.rigidbody.raycastFirst(pos, rayEnd, function(result) { self.onGround = true; });
+            app.systems.rigidbody.raycastFirst(pos, rayEnd, function(result) { self.onGround = true; });
         }
     };
 
