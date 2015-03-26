@@ -131,7 +131,17 @@ pc.script.create('Network_Manager', function (app) {
             }
             // console.log(player);
             player.destroy();
-        }
+        },
+
+        newTreasury: function (data){
+            // console.log(data);
+            // create Treasury
+            var TreasuryBox = app.root.findByName('Treasure Chest').clone();
+            TreasuryBox.setPosition(data.x, data.y, data.z);
+            TreasuryBox.enabled = true;
+            app.root.addChild(TreasuryBox);
+        } // End newTreasury 
+
     };
 
     return Network_Manager;

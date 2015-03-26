@@ -25,6 +25,7 @@ pc.script.create('Client', function (app)
             this.socket.on('player_joined', network_manager.newPlayer);
             this.socket.on('player_quit', network_manager.deletePlayer);
             this.socket.on('player_moved', network_manager.movePlayer);
+            this.socket.on('Create TB', network_manager.newTreasury);
         },
 
         // Called every frame, dt is time in seconds since last update
