@@ -49,6 +49,10 @@ pc.script.create('Player_Input', function (context) {
 
         update: function (dt)
         {
+            if ( this.isInputLocked )
+                return;
+        
+
             var input = false;
             // Calculate our heading in the XZ plane
             var transform = this.camera.getWorldTransform();
@@ -101,15 +105,14 @@ pc.script.create('Player_Input', function (context) {
                 this.unlockInput();
             }
             
-            // Finally, if we aren't Input Locked, move!
-            if ( !this.isInputLocked ) {
-                this.character.script.Character_Controller.move(this.heading);
-            }
+            this.character.script.Character_Controller.move(this.heading);
         },
 
         lockInput: function ()
         {
             this.isInputLocked = true;
+            
+            this.character.script.Character_Controller.slow();
         },
 
         unlockInput: function ()

@@ -53,14 +53,14 @@ pc.script.create('Third_Person_Camera', function (app)
 
         update: function (dt)
         {
-            // Update our Player's angles
-            if ( !this.isInputLocked ) {
-                this.entity.setEulerAngles(this.ex, this.ey, 0);
-            }
+            this.entity.setEulerAngles(this.ex, this.ey, 0);
         },
 
         onMouseMove: function (event)
         {
+            if ( this.isInputLocked )
+                return;
+
             if ( this.horizontalControl )
             {
                 this.ey -= event.dx / this.horizontalSensitivity;

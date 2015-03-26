@@ -9,6 +9,8 @@
 
 pc.script.create('Treasure_Box', function (app)
 {
+    var targetPlayer;
+
     // Creates a new Treasure_Box instance
     var Treasure_Box = function (entity) {
         this.entity = entity;
@@ -31,17 +33,17 @@ pc.script.create('Treasure_Box', function (app)
         {
             if (result.other.name === "Player")
             {
-                // TO DO: Save a reference to THIS Player
+                // Save a reference to THIS Player
+                this.targetPlayer = result.other;
+                console.log(this.targetPlayer);
 
-                // TO DO: This should pass information along to Question (i.e. the Player Object)
-                
-                // generate a new question
-                this.Question.generate();
-                
+                // Generate a new question
+                this.Question.generate(this.targetPlayer);
+
                 // Stop the Player that touched us from moving. (Should be it's own function, probably)
                 console.log(result.other.name + " should be unable to move now.");
-                result.other.script.Player_Input.lockInput();
-                result.other.script.Third_Person_Camera.lockInput();
+                this.targetPlayer.script.Player_Input.lockInput();
+                this.targetPlayer.script.Third_Person_Camera.lockInput();
             }
         }
     };

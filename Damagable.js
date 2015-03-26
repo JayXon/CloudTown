@@ -29,6 +29,7 @@ pc.script.create('Damagable', function (context) {
         // This function can either heal the target
         // or deplete its Health Points
         adjustHealth: function () {
+
         }
     };
 

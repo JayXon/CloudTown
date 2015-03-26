@@ -12,6 +12,7 @@ pc.script.create('Question', function (app)
     // Creates a new Question instance
     var Question = function (entity) {
         this.entity = entity;
+        this.targetPlayer;
     };
 
     Question.prototype = {
@@ -20,9 +21,8 @@ pc.script.create('Question', function (app)
         {
             console.log("Question... Initialized.");
 
-
             this.Client = app.root.getChildren()[0].script.Client;
-            
+
             var panel = document.createElement('div');
             panel.id = 'panel';
             panel.style.top = '10%';
@@ -59,7 +59,7 @@ pc.script.create('Question', function (app)
             closeButton.style.right = 0;
             closeButton.style.position = 'absolute';
             closeButton.style.margin = '16px';
-            closeButton.onclick = this.closePanel;
+            closeButton.onclick = this.closePanel.bind(this);
             panel.appendChild(closeButton);
 
             var hintButton = document.createElement('button');
@@ -83,10 +83,8 @@ pc.script.create('Question', function (app)
             panel.appendChild(submitButton);
 
             document.querySelector('body').appendChild(panel);
-            // this.generate();
         },
 
-        // Called every frame, dt is time in seconds since last update
         update: function (dt) {
         },
 
@@ -181,17 +179,21 @@ pc.script.create('Question', function (app)
             app.mouse.enablePointerLock();
 
             // Let the Player move again
-            this.PlayerWhoHasAPanelOpen = app.root.getChildren()[0].getChildren()[2];
-            this.PlayerWhoHasAPanelOpen.script.Player_Input.unlockInput();
-            this.PlayerWhoHasAPanelOpen.script.Third_Person_Camera.unlockInput();
-            console.log(this.PlayerWhoHasAPanelOpen.name + " should be able to move now.");
+            this.targetPlayer.script.Player_Input.unlockInput();
+            this.targetPlayer.script.Third_Person_Camera.unlockInput();
+
+            console.log(this.targetPlayer.name + " should be able to move now.");
         },
 
         isPanelVisible : function () {
             return document.getElementById('panel').style.visibility === 'visible';
         },
 
-        generate: function () {
+        generate: function ( player ) {
+
+            this.targetPlayer = player;
+            console.log("WHOOOOOOOO " + this.targetPlayer.name);
+
             if (!this.isPanelVisible()) {
                 this.Client.send('new_question');
             }

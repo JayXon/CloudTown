@@ -73,6 +73,11 @@ pc.script.create('Character_Controller', function (context) {
                 this.entity.rigidbody.linearVelocity = direction;
             }
         },
+        
+        slow: function () {
+            // alert("sloooow dowoooonw");
+            this.entity.rigidbody.linearVelocity = new pc.Vec3(0, 0, 0);
+        },
 
         _checkGround: function () {
             var self = this;
