@@ -27,6 +27,8 @@ pc.script.create('Character_Controller', function (context) {
 
         initialize: function () {
             console.log("Character_Controller... Initialized.");
+
+            this.camera_script = this.entity.script.Third_Person_Camera;
         },
 
         update: function (dt) {
@@ -48,7 +50,7 @@ pc.script.create('Character_Controller', function (context) {
             // shootRayEnd.mul(self.entity.forward, pos);
 
             // shootRayEnd.add2(pos, self.entity.forward);
-            var y_redian = self.entity.script.Third_Person_Camera.ey/180*Math.PI;
+            var y_redian = this.camera_script.ey/180*Math.PI;
             shootRayEnd.x = Math.sin(y_redian);
             shootRayEnd.z = Math.cos(y_redian);
             shootRayEnd.scale(1000000);
