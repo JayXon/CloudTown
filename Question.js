@@ -189,13 +189,13 @@ pc.script.create('Question', function (app)
             return document.getElementById('panel').style.visibility === 'visible';
         },
 
-        generate: function ( player ) {
+        generate: function ( player, id ) {
 
             this.targetPlayer = player;
-            console.log("WHOOOOOOOO " + this.targetPlayer.name);
+            console.log("WHOOOOOOOO " + this.targetPlayer.name + " hit TreasureBox " + id);
 
             if (!this.isPanelVisible()) {
-                this.Client.send('new_question');
+                this.Client.send('new_question', id);
             }
         }
     };

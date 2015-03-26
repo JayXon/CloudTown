@@ -126,21 +126,38 @@ pc.script.create('Network_Manager', function (app) {
         deletePlayer : function (data) {
             // a player has quit
             var player = app.root.findByName('Player_' + data);
+            console.log(player);
+
             if (!player) {
                 return;
             }
             // console.log(player);
             player.destroy();
+            console.log(player);
+            
         },
 
-        newTreasury: function (data){
+        newTreasury: function (data) {
             // console.log(data);
             // create Treasury
             var TreasuryBox = app.root.findByName('Treasure Chest').clone();
+            TreasuryBox.setName('Treasure_' + data.i);
             TreasuryBox.setPosition(data.x, data.y, data.z);
             TreasuryBox.enabled = true;
             app.root.addChild(TreasuryBox);
-        } // End newTreasury 
+        },
+
+        deleteTreasury: function (data) {
+            // remove Treasure Box
+            var TreasuryBox = app.root.findByName('Treasure_' + data);
+            console.log(TreasuryBox);
+            if (!TreasuryBox) {
+                return;
+            }
+            TreasuryBox.destroy();
+            TreasuryBox.enabled = false;
+            console.log(TreasuryBox);
+        }
 
     };
 

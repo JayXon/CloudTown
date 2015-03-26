@@ -23,6 +23,9 @@ pc.script.create('Treasure_Box', function (app)
             this.entity.collision.on('collisionstart', this.onCollisionStart, this);
 
             this.Question = app.root.getChildren()[0].script.Question;
+
+            // console.log(this.entity.name);
+            this.id = parseInt(this.entity.name.slice(9));
         },
 
         // Called every frame, dt is time in seconds since last update
@@ -38,7 +41,7 @@ pc.script.create('Treasure_Box', function (app)
                 console.log(this.targetPlayer);
 
                 // Generate a new question
-                this.Question.generate(this.targetPlayer);
+                this.Question.generate(this.targetPlayer, this.id);
 
                 // Stop the Player that touched us from moving. (Should be it's own function, probably)
                 console.log(result.other.name + " should be unable to move now.");
