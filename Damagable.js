@@ -11,10 +11,10 @@
 
 pc.script.create('Damagable', function (context) {
 
-    // vars
-
     var Damagable = function (entity) {
         this.entity = entity;
+        this.currentHealth = 50;
+        this.maxHealth = 50;
     };
 
     Damagable.prototype = {
@@ -29,7 +29,14 @@ pc.script.create('Damagable', function (context) {
         // This function can either heal the target
         // or deplete its Health Points
         adjustHealth: function () {
-
+            this.currentHealth -= 5;
+            
+            if ( this.currentHealth <= 0 ) {
+                this.currentHealth = 0;
+                this.entity.destroy();
+            }
+            
+            console.log("Health remaining: " + this.currentHealth);
         }
     };
 

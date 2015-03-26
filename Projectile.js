@@ -22,15 +22,24 @@ pc.script.create('Projectile', function (app) {
         initialize: function () {
             console.log("Projectile... Initialized.");
             this.entity.collision.on('collisionstart', this.onCollisionStart, this);
-
         },
 
         update: function (dt) {
+            // The destroy timer will tick down. When it depletes, destroy this object
         },
-        
+
         onCollisionStart: function (result)
         {
-            console.log("Ping!");
+            // Find the other's Damagable and adjust it's health
+            if ( result.other.script && result.other.script.Damagable )
+            {
+                result.other.script.Damagable.adjustHealth();
+            }
+            else
+                console.log("No Damagable detected");
+
+            // TO DO: Start the destroy timer
+
             this.entity.destroy();
         }
     };
