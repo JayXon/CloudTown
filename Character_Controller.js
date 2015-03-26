@@ -45,10 +45,14 @@ pc.script.create('Character_Controller', function (context) {
             
             // Vinnie says that shootRayEnd should be
             // the forward vector * (distance + posVector)
-            shootRayEnd.mul(self.entity.forward, pos);
+            // shootRayEnd.mul(self.entity.forward, pos);
 
             // shootRayEnd.add2(pos, self.entity.forward);
-            // shootRayEnd.scale(1000000);
+            var y_redian = self.entity.script.Third_Person_Camera.ey/180*Math.PI;
+            shootRayEnd.x = Math.sin(y_redian);
+            shootRayEnd.z = Math.cos(y_redian);
+            shootRayEnd.scale(1000000);
+
             context.systems.rigidbody.raycastFirst(pos, shootRayEnd, function(result) 
             {
                 // Spawn a box
