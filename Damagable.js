@@ -9,7 +9,7 @@
 // Authors: Frank DiCola
 
 
-pc.script.create('Damagable', function (context) {
+pc.script.create('Damagable', function (app) {
 
     var Damagable = function (entity) {
         this.entity = entity;
@@ -21,6 +21,7 @@ pc.script.create('Damagable', function (context) {
 
         initialize: function () {
             console.log("Damagable... Initialized.");
+            this.User_Interface = app.root.getChildren()[0].script.User_Interface;
         },
 
         update: function (dt) {
@@ -30,13 +31,16 @@ pc.script.create('Damagable', function (context) {
         // or deplete its Health Points
         adjustHealth: function () {
             this.currentHealth -= 5;
-            
+
             if ( this.currentHealth <= 0 ) {
                 this.currentHealth = 0;
                 this.entity.destroy();
             }
 
             // If this is a Player, update the HTML Graphics thing with current health
+            if ( this.entity.name === "Player" )
+                this.User_Interface.setHealthDisplay( this.currentHealth );
+                
             console.log("Health remaining: " + this.currentHealth);
         }
     };
