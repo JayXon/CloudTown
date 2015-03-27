@@ -20,7 +20,7 @@ pc.script.create('Projectile', function (app) {
     Projectile.prototype = {
 
         initialize: function () {
-            console.log("Projectile... Initialized.");
+            // console.log("Projectile... Initialized.");
             this.entity.collision.on('collisionstart', this.onCollisionStart, this);
         },
 

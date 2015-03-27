@@ -35,7 +35,8 @@ pc.script.create('Damagable', function (context) {
                 this.currentHealth = 0;
                 this.entity.destroy();
             }
-            
+
+            // If this is a Player, update the HTML Graphics thing with current health
             console.log("Health remaining: " + this.currentHealth);
         }
     };

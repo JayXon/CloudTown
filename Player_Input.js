@@ -7,7 +7,7 @@
 // Authors: Frank DiCola
 
 
-pc.script.create('Player_Input', function (context) {
+pc.script.create('Player_Input', function (app) {
 
     // Creates a new Player_Input instance
     var Player_Input = function (entity) {
@@ -27,7 +27,7 @@ pc.script.create('Player_Input', function (context) {
         this.controller.registerKeys('jump', [pc.input.KEY_SPACE]);
         
         // Mouse Controls
-        context.mouse.on(pc.EVENT_MOUSEDOWN, this.onMouseDown, this);
+        app.mouse.on(pc.EVENT_MOUSEDOWN, this.onMouseDown, this);
 
         // Debug Controls
         this.controller.registerKeys('debug_01', [pc.input.KEY_N]);
@@ -39,8 +39,10 @@ pc.script.create('Player_Input', function (context) {
         initialize: function ()
         {
             console.log("Player_Input... Initialized.");
+            
+            this.Client = app.root.getChildren()[0].script.Client;
 
-            // this.camera = context.root.findByName('Camera');
+            // this.camera = app.root.findByName('Camera');
             this.camera = this.entity.findByName('Camera');
             this.character = this.entity;
             this.characterController = 'Character_Controller';
@@ -127,6 +129,7 @@ pc.script.create('Player_Input', function (context) {
                 // Left Button
                 if ( event.button ===  pc.MOUSEBUTTON_LEFT ) {
                     this.character.script.Character_Controller.attack();
+                    this.Client.send('shoot');
                 }
 
                 if ( event.button === pc.MOUSEBUTTON_MIDDLE )

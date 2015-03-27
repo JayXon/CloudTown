@@ -46,6 +46,8 @@ pc.script.create('Network_Manager', function (app) {
                     url : 'Third_Person_Camera.js'
                 }, {
                     url : 'Player_Input.js'
+                }, {
+                    url : 'Damagable.js'
                 }]
             });
 
@@ -65,6 +67,8 @@ pc.script.create('Network_Manager', function (app) {
             }
             // send join message to server
             this.Client.send('player_joined', data);
+            
+            console.log(this.player);
         },
 
         update: function (dt) {
@@ -105,8 +109,10 @@ pc.script.create('Network_Manager', function (app) {
             player.setName('Player_' + data.id);
             player.setPosition(data.x, data.y, data.z);
             player.setEulerAngles(0, data.ey, 0);
+            
             // disable the rigidbody for other player for now to prevent collision with other player
-            player.rigidbody.enabled = false;
+            // psychheee!
+            player.rigidbody.enabled = true; // Was false before
             player.enabled = true;
 
             app.root.addChild(player);
@@ -121,6 +127,15 @@ pc.script.create('Network_Manager', function (app) {
             // console.log(data.ey);
             player.setPosition(data.x, data.y, data.z);
             player.setEulerAngles(0, data.ey, 0);
+        },
+        
+        playerAttack : function (data) {
+            var player = app.root.findByName('Player_' + data);
+            if (!player) {
+                return;
+            }
+
+            player.script.Character_Controller.attack();
         },
 
         deletePlayer : function (data) {

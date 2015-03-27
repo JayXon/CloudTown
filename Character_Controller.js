@@ -34,52 +34,30 @@ pc.script.create('Character_Controller', function (app) {
         update: function (dt) {
             this._checkGround();
         },
-        
+
         // Attack with the equipped weapon in the direction
         // the character is facing.
         attack: function ()
         {
-            // console.log("Shoot: " + this.entity.forward.toString());
+            var pos = this.entity.getPosition();
             
-            // Cast a ray
-            var self = this;
-            var pos = self.entity.getPosition();
-            
-            // Vinnie says that shootRayEnd should be
-            // the forward vector * (distance + posVector)
-            // shootRayEnd.mul(self.entity.forward, pos);
-
-            // shootRayEnd.add2(pos, self.entity.forward);
-            var y_redian = this.camera_script.ey/180*Math.PI;
-            shootRayEnd.x = Math.sin(y_redian);
-            shootRayEnd.z = Math.cos(y_redian);
-            shootRayEnd.scale(1000000);
-
-            /*app.systems.rigidbody.raycastFirst(pos, shootRayEnd, function(result)
-            {
-                // Spawn a box
-                var spawnedBox = new pc.Entity();
-                spawnedBox.addComponent("model", { type: 'box', });
-                app.root.addChild(spawnedBox);
-                spawnedBox.setPosition(result.point);
-                spawnedBox.setLocalScale(5, 5, 5);
-            });*/
+            var shootDirection = new pc.Vec3( 0, 0, 1 );
+            var tmpQuat = this.entity.getRotation();
+            shootDirection = tmpQuat.transformVector(shootDirection);
             
             var projectile = new pc.Entity();
-            projectile.setPosition( pos.add2(pos, new pc.Vec3(Math.sin(y_redian) * 5, 5, Math.cos(y_redian) * 5) ) );
+            projectile.setPosition( pos.add2(pos, shootDirection.scale(15) ) );
             projectile.setLocalScale( 3, 3, 3 );
             projectile.addComponent("model", { type: 'sphere', });
             projectile.addComponent("collision", { type: 'sphere', radius: 1.5, });
             projectile.addComponent("rigidbody", { type: 'dynamic', });
-            projectile.rigidbody.applyForce( Math.sin(y_redian) * 20000, 0, Math.cos(y_redian) * 20000 );
+            projectile.rigidbody.applyForce( shootDirection.scale(2500) );
             app.root.addChild(projectile);
             app.systems.script.addComponent(projectile, {
                 scripts : [{
                     url : 'Projectile.js'
                 }]
             });
-
-
         },
 
         // Move the character in the direction supplied
