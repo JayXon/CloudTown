@@ -25,9 +25,9 @@ pc.script.create('Network_Manager', function (app) {
             var player = this.player = app.root.findByName('Player').clone();
 
             // random position and angle
-            var x = Math.random() * 150 - 75;
+            var x = Math.random() * 250 - 175;
             var y = Math.random() * 25;
-            var z = Math.random() * 150 - 75;
+            var z = Math.random() * 250 - 75;
             var ey = Math.random() * 360;
 
             // attach camera to player
