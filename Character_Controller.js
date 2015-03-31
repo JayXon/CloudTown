@@ -33,6 +33,9 @@ pc.script.create('Character_Controller', function (app) {
 
         update: function (dt) {
             this._checkGround();
+            
+            // Apply gravity manually for more tuning control
+            this.entity.rigidbody.applyForce(0, -9000, 2);
         },
 
         // Attack with the equipped weapon in the direction
@@ -40,7 +43,7 @@ pc.script.create('Character_Controller', function (app) {
         attack: function ()
         {
             var pos = this.entity.getPosition();
-            
+
             var shootDirection = new pc.Vec3( 0, 0, 1 );
             var tmpQuat = this.entity.getRotation();
             shootDirection = tmpQuat.transformVector(shootDirection);
@@ -106,7 +109,7 @@ pc.script.create('Character_Controller', function (app) {
         
         slow: function () {
             // alert("sloooow dowoooonw");
-            this.entity.rigidbody.linearVelocity = new pc.Vec3(0, 0, 0);
+            // this.entity.rigidbody.linearVelocity = new pc.Vec3(0, 0, 0);
         },
 
         _checkGround: function () {

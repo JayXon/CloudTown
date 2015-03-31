@@ -34,8 +34,8 @@ pc.script.create('Harmful', function (app) {
             }
             else
                 console.log("No Damagable detected");
-
-            this.entity.destroy();
+                
+            console.log("Aight");
         }
     };
 
