@@ -34,8 +34,11 @@ pc.script.create('Character_Controller', function (app) {
         update: function (dt) {
             this._checkGround();
             
-            // Apply gravity manually for more tuning control
-            this.entity.rigidbody.applyForce(0, -9000, 2);
+            if ( this.entity.name === "Player" )
+            {
+                // Apply gravity manually for more tuning control
+                this.entity.rigidbody.applyForce(0, -9000, 0);
+            }
         },
 
         // Attack with the equipped weapon in the direction
@@ -95,7 +98,7 @@ pc.script.create('Character_Controller', function (app) {
             children.forEach( function (child) {
                 child.enabled = true;
             });
-            
+
             this.entity.script.Damagable.adjustHealth(50);
         },
 

@@ -38,6 +38,11 @@ pc.script.create('Third_Person_Camera', function (app)
         
         // For locking input when menus appear and the mouse is needed
         this.isInputLocked = false;
+        
+        // Camera Spring Arm Variables
+        this.rayEnd = new pc.Vec3();
+        this.cameraMaxDist = 35;
+        this.cameraHeight = 15;
     };
 
     Third_Person_Camera.prototype =
@@ -49,11 +54,31 @@ pc.script.create('Third_Person_Camera', function (app)
             // set initial angle
             var angles = this.entity.getEulerAngles();
             this.ey = angles.y;
+            
+            // Grab our camera reference
+            this.camera = this.entity.findByName('Camera');
+            console.log(this.camera);
         },
 
         update: function (dt)
         {
             this.entity.setEulerAngles(this.ex, this.ey, 0);
+
+            // Camera Spring Arm
+            var self = this;
+            var pos = self.entity.getPosition();
+            var backCheckRay = self.entity.forward;
+            backCheckRay.scale(this.cameraMaxDist);
+            backCheckRay.y = this.cameraHeight;
+            this.rayEnd.add2(pos, backCheckRay);
+
+            // Default pos
+            this.camera.setPosition(this.rayEnd);
+
+            app.systems.rigidbody.raycastFirst(pos, this.rayEnd, function( result ) {
+                // console.log("Hit a " + result.entity.name.toString());
+                self.camera.setPosition( result.point );
+            });
         },
 
         onMouseMove: function (event)

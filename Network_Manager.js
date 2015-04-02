@@ -35,7 +35,6 @@ pc.script.create('Network_Manager', function (app) {
             camera.setName('Camera');
             camera.addComponent('camera');
             player.addChild(camera);
-            camera.setLocalPosition(0, 15, -35);
             camera.setLocalEulerAngles(160, 0, 180);
 
             // add script to player
