@@ -113,9 +113,8 @@ pc.script.create('Network_Manager', function (app) {
             player.setPosition(data.x, data.y, data.z);
             player.setEulerAngles(data.ex, data.ey, 0);
             
-            // disable the rigidbody for other player for now to prevent collision with other player
-            // psychheee!
             player.rigidbody.enabled = true; // Was false before
+            player.rigidbody.type = pc.BODYTYPE_KINEMATIC;
             player.enabled = true;
 
             app.root.addChild(player);
@@ -127,9 +126,9 @@ pc.script.create('Network_Manager', function (app) {
             if (!player) {
                 return;
             }
-            // console.log(data.ey);
-            player.setPosition(data.x, data.y, data.z);
-            player.setEulerAngles(data.ex, data.ey, 0);
+            // player.setPosition(data.x, data.y, data.z);
+            // player.setEulerAngles(data.ex, data.ey, 0);
+            player.rigidbody.teleport(data.x, data.y, data.z, data.ex, data.ey, 0);
         },
         
         playerAttack : function (data) {
