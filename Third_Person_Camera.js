@@ -23,9 +23,9 @@ pc.script.create('Third_Person_Camera', function (app)
 
         this.horizontalControl = true;
         this.horizontalSensitivity = 5;
-        this.verticalControl = false;
+        this.verticalControl = true;
         this.verticalSensitivity = 5;
-        this.verticalBounds = [-45, 45, 0];
+        this.verticalBound = 45;
 
         // Camera Euler angle rotation
         this.ex = 0;
@@ -69,7 +69,9 @@ pc.script.create('Third_Person_Camera', function (app)
             var pos = self.entity.getPosition();
             var backCheckRay = self.entity.forward;
             backCheckRay.scale(this.cameraMaxDist);
-            backCheckRay.y = this.cameraHeight;
+
+
+            backCheckRay.y = this.cameraHeight + Math.sin(this.ex / 180 * Math.PI) * 30;
             this.rayEnd.add2(pos, backCheckRay);
 
             // Default pos
@@ -93,8 +95,9 @@ pc.script.create('Third_Person_Camera', function (app)
 
             if ( this.verticalControl )
             {
-                this.ex -= event.dy / this.verticalSensitivity;
-                this.ex = pc.math.clamp(this.ex, this.verticalBounds.x, this.verticalBounds.y);
+                this.ex += event.dy / this.verticalSensitivity;
+
+                this.ex = pc.math.clamp(this.ex, -this.verticalBound, this.verticalBound);
             }
         },
 

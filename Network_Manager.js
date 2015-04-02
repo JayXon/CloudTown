@@ -62,6 +62,7 @@ pc.script.create('Network_Manager', function (app) {
                 x : x,
                 y : y,
                 z : z,
+                ex : 0,
                 ey : ey
             }
             // send join message to server
@@ -84,17 +85,20 @@ pc.script.create('Network_Manager', function (app) {
             // getEulerAngles doesn't seems to work properly
             // have to get the correct angle from Third_Person_Camera
             var ey = this.camera_script.ey;
+            var ex = this.camera_script.ex;
 
             // only send message to server if the location has changed
             if (position.x !== this.playerLocation.x ||
                 position.y !== this.playerLocation.y ||
                 position.z !== this.playerLocation.z ||
+                ex !== this.playerLocation.ex ||
                 ey !== this.playerLocation.ey) {
                 // console.log(angle.x + ', ' + angle.y + ', ' + angle.z);
                 this.playerLocation = {
                     x : position.x,
                     y : position.y,
                     z : position.z,
+                    ex : ex,
                     ey : ey
                 };
                 this.Client.send('player_moved', this.playerLocation);
@@ -107,7 +111,7 @@ pc.script.create('Network_Manager', function (app) {
             var player = app.root.findByName('Player').clone();
             player.setName('Player_' + data.id);
             player.setPosition(data.x, data.y, data.z);
-            player.setEulerAngles(0, data.ey, 0);
+            player.setEulerAngles(data.ex, data.ey, 0);
             
             // disable the rigidbody for other player for now to prevent collision with other player
             // psychheee!
@@ -125,7 +129,7 @@ pc.script.create('Network_Manager', function (app) {
             }
             // console.log(data.ey);
             player.setPosition(data.x, data.y, data.z);
-            player.setEulerAngles(0, data.ey, 0);
+            player.setEulerAngles(data.ex, data.ey, 0);
         },
         
         playerAttack : function (data) {
