@@ -51,8 +51,10 @@ pc.script.create('Player_Input', function (app) {
 
         update: function (dt)
         {
-            if ( this.isInputLocked )
+            if ( this.isInputLocked ) {
+                this.character.script.Character_Controller.move(new pc.Vec3(0, 0, 0));
                 return;
+            }
         
 
             var input = false;
