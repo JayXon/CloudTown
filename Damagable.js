@@ -41,7 +41,7 @@ pc.script.create('Damagable', function (app) {
             if ( this.entity.name === "Player" )
                 this.User_Interface.setHealthDisplay( this.currentHealth );
 
-            console.log("Health remaining: " + this.currentHealth);
+            // console.log("Health remaining: " + this.currentHealth);
         },
 
         die : function () {

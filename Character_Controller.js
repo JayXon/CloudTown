@@ -15,14 +15,19 @@ pc.script.create('Character_Controller', function (app) {
     var rayEnd = new pc.Vec3();
     var shootRayEnd = new pc.Vec3();
     var origin = new pc.Vec3( 0, 0, 0 );
+    var GAME_STATES = {
+        MainMenu: 0,
+        Alive: 1,
+        Dead: 2
+    };
 
     // Creates a new Character_Controller instance
     var Character_Controller = function (entity) {
         this.entity = entity;
         this.onGround = false;
 
-        this.moveSpeed = 30;
-        this.jumpPower = new pc.Vec3( 0, 10000, 0 );
+        this.moveSpeed = 40;
+        this.jumpPower = new pc.Vec3( 0, 8000, 0 );
     };
 
     Character_Controller.prototype = {
@@ -31,16 +36,22 @@ pc.script.create('Character_Controller', function (app) {
             console.log("Character_Controller... Initialized.");
 
             this.camera_script = this.entity.script.Third_Person_Camera;
+            this.question_script = app.root.getChildren()[0].script.Question;
+
+            this.gameState = GAME_STATES.Alive;
         },
 
         update: function (dt) {
             this._checkGround();
             
-            if ( this.entity.name === "Player" )
+            if ( this.entity.name === "Player" && this.gameState === GAME_STATES.Alive )
             {
                 // Apply gravity manually for more tuning control
                 this.entity.rigidbody.applyForce(0, -9000, 0);
+                console.log(this.gameState.toString());
             }
+
+            // console.log(this.entity.rigidbody.linearVelocity.toString());
         },
 
         // Attack with the equipped weapon in the direction
@@ -67,43 +78,62 @@ pc.script.create('Character_Controller', function (app) {
                 }]
             });
         },
-        
+
         die: function () {
             // Lock your input
             if ( this.entity.name === "Player" ) {
                 this.entity.script.Player_Input.lockInput();
                 this.entity.script.Third_Person_Camera.lockInput();
+                
+                // Generate a Question to respawn
+                this.question_script.generate(this.entity, -1);
+
+                // Send him to HELL
+                this.entity.rigidbody.teleport( 0, -100, -10, 0, 0, 0 );
+                this.move( new pc.Vec3(0,0,0) );
+                this.entity.rigidbody.enabled = false;
             }
 
-            // Play death animation
-            var children = this.entity.getChildren();
+            // Set state to "Dead"
+            this.gameState = GAME_STATES.Dead;
+            console.log("I JUST DIED, SEE? " + this.gameState );
 
-            children.forEach( function (child) {
+            this.entity.getChildren().forEach( function (child) {
                 if ( child.name !== "Camera")
                     child.enabled = false;
             });
+        },
 
-            // Have him sit there like a dummy
-            // Take him to HELL
-            // Have him solve a problem or 2
+        spawn: function () {
+            // Spawn him in the world with full health in a random place
+            var x = Math.random() * 250 - 175;
+            var y = Math.random() * 25;
+            var z = Math.random() * 250 - 75;
+            var ey = Math.random() * 360;
+            this.entity.rigidbody.teleport( x, y, z, 0, ey, 0 );
 
-            // Respawn him in the world with full health
-            this.entity.rigidbody.teleport( 0, 60, 60 );
-            
             // Control yourself
             if ( this.entity.name === "Player" ) {
-                this.entity.script.Player_Input.unlockInput();
-                this.entity.script.Third_Person_Camera.unlockInput();
+                //this.entity.script.Player_Input.unlockInput();
+                //this.entity.script.Third_Person_Camera.unlockInput();
             }
 
-            // add everythig back
-            children.forEach( function (child) {
+            // Add everything back
+            this.entity.getChildren().forEach( function (child) {
                 child.enabled = true;
             });
 
+            // Maximum health restored
             this.entity.script.Damagable.adjustHealth(50);
+
+            // Enable Rigidbody
+            this.move( new pc.Vec3(0,0,0) );
+            this.entity.rigidbody.enabled = true;
+            
+            // Set state to Alive
+            this.gameState = GAME_STATES.Alive;
         },
-        
+
         jump: function ( ) {
             console.log("Jump!");
 

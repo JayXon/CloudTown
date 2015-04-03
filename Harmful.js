@@ -31,11 +31,10 @@ pc.script.create('Harmful', function (app) {
             if ( result.other.script && result.other.script.Damagable )
             {
                 result.other.script.Damagable.adjustHealth( this.damage );
+                console.log("HAHA! YOU'VE BEEN HARMED BY ME, " + this.entity.name + " FOR " + this.damage + " HITPOINTS!!!!");
             }
             else
                 console.log("No Damagable detected");
-                
-            console.log("Aight");
         }
     };
 

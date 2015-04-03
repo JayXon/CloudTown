@@ -91,7 +91,7 @@ pc.script.create('Question', function (app)
         present: function (data) {
             // prevent panel from changing question
             if (this.isPanelVisible()) {
-                return;
+                // return;
             }
 
             console.log(data);
@@ -163,15 +163,37 @@ pc.script.create('Question', function (app)
                 label.style.color = 'green';
                 label.innerHTML = 'Correct!'
                 document.getElementById('answer').appendChild(label);
+                this.reward();
             } else {
                 // the answers are wrong :(
                 // mark the wrong answers as red
                 data.forEach(function(i) {
                     checkboxes[i].style.color = '#fff';
-                    checkboxes[i].style.backgroundColor = 'red';
+                    
+                    if ( checkboxes[i].firstChild.checked === true )
+                        checkboxes[i].style.backgroundColor = 'red';
+                    else
+                        checkboxes[i].style.backgroundColor = 'green';
                 });
+                
+                // this.Punishment();
+            }
+        },
+        
+        reward : function () {
+            
+            // If they are dead, respawn them
+            if ( this.targetPlayer.script.Character_Controller.gameState === 2 ) {
+                alert("Welcome back!");
+                this.targetPlayer.script.Character_Controller.spawn();
             }
 
+            // Else, sparkly particles
+            // spawn some thing at the box
+            
+            
+            // No matter what, close the panel!
+            this.closePanel();
         },
 
         closePanel : function () {
@@ -194,7 +216,7 @@ pc.script.create('Question', function (app)
             this.targetPlayer = player;
             console.log("WHOOOOOOOO " + this.targetPlayer.name + " hit TreasureBox " + id);
 
-            if (!this.isPanelVisible()) {
+            if ( true || !this.isPanelVisible() ) {
                 this.Client.send('new_question', id);
             }
         }
