@@ -14,6 +14,7 @@ pc.script.create('Character_Controller', function (app) {
     var groundCheckRay = new pc.Vec3(0, -6.5, 0);      // > 5.78
     var rayEnd = new pc.Vec3();
     var shootRayEnd = new pc.Vec3();
+    var origin = new pc.Vec3( 0, 0, 0 );
 
     // Creates a new Character_Controller instance
     var Character_Controller = function (entity) {
@@ -21,6 +22,7 @@ pc.script.create('Character_Controller', function (app) {
         this.onGround = false;
 
         this.moveSpeed = 30;
+        this.jumpPower = new pc.Vec3( 0, 10000, 0 );
     };
 
     Character_Controller.prototype = {
@@ -101,6 +103,14 @@ pc.script.create('Character_Controller', function (app) {
 
             this.entity.script.Damagable.adjustHealth(50);
         },
+        
+        jump: function ( ) {
+            console.log("Jump!");
+
+            if ( this.onGround ) {
+                this.entity.rigidbody.applyImpulse( this.jumpPower, origin );
+            }
+        },
 
         // Move the character in the direction supplied
         move: function (direction) {
@@ -109,7 +119,7 @@ pc.script.create('Character_Controller', function (app) {
                 this.entity.rigidbody.linearVelocity = direction;
             }
         },
-        
+
         slow: function () {
             // alert("sloooow dowoooonw");
             // this.entity.rigidbody.linearVelocity = new pc.Vec3(0, 0, 0);

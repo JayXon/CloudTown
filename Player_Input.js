@@ -102,14 +102,18 @@ pc.script.create('Player_Input', function (app) {
             
 
             if ( this.controller.isPressed('debug_01') ) {
-                this.lockInput();
+                //this.lockInput();
             }
 
             if ( this.controller.isPressed('debug_02') ) {
-                this.unlockInput();
+                //this.unlockInput();
             }
-            
+
             this.character.script.Character_Controller.move(this.heading);
+            
+            if ( this.controller.isPressed('jump') ) {
+                this.character.script.Character_Controller.jump();
+            }
         },
 
         lockInput: function ()
