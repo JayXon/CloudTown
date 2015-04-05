@@ -13,6 +13,7 @@ pc.script.create('Question', function (app)
     var Question = function (entity) {
         this.entity = entity;
         this.targetPlayer;
+        this.correct;
     };
 
     Question.prototype = {
@@ -146,6 +147,7 @@ pc.script.create('Question', function (app)
             this.Client.send('submit_answer', selected);
             // disable submit button
             document.getElementById('submit').disabled = true;
+            this.correct = true;
         },
 
         hint : function () {
@@ -176,7 +178,8 @@ pc.script.create('Question', function (app)
                         checkboxes[i].style.backgroundColor = 'green';
                 });
                 
-                // this.Punishment();
+                this.correct = false;
+                // this.punish();
             }
         },
         
@@ -197,6 +200,12 @@ pc.script.create('Question', function (app)
         },
 
         closePanel : function () {
+            // If they are dead and got it wrong, get a new question
+            if ( this.correct === false && this.targetPlayer.script.Character_Controller.gameState === 2 ) {
+                this.generate(this.targetPlayer, -1);
+                return;
+            }
+
             document.getElementById('panel').style.visibility = 'hidden';
             app.mouse.enablePointerLock();
 
