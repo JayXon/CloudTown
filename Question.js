@@ -55,6 +55,7 @@ pc.script.create('Question', function (app)
             panel.appendChild(answer);
 
             var closeButton = document.createElement('button');
+            closeButton.id = 'close'
             closeButton.innerHTML = 'X';
             closeButton.style.top = 0;
             closeButton.style.right = 0;
@@ -123,6 +124,10 @@ pc.script.create('Question', function (app)
                 document.getElementById('hint').style.visibility = 'hidden';
             }
 
+            // if the player is dead disable close button before submit
+            if ( this.targetPlayer.script.Character_Controller.gameState === 2 ) {
+                document.getElementById('close').disabled = true;
+            }
             // enable submit button
             document.getElementById('submit').disabled = false;
 
@@ -145,8 +150,11 @@ pc.script.create('Question', function (app)
                 }
             }
             this.Client.send('submit_answer', selected);
+
+            document.getElementById('close').disabled = false;
             // disable submit button
             document.getElementById('submit').disabled = true;
+            
             this.correct = true;
         },
 
