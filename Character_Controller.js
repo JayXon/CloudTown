@@ -87,6 +87,12 @@ pc.script.create('Character_Controller', function (app) {
             });
         },
 
+        adjustBullets: function (amount) {
+            this.bullets += amount;
+            
+            console.log("Bullets: " + this.bullets);
+        },
+
         die: function () {
             // Lock your input
             if ( this.entity.name === "Player" ) {

@@ -143,15 +143,37 @@ pc.script.create('Network_Manager', function (app) {
         deletePlayer : function (data) {
             // a player has quit
             var player = app.root.findByName('Player_' + data);
-            console.log(player);
-
             if (!player) {
                 return;
             }
-            // console.log(player);
+
             player.destroy();
-            console.log(player);
-            
+        },
+        
+        playerHealth : function (data) {
+            var player;
+            if (data.id === -1)
+                player = this.player;
+            else
+                player = app.root.findByName('Player_' + data.id);
+            if (!player) {
+                return;
+            }
+
+            player.script.Damagable.adjustHealth(data.hp);
+        },
+        
+        playerBullets : function (data) {
+            var player;
+            if (data.id === -1)
+                player = this.player;
+            else
+                player = app.root.findByName('Player_' + data.id);
+            if (!player) {
+                return;
+            }
+
+            player.script.Character_Controller.adjustBullets(data.bullets);
         },
 
         newTreasury: function (data) {

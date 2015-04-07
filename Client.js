@@ -28,6 +28,8 @@ pc.script.create('Client', function (app)
             this.socket.on('Create TB', network_manager.newTreasury);
             this.socket.on('Delete TB', network_manager.deleteTreasury);
             this.socket.on('shoot', network_manager.playerAttack);
+            this.socket.on('health', network_manager.playerHealth.bind(network_manager));
+            this.socket.on('bullets', network_manager.playerBullets.bind(network_manager));
         },
 
         // Called every frame, dt is time in seconds since last update
