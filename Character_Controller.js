@@ -39,6 +39,8 @@ pc.script.create('Character_Controller', function (app) {
             this.question_script = app.root.getChildren()[0].script.Question;
 
             this.gameState = GAME_STATES.Alive;
+
+            this.bullets = 50;
         },
 
         update: function (dt) {
@@ -48,7 +50,7 @@ pc.script.create('Character_Controller', function (app) {
             {
                 // Apply gravity manually for more tuning control
                 this.entity.rigidbody.applyForce(0, -9000, 0);
-                console.log(this.gameState.toString());
+                //console.log(this.gameState.toString());
             }
 
             // console.log(this.entity.rigidbody.linearVelocity.toString());
@@ -58,6 +60,12 @@ pc.script.create('Character_Controller', function (app) {
         // the character is facing.
         attack: function ()
         {
+            if (this.bullets <= 0) {
+                console.log("no more bullets!");
+                return;
+            }
+            this.bullets--;
+
             var pos = this.entity.getPosition();
 
             var shootDirection = new pc.Vec3( 0, 0, 1 );
