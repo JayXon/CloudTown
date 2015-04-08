@@ -22,8 +22,8 @@ pc.script.create('Network_Manager', function (app) {
             this.Client = app.root.getChildren()[0].script.Client;
 
             // create new player
-            var player = this.player = app.root.findByName('Player').clone();
-
+            var player = this.player = app.root.findByName('_Player').clone();
+            player.setName('Player'); 
             // random position and angle
             var x = Math.random() * 250 - 175;
             var y = Math.random() * 25;
@@ -108,7 +108,7 @@ pc.script.create('Network_Manager', function (app) {
         newPlayer : function (data) {
             // console.log(data);
             // a new player has joined
-            var player = app.root.findByName('Player').clone();
+            var player = app.root.findByName('_Player').clone();
             player.setName('Player_' + data.id);
             player.setPosition(data.x, data.y, data.z);
             player.setEulerAngles(data.ex, data.ey, 0);

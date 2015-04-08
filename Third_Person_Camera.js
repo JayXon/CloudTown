@@ -37,7 +37,7 @@ pc.script.create('Third_Person_Camera', function (app)
         app.mouse.on(pc.input.EVENT_MOUSEDOWN, this.onMouseDown, this);
         
         // For locking input when menus appear and the mouse is needed
-        this.isInputLocked = false;
+        this.isInputLocked = true;
         
         // Camera Spring Arm Variables
         this.rayEnd = new pc.Vec3();

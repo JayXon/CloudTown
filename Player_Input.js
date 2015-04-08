@@ -46,7 +46,7 @@ pc.script.create('Player_Input', function (app) {
             this.camera = this.entity.findByName('Camera');
             this.character = this.entity;
             this.characterController = 'Character_Controller';
-            this.isInputLocked = false;
+            this.isInputLocked = true;
         },
 
         update: function (dt)
