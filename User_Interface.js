@@ -190,10 +190,28 @@ pc.script.create('User_Interface', function (app) {
         },
         
         playGame: function() {
-          document.getElementById('buttMenu').style.visibility = 'hidden';   
-          var player = app.root.findByName('Player');
-          player.script.Third_Person_Camera.unlockInput();
-          player.script.Player_Input.unlockInput();
+            document.getElementById('buttMenu').style.visibility = 'hidden';   
+            var player = app.root.findByName('Player');
+            player.script.Third_Person_Camera.unlockInput();
+            player.script.Player_Input.unlockInput();
+
+            // random position and angle
+            var x = Math.random() * 250 - 175;
+            var y = Math.random() * 25;
+            var z = Math.random() * 250 - 75;
+            var ey = Math.random() * 360;
+
+            player.rigidbody.teleport(x, y, z, 0, ey, 0);
+
+            var data = {
+                x : x,
+                y : y,
+                z : z,
+                ex : 0,
+                ey : ey
+            }
+            // send join message to server
+            app.root.getChildren()[0].script.Client.send('player_joined', data);
         }
     };
 
