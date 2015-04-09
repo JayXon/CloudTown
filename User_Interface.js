@@ -77,18 +77,14 @@ pc.script.create('User_Interface', function (app) {
             document.querySelector('body').appendChild(buttonMenu);
             
             this.loadjscssfile("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.6/semantic.min.css","css");
+
             var healthDisplay = document.createElement('div');
             healthDisplay.id = 'HP';
-            healthDisplay.style.top = '10 px';
-            healthDisplay.style.margin = '30 px';
-            healthDisplay.style.padding = '8px';
-            healthDisplay.style.zIndex = 1000;
-            healthDisplay.style.visibility = 'visible';
+            healthDisplay.className = 'ui label';
             healthDisplay.style.position = 'relative';
-            healthDisplay.style.color = '#FFFFFF';
-            
+            healthDisplay.style.color = 'red';
+
             document.querySelector('body').appendChild(healthDisplay);
-            
             // Set initial values
             this.setHealthDisplay( 50 );
 
@@ -109,6 +105,15 @@ pc.script.create('User_Interface', function (app) {
             var closeButton = document.createElement('i');
             closeButton.className = "close icon";
             uiPanel.appendChild(closeButton);
+
+            var bulletsDisplay = document.createElement('div');
+            bulletsDisplay.id = 'Bullets';
+            bulletsDisplay.className = 'ui label';
+            bulletsDisplay.style.position = 'relative';
+            bulletsDisplay.style.color = 'gray';
+            
+            document.querySelector('body').appendChild(bulletsDisplay);
+            this.setBulletsDisplay( 50 );
 
             var title = document.createElement('div');
             title.className = "header";
@@ -135,7 +140,11 @@ pc.script.create('User_Interface', function (app) {
         },
         
         setHealthDisplay : function ( hp ) {
-            document.getElementById('HP').innerHTML = "Health: " + hp;
+            document.getElementById('HP').innerHTML = '<i class="heart icon"></i>' + hp;
+        },
+        
+        setBulletsDisplay : function ( bullets ) {
+            document.getElementById('Bullets').innerHTML = '<i class="circle icon"></i>' + bullets;
         },
 
         /*showUIMenu: function (){
@@ -216,10 +225,28 @@ pc.script.create('User_Interface', function (app) {
         },
         
         playGame: function() {
-          document.getElementById('buttMenu').style.visibility = 'hidden';   
-          var player = app.root.findByName('Player');
-          player.script.Third_Person_Camera.unlockInput();
-          player.script.Player_Input.unlockInput();
+            document.getElementById('buttMenu').style.visibility = 'hidden';   
+            var player = app.root.findByName('Player');
+            player.script.Third_Person_Camera.unlockInput();
+            player.script.Player_Input.unlockInput();
+
+            // random position and angle
+            var x = Math.random() * 250 - 175;
+            var y = Math.random() * 25;
+            var z = Math.random() * 250 - 75;
+            var ey = Math.random() * 360;
+
+            player.rigidbody.teleport(x, y, z, 0, ey, 0);
+
+            var data = {
+                x : x,
+                y : y,
+                z : z,
+                ex : 0,
+                ey : ey
+            }
+            // send join message to server
+            app.root.getChildren()[0].script.Client.send('player_joined', data);
         }
     };
 

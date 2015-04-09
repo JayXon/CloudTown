@@ -24,11 +24,6 @@ pc.script.create('Network_Manager', function (app) {
             // create new player
             var player = this.player = app.root.findByName('_Player').clone();
             player.setName('Player'); 
-            // random position and angle
-            var x = Math.random() * 250 - 175;
-            var y = Math.random() * 25;
-            var z = Math.random() * 250 - 75;
-            var ey = Math.random() * 360;
 
             // attach camera to player
             var camera = new pc.Entity();
@@ -50,25 +45,23 @@ pc.script.create('Network_Manager', function (app) {
                 }]
             });
 
-            player.setPosition(x, y, z);
-            player.setEulerAngles(0, ey, 0);
+            player.setPosition(0, -100, -10);
+            player.setEulerAngles(0, 0, 0);
             player.enabled = true;
 
             app.root.addChild(player);
 
             // console.log(player);
-
-            var data = this.playerLocation = {
-                x : x,
-                y : y,
-                z : z,
-                ex : 0,
-                ey : ey
-            }
-            // send join message to server
-            this.Client.send('player_joined', data);
             
             console.log(this.player);
+
+            this.playerLocation = {
+                x : 0,
+                y : 0,
+                z : 0,
+                ez : 0,
+                ey : 0
+            };
         },
 
         update: function (dt) {
