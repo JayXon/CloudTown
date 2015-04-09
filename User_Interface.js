@@ -30,7 +30,7 @@ pc.script.create('User_Interface', function (app) {
             buttonMenu.style.position = 'absolute';
             buttonMenu.style.left = '45%';
             buttonMenu.style.top = '35%';
-            buttonMenu.style.zIndex = 1020;
+            //sbuttonMenu.style.zIndex = 1020;
 
             var playButton = document.createElement('div');
              playButton.className = "ui button green";
@@ -49,7 +49,7 @@ pc.script.create('User_Interface', function (app) {
              settingsButton.style.margin = '10px'; 
              settingsButton.id = 'settingsButton';                         
              settingsButton.innerHTML = "<i class=\"settings icon\"></i> Settings";
-             settingsButton.onclick = this.showDevelopmentPanel.bind(this);
+             settingsButton.onclick = this.showSettingsuiPanel.bind(this);
              buttonMenu.appendChild(settingsButton); 
 
              buttonMenu.appendChild(document.createElement('br'));
@@ -60,7 +60,7 @@ pc.script.create('User_Interface', function (app) {
              helpButton.style.margin = '10px'; 
              helpButton.id = 'helpButton';                         
              helpButton.innerHTML = "<i class=\"help icon\"></i> Help";
-             helpButton.onclick = this.showDevelopmentPanel.bind(this);
+             helpButton.onclick = this.showHelpuiPanel.bind(this);
              buttonMenu.appendChild(helpButton); 
 
              buttonMenu.appendChild(document.createElement('br'));
@@ -71,7 +71,7 @@ pc.script.create('User_Interface', function (app) {
              creditsButton.style.margin = '10px'; 
              creditsButton.id = 'creditsButton';                         
              creditsButton.innerHTML = "<i class=\"book icon\"></i> Credits";
-             creditsButton.onclick = this.showDevelopmentPanel.bind(this);
+             creditsButton.onclick = this.showDevelopmentuiPanel.bind(this);
              buttonMenu.appendChild(creditsButton); 
              
             document.querySelector('body').appendChild(buttonMenu);
@@ -92,42 +92,42 @@ pc.script.create('User_Interface', function (app) {
             // Set initial values
             this.setHealthDisplay( 50 );
 
-            var panel = document.createElement('div');
-            panel.id = 'panel';
-            panel.style.top = '10%';
-            panel.style.height = '75%';
-            panel.style.width = '800px';
-            panel.style.margin = 'auto';
-            panel.style.zIndex = 1001;
-            panel.style.visibility = 'hidden';
-            panel.style.position = 'relative';
-            panel.style.color = '#295f48';
-            panel.style.backgroundColor = 'rgba(172,217,44,0.9)';
-            panel.style.boxShadow = '6px 12px 14px 2px rgba(0,0,0,0.64)';
+            var uiPanel = document.createElement('div');
+            uiPanel.className = "ui modal";
+            uiPanel.id = 'uiPanel';
+            uiPanel.style.top = '10%';
+            //uiPanel.style.height = '75%';
+            //uiPanel.style.width = '800px';
+            //uiPanel.style.margin = 'auto';
+            uiPanel.style.zIndex = 1001;
+            uiPanel.style.visibility = 'hidden';
+            uiPanel.style.position = 'relative';
+            uiPanel.style.color = '#295f48';
+            uiPanel.style.backgroundColor = 'rgba(172,217,44,0.9)';
+            uiPanel.style.boxShadow = '6px 12px 14px 2px rgba(0,0,0,0.64)';
+
+            var closeButton = document.createElement('i');
+            closeButton.className = "close icon";
+            uiPanel.appendChild(closeButton);
 
             var title = document.createElement('div');
-            title.id = 'title';
-            title.style.color = 'gray';
-            title.style.padding = '8px';
-            panel.appendChild(title);
+            title.className = "header";
+            title.id = 'uiTitle';
+            //stitle.style.color = 'gray';
+            //title.style.padding = '8px';
+            uiPanel.appendChild(title);
              
             var description = document.createElement('div');
+            description.className = "content";
             description.id = 'desc';
-            description.style.fontSize = '24px';
-            description.style.padding = '8px';
-            panel.appendChild(description);
+            //description.style.fontSize = '24px';
+            //description.style.padding = '8px';
+            uiPanel.appendChild(description);
 
-            var closeButton = document.createElement('button');
-            closeButton.innerHTML = 'X';
-            closeButton.style.top = 0;
-            closeButton.style.right = 0;
-            closeButton.style.position = 'absolute';
-            closeButton.style.margin = '16px';
-            closeButton.onclick = this.closePanel.bind(this);
-            panel.appendChild(closeButton);
+            
 
 
-            document.querySelector('body').appendChild(panel);
+            document.querySelector('body').appendChild(uiPanel);
             
         },
 
@@ -150,21 +150,47 @@ pc.script.create('User_Interface', function (app) {
              //var divContent = "<div class= \"ui green button\"> <i class=\"book icon\"></i> About Game Development </div>";
              //var divContent = "<div class= \"ui green button\" > <i class=\"play icon\" ></i> Play Game </div> <div class= \"ui green button\"> <i class=\"settings icon\"></i> Settings </div> <div class= \"ui green button\"> <i class=\"help circle icon\"></i> Help </div> <div class= \"ui green button\"> <i class=\"book icon\"></i> About Game Development </div>";
              aboutButton.innerHTML = "About Game Development"; //divContent;
-             aboutButton.onclick = this.showDevelopmentPanel.bind(this);
+             aboutButton.onclick = this.showDevelopmentuiPanel.bind(this);
              document.querySelector('body').appendChild(aboutButton);
               
               
             
          },*/
 
-         showDevelopmentPanel: function (){
-            console.log("show panel");
+         showDevelopmentuiPanel: function (){
+            console.log("show uiPanel");
             
-            document.getElementById('title').innerHTML = "Game Development";
-            document.getElementById('buttMenu').style.visibility = 'hidden';
+            document.getElementById('uiTitle').innerHTML = "Credits";
+            //document.getElementById('buttMenu').style.visibility = 'hidden';
             document.getElementById('desc').innerHTML = "The game \"STEM PARADISE\" was developed by Frank Dicola, Sen Jiang and Svyatoslav Turets. \
                                                          All of them have been graduate students in Stevens Institute of Technology. \"STEM PARADISE\" was their master project in software engineering program.";
-            document.getElementById('panel').style.visibility = 'visible';
+            document.getElementById('uiPanel').style.visibility = 'visible';
+            //app.mouse.enablePointerLock();
+            $('#uiPanel').modal('show');
+
+        },
+        
+         showSettingsuiPanel: function (){
+            console.log("show uiPanel");
+            
+            document.getElementById('uiTitle').innerHTML = "Settings";
+            //document.getElementById('buttMenu').style.visibility = 'hidden';
+            document.getElementById('desc').innerHTML = "";
+            document.getElementById('uiPanel').style.visibility = 'visible';
+             $('#uiPanel').modal('show');
+            //app.mouse.enablePointerLock();
+         },
+
+         showHelpuiPanel: function (){
+            console.log("show uiPanel");
+            
+            document.getElementById('uiTitle').innerHTML = "Help";
+            //document.getElementById('buttMenu').style.visibility = 'hidden';
+            document.getElementById('desc').innerHTML = "The goal of the game is to provide high school students with  basic knowledge in C++. The player \
+                                                          has to bump into the treasury chests to get questions. The treasury box provides either ammunition or health \
+                                                           in case the player answers the question correctly.";
+            document.getElementById('uiPanel').style.visibility = 'visible';
+             $('#uiPanel').modal('show');
             //app.mouse.enablePointerLock();
          },
 
@@ -184,8 +210,8 @@ pc.script.create('User_Interface', function (app) {
                document.getElementsByTagName("head")[0].appendChild(fileref);
         },
 
-        closePanel : function () {
-            document.getElementById('panel').style.visibility = 'hidden';
+        closeuiPanel : function () {
+            document.getElementById('uiPanel').style.visibility = 'hidden';
             document.getElementById('buttMenu').style.visibility = 'visible';
         },
         
