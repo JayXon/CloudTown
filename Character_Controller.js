@@ -37,6 +37,7 @@ pc.script.create('Character_Controller', function (app) {
 
             this.camera_script = this.entity.script.Third_Person_Camera;
             this.question_script = app.root.getChildren()[0].script.Question;
+            this.User_Interface = app.root.getChildren()[0].script.User_Interface;
 
             this.gameState = GAME_STATES.Alive;
 
@@ -65,6 +66,8 @@ pc.script.create('Character_Controller', function (app) {
                 return;
             }
             this.bullets--;
+            if ( this.entity.name === "Player")
+                this.User_Interface.setBulletsDisplay(this.bullets);
 
             var pos = this.entity.getPosition();
 
@@ -90,7 +93,8 @@ pc.script.create('Character_Controller', function (app) {
         adjustBullets: function (amount) {
             this.bullets += amount;
             
-            console.log("Bullets: " + this.bullets);
+            if ( this.entity.name === "Player")
+                this.User_Interface.setBulletsDisplay(this.bullets);
         },
 
         die: function () {

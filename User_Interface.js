@@ -77,20 +77,26 @@ pc.script.create('User_Interface', function (app) {
             document.querySelector('body').appendChild(buttonMenu);
             
             this.loadjscssfile("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.6/semantic.min.css","css");
+
             var healthDisplay = document.createElement('div');
             healthDisplay.id = 'HP';
-            healthDisplay.style.top = '10 px';
-            healthDisplay.style.margin = '30 px';
-            healthDisplay.style.padding = '8px';
-            healthDisplay.style.zIndex = 1000;
-            healthDisplay.style.visibility = 'visible';
+            healthDisplay.className = 'ui label';
             healthDisplay.style.position = 'relative';
-            healthDisplay.style.color = '#FFFFFF';
-            
+            healthDisplay.style.color = 'red';
+
             document.querySelector('body').appendChild(healthDisplay);
-            
             // Set initial values
             this.setHealthDisplay( 50 );
+
+            var bulletsDisplay = document.createElement('div');
+            bulletsDisplay.id = 'Bullets';
+            bulletsDisplay.className = 'ui label';
+            bulletsDisplay.style.position = 'relative';
+            bulletsDisplay.style.color = 'gray';
+            
+            document.querySelector('body').appendChild(bulletsDisplay);
+            this.setBulletsDisplay( 50 );
+            
 
             var panel = document.createElement('div');
             panel.id = 'panel';
@@ -135,7 +141,11 @@ pc.script.create('User_Interface', function (app) {
         },
         
         setHealthDisplay : function ( hp ) {
-            document.getElementById('HP').innerHTML = "Health: " + hp;
+            document.getElementById('HP').innerHTML = '<i class="heart icon"></i>' + hp;
+        },
+        
+        setBulletsDisplay : function ( bullets ) {
+            document.getElementById('Bullets').innerHTML = '<i class="circle icon"></i>' + bullets;
         },
 
         /*showUIMenu: function (){
