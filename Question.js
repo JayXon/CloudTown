@@ -26,6 +26,7 @@ pc.script.create('Question', function (app)
 
             var panel = document.createElement('div');
             panel.id = 'panel';
+            /*
             panel.style.top = '10%';
             panel.style.height = '75%';
             panel.style.width = '800px';
@@ -36,24 +37,28 @@ pc.script.create('Question', function (app)
             panel.style.color = '#DAA520';
             panel.style.backgroundColor = 'rgba(0,0,0,0.8)';
             panel.style.boxShadow = '6px 12px 14px 2px rgba(0,0,0,0.64)';
+            */
+            panel.className = 'ui modal';
 
-            var title = document.createElement('div');
-            title.id = 'title';
-            title.style.color = 'gray';
-            title.style.padding = '8px';
-            panel.appendChild(title);
-
+            var header = document.createElement('div');
+            header.className = 'header';
             var question = document.createElement('div');
             question.id = 'question';
-            question.style.fontSize = '24px';
-            question.style.padding = '8px';
-            panel.appendChild(question);
+            question.className = 'content';
+            header.appendChild(question);
+            panel.appendChild(header);
 
             var answer = document.createElement('div');
             answer.id = 'answer';
-            answer.style.padding = '4px 8px';
+            answer.className = 'content';
+            //answer.style.padding = '4px 8px';
             panel.appendChild(answer);
 
+            var closeButton = document.createElement('i');
+            closeButton.className = "close icon";
+            closeButton.onclick = this.closePanel.bind(this);
+            panel.appendChild(closeButton);
+/*
             var closeButton = document.createElement('button');
             closeButton.id = 'close'
             closeButton.innerHTML = 'X';
@@ -63,26 +68,37 @@ pc.script.create('Question', function (app)
             closeButton.style.margin = '16px';
             closeButton.onclick = this.closePanel.bind(this);
             panel.appendChild(closeButton);
+*/
+            var actionsDiv = document.createElement('div');
+            actionsDiv.className = 'actions';
 
-            var hintButton = document.createElement('button');
+            var hintButton = document.createElement('div');
             hintButton.id = 'hint'
+            hintButton.className = 'ui button';
             hintButton.innerHTML = 'Hint';
+            /*
             hintButton.style.bottom = 0;
             hintButton.style.right = '80px';
             hintButton.style.position = 'absolute';
             hintButton.style.margin = '16px';
+            */
             hintButton.onclick = this.hint.bind(this);
-            panel.appendChild(hintButton);
+            actionsDiv.appendChild(hintButton);
 
-            var submitButton = document.createElement('button');
+            var submitButton = document.createElement('div');
             submitButton.id = 'submit'
+            submitButton.className = 'ui right primary button';
             submitButton.innerHTML = 'Submit';
+            /*
             submitButton.style.bottom = 0;
             submitButton.style.right = 0;
             submitButton.style.position = 'absolute';
             submitButton.style.margin = '16px';
+            */
             submitButton.onclick = this.submit.bind(this);
-            panel.appendChild(submitButton);
+            actionsDiv.appendChild(submitButton);
+
+            panel.appendChild(actionsDiv);
 
             document.querySelector('body').appendChild(panel);
         },
@@ -91,31 +107,43 @@ pc.script.create('Question', function (app)
         },
 
         present: function (data) {
-            // prevent panel from changing question
-            if (this.isPanelVisible()) {
-                // return;
-            }
-
             console.log(data);
             this.data = data;
 
-            document.getElementById('title').innerHTML = data.title;
             document.getElementById('question').innerHTML = data.question;
+
+            document.getElementById('question').appendChild(document.createElement('br'));
+            var title = document.createElement('div');
+            title.id = 'title';
+            title.className = 'ui label';
+            title.innerHTML = data.title;
+            document.getElementById('question').appendChild(title);
+
             var answer_div = document.getElementById('answer');
             answer_div.innerHTML = "";
 
             data.answers.forEach(function(answer) {
+                var checkbox = document.createElement('div');
+                checkbox.className = 'ui checkbox';
+                var input = document.createElement('input');
+                input.type = 'checkbox';
+                checkbox.appendChild(input);
                 var label = document.createElement('label');
-                var checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
+                /*
                 label.style.width = '720px';
                 label.style.margin = '6px';
-                label.style.display = 'block';
-                label.innerHTML = answer + '<br/>';
+                label.style.display = 'block';*/
+                label.innerHTML = answer;
+                checkbox.appendChild(label);
+                //label.insertBefore(checkbox, label.childNodes[0]);
+                answer_div.appendChild(checkbox);
 
-                label.insertBefore(checkbox, label.childNodes[0]);
-                answer_div.appendChild(label);
+                var divider = document.createElement('div');
+                divider.className = 'ui hidden divider';
+                answer_div.appendChild(divider);
             });
+
+            $('.ui.checkbox').checkbox();
 
             // hide or show hint button
             if (data.hint.length !== 0) {
@@ -125,13 +153,22 @@ pc.script.create('Question', function (app)
             }
 
             // if the player is dead disable close button before submit
-            if ( this.targetPlayer.script.Character_Controller.gameState === 2 ) {
-                document.getElementById('close').disabled = true;
-            }
+            if ( this.targetPlayer.script.Character_Controller.gameState === 2 )
+                $('#panel').modal('setting', 'closable', false);
+            else
+                $('#panel').modal('setting', 'closable', true);
             // enable submit button
             document.getElementById('submit').disabled = false;
 
-            document.getElementById('panel').style.visibility = 'visible';
+            // document.getElementById('panel').style.visibility = 'visible';
+            $('#panel').modal({
+                onHide : this.closePanel.bind(this),
+                onApprove : function() {
+                    alert('Approved!');
+                    return false;
+                }
+            });
+            $('#panel').modal('show');
 
             // unlock mouse
             if ( pc.input.Mouse.isPointerLocked() )
@@ -144,14 +181,14 @@ pc.script.create('Question', function (app)
             // send the index of selected answers to server
             var selected = [];
             var checkboxes = document.getElementById('answer').childNodes;
-            for (var i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].firstChild.checked) {
+            for (var i = 0; i*2 < checkboxes.length; i++) {
+                if (checkboxes[i*2].firstChild.checked) {
                     selected.push(i);
                 }
             }
             this.Client.send('submit_answer', selected);
 
-            document.getElementById('close').disabled = false;
+            // document.getElementById('close').disabled = false;
             // disable submit button
             document.getElementById('submit').disabled = true;
             
@@ -180,10 +217,10 @@ pc.script.create('Question', function (app)
                 data.forEach(function(i) {
                     checkboxes[i].style.color = '#fff';
                     
-                    if ( checkboxes[i].firstChild.checked === true )
-                        checkboxes[i].style.backgroundColor = 'red';
+                    if ( checkboxes[i*2].firstChild.checked === true )
+                        checkboxes[i*2].style.backgroundColor = 'red';
                     else
-                        checkboxes[i].style.backgroundColor = 'green';
+                        checkboxes[i*2].style.backgroundColor = 'green';
                 });
                 
                 this.correct = false;
@@ -203,8 +240,9 @@ pc.script.create('Question', function (app)
             // spawn some thing at the box
             
             
+            $('#panel').modal('hide');
             // No matter what, close the panel!
-            this.closePanel();
+            //this.closePanel();
         },
 
         closePanel : function () {
@@ -214,7 +252,7 @@ pc.script.create('Question', function (app)
                 return;
             }
 
-            document.getElementById('panel').style.visibility = 'hidden';
+            //document.getElementById('panel').style.visibility = 'hidden';
             app.mouse.enablePointerLock();
 
             // Let the Player move again
