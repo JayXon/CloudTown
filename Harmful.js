@@ -13,13 +13,12 @@ pc.script.create('Harmful', function (app) {
 
     var Harmful = function (entity) {
         this.entity = entity;
-        this.damage = this.damageAmount;
     };
 
     Harmful.prototype = {
 
         initialize: function () {
-            console.log("Harmful... Initialized.");
+            console.log("Harmful... Initialized at " + this.damageAmount + " damage.");
             this.entity.collision.on('collisionstart', this.onCollisionStart, this);
         },
 
@@ -31,8 +30,8 @@ pc.script.create('Harmful', function (app) {
             // Find the other's Damagable and adjust it's health
             if ( result.other.script && result.other.script.Damagable )
             {
-                result.other.script.Damagable.adjustHealth( this.damage );
-                console.log("HAHA! YOU'VE BEEN HARMED BY ME, " + this.entity.name + " FOR " + this.damage + " HITPOINTS!!!!");
+                result.other.script.Damagable.adjustHealth( this.damageAmount );
+                console.log("HAHA! YOU'VE BEEN HARMED BY ME, " + this.entity.name + " FOR " + this.damageAmount + " HITPOINTS!!!!");
             }
             else
                 console.log("No Damagable detected");
