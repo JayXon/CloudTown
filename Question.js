@@ -50,7 +50,7 @@ pc.script.create('Question', function (app)
 
             var answer = document.createElement('div');
             answer.id = 'answer';
-            answer.className = 'content';
+            answer.className = 'ui content form';
             //answer.style.padding = '4px 8px';
             panel.appendChild(answer);
 
@@ -74,7 +74,7 @@ pc.script.create('Question', function (app)
 
             var hintButton = document.createElement('div');
             hintButton.id = 'hint'
-            hintButton.className = 'ui button';
+            hintButton.className = 'ui approve button';
             hintButton.innerHTML = 'Hint';
             /*
             hintButton.style.bottom = 0;
@@ -87,7 +87,7 @@ pc.script.create('Question', function (app)
 
             var submitButton = document.createElement('div');
             submitButton.id = 'submit'
-            submitButton.className = 'ui right primary button';
+            submitButton.className = 'ui right approve primary button';
             submitButton.innerHTML = 'Submit';
             /*
             submitButton.style.bottom = 0;
@@ -152,23 +152,19 @@ pc.script.create('Question', function (app)
                 document.getElementById('hint').style.visibility = 'hidden';
             }
 
-            // if the player is dead disable close button before submit
-            if ( this.targetPlayer.script.Character_Controller.gameState === 2 )
-                $('#panel').modal('setting', 'closable', false);
-            else
-                $('#panel').modal('setting', 'closable', true);
             // enable submit button
-            document.getElementById('submit').disabled = false;
+            $('#submit').removeClass('disabled');
+            if (this.targetPlayer.script.Character_Controller.gameState === 2)
+                $('#panel>.close').hide();
 
             // document.getElementById('panel').style.visibility = 'visible';
             $('#panel').modal({
+                closable  : this.targetPlayer.script.Character_Controller.gameState !== 2,
                 onHide : this.closePanel.bind(this),
                 onApprove : function() {
-                    alert('Approved!');
                     return false;
                 }
-            });
-            $('#panel').modal('show');
+            }).modal('show');
 
             // unlock mouse
             if ( pc.input.Mouse.isPointerLocked() )
@@ -190,7 +186,9 @@ pc.script.create('Question', function (app)
 
             // document.getElementById('close').disabled = false;
             // disable submit button
-            document.getElementById('submit').disabled = true;
+            //document.getElementById('submit').disabled = true;
+            $('#submit').addClass('disabled');
+            $('#panel>.close').show();
             
             this.correct = true;
         },
@@ -206,21 +204,22 @@ pc.script.create('Question', function (app)
             var checkboxes = document.getElementById('answer').childNodes;
             if (data.length === 0) {
                 // the answers are correct!
+                /*
                 var label = document.createElement('label');
                 label.style.color = 'green';
                 label.innerHTML = 'Correct!'
-                document.getElementById('answer').appendChild(label);
+                document.getElementById('answer').appendChild(label);*/
                 this.reward();
             } else {
                 // the answers are wrong :(
                 // mark the wrong answers as red
                 data.forEach(function(i) {
-                    checkboxes[i].style.color = '#fff';
+                    //checkboxes[i*2].style.color = '#fff';
                     
                     if ( checkboxes[i*2].firstChild.checked === true )
-                        checkboxes[i*2].style.backgroundColor = 'red';
+                        $(checkboxes[i*2]).wrap('<div class="ui negative message"></div>');
                     else
-                        checkboxes[i*2].style.backgroundColor = 'green';
+                        $(checkboxes[i*2]).wrap('<div class="ui positive message"></div>');
                 });
                 
                 this.correct = false;
