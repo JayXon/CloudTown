@@ -7,12 +7,13 @@
 //
 // Authors: Frank DiCola, Sen Jiang, Slavik Turets
 
+pc.script.attribute("damageAmount", "number", 10, {displayName: "Damage"}); // Running speed
 
 pc.script.create('Harmful', function (app) {
 
     var Harmful = function (entity) {
         this.entity = entity;
-        this.damage = -200;
+        this.damage = this.damageAmount;
     };
 
     Harmful.prototype = {

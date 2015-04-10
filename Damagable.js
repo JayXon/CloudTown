@@ -14,7 +14,7 @@ pc.script.create('Damagable', function (app) {
     var Damagable = function (entity) {
         this.entity = entity;
         this.currentHealth = 50;
-        this.maxHealth = 50;
+        this.maxHealth = 100;
     };
 
     Damagable.prototype = {
@@ -22,9 +22,24 @@ pc.script.create('Damagable', function (app) {
         initialize: function () {
             console.log("Damagable... Initialized.");
             this.User_Interface = app.root.getChildren()[0].script.User_Interface;
+
+            // Find our Health Bar
+            this.healthBar = this.entity.findByName("Health");
+
+            // Find the camera
+            this.camera = app.root.findByName("Camera");
+            // console.log(this.camera);
+
+            // Update our graphics
+            this.adjustHealth(0);
         },
 
         update: function (dt) {
+        	if ( this.entity.name !== "Player" )
+        	{
+        		// Turn HealthBar to face the camera
+        		this.healthBar.lookAt(this.camera.getPosition());
+        	}
         },
 
         // This function can either heal the target
@@ -36,12 +51,16 @@ pc.script.create('Damagable', function (app) {
                 this.currentHealth = 0;
                 this.die();
             }
+            
+            if ( this.currentHealth >= this.maxHealth ) {
+            	this.currentHealth = this.maxHealth;
+            }
 
-            // If this is a Player, update the HTML Graphics thing with current health
+            // If this is YOUR Player, update the HTML Graphics thing with current health
             if ( this.entity.name === "Player" )
                 this.User_Interface.setHealthDisplay( this.currentHealth );
-
-            // console.log("Health remaining: " + this.currentHealth);
+            else
+            	this.healthBar.setLocalScale( this.currentHealth / 10, 1, 1 );
         },
 
         die : function () {

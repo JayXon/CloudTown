@@ -45,6 +45,9 @@ pc.script.create('Network_Manager', function (app) {
                 }]
             });
 
+            // Remove unnecessary things from Player
+            player.findByName("HealthBar").destroy();
+
             player.setPosition(0, -100, -10);
             player.setEulerAngles(0, 0, 0);
             player.enabled = true;
