@@ -26,18 +26,6 @@ pc.script.create('Question', function (app)
 
             var panel = document.createElement('div');
             panel.id = 'panel';
-            /*
-            panel.style.top = '10%';
-            panel.style.height = '75%';
-            panel.style.width = '800px';
-            panel.style.margin = 'auto';
-            panel.style.zIndex = 999;
-            panel.style.visibility = 'hidden';
-            panel.style.position = 'relative';
-            panel.style.color = '#DAA520';
-            panel.style.backgroundColor = 'rgba(0,0,0,0.8)';
-            panel.style.boxShadow = '6px 12px 14px 2px rgba(0,0,0,0.64)';
-            */
             panel.className = 'ui modal';
 
             var header = document.createElement('div');
@@ -51,24 +39,13 @@ pc.script.create('Question', function (app)
             var answer = document.createElement('div');
             answer.id = 'answer';
             answer.className = 'ui content form';
-            //answer.style.padding = '4px 8px';
             panel.appendChild(answer);
 
             var closeButton = document.createElement('i');
             closeButton.className = "close icon";
             closeButton.onclick = this.closePanel.bind(this);
             panel.appendChild(closeButton);
-/*
-            var closeButton = document.createElement('button');
-            closeButton.id = 'close'
-            closeButton.innerHTML = 'X';
-            closeButton.style.top = 0;
-            closeButton.style.right = 0;
-            closeButton.style.position = 'absolute';
-            closeButton.style.margin = '16px';
-            closeButton.onclick = this.closePanel.bind(this);
-            panel.appendChild(closeButton);
-*/
+
             var actionsDiv = document.createElement('div');
             actionsDiv.className = 'actions';
 
@@ -76,12 +53,6 @@ pc.script.create('Question', function (app)
             hintButton.id = 'hint'
             hintButton.className = 'ui approve button';
             hintButton.innerHTML = 'Hint';
-            /*
-            hintButton.style.bottom = 0;
-            hintButton.style.right = '80px';
-            hintButton.style.position = 'absolute';
-            hintButton.style.margin = '16px';
-            */
             hintButton.onclick = this.hint.bind(this);
             actionsDiv.appendChild(hintButton);
 
@@ -89,12 +60,6 @@ pc.script.create('Question', function (app)
             submitButton.id = 'submit'
             submitButton.className = 'ui right approve primary button';
             submitButton.innerHTML = 'Submit';
-            /*
-            submitButton.style.bottom = 0;
-            submitButton.style.right = 0;
-            submitButton.style.position = 'absolute';
-            submitButton.style.margin = '16px';
-            */
             submitButton.onclick = this.submit.bind(this);
             actionsDiv.appendChild(submitButton);
 
@@ -125,17 +90,15 @@ pc.script.create('Question', function (app)
             data.answers.forEach(function(answer) {
                 var checkbox = document.createElement('div');
                 checkbox.className = 'ui checkbox';
+
                 var input = document.createElement('input');
                 input.type = 'checkbox';
                 checkbox.appendChild(input);
+
                 var label = document.createElement('label');
-                /*
-                label.style.width = '720px';
-                label.style.margin = '6px';
-                label.style.display = 'block';*/
                 label.innerHTML = answer;
                 checkbox.appendChild(label);
-                //label.insertBefore(checkbox, label.childNodes[0]);
+
                 answer_div.appendChild(checkbox);
 
                 var divider = document.createElement('div');
@@ -143,6 +106,7 @@ pc.script.create('Question', function (app)
                 answer_div.appendChild(divider);
             });
 
+            // initialize checkbox
             $('.ui.checkbox').checkbox();
 
             // hide or show hint button
@@ -154,6 +118,7 @@ pc.script.create('Question', function (app)
 
             // enable submit button
             $('#submit').removeClass('disabled');
+            // Hide close button if player is dead
             if (this.targetPlayer.script.Character_Controller.gameState === 2)
                 $('#panel>.close').hide();
 
@@ -168,9 +133,7 @@ pc.script.create('Question', function (app)
 
             // unlock mouse
             if ( pc.input.Mouse.isPointerLocked() )
-            {
                 app.mouse.disablePointerLock();
-            }
         },
 
         submit : function () {
@@ -184,10 +147,9 @@ pc.script.create('Question', function (app)
             }
             this.Client.send('submit_answer', selected);
 
-            // document.getElementById('close').disabled = false;
             // disable submit button
-            //document.getElementById('submit').disabled = true;
             $('#submit').addClass('disabled');
+            // Show close button
             $('#panel>.close').show();
             
             this.correct = true;
@@ -198,23 +160,16 @@ pc.script.create('Question', function (app)
         },
 
         feedback : function (data) {
-            // alert(data.correct);
-            // this.closePanel();
 
             var checkboxes = document.getElementById('answer').childNodes;
             if (data.length === 0) {
                 // the answers are correct!
-                /*
-                var label = document.createElement('label');
-                label.style.color = 'green';
-                label.innerHTML = 'Correct!'
-                document.getElementById('answer').appendChild(label);*/
+
                 this.reward();
             } else {
                 // the answers are wrong :(
                 // mark the wrong answers as red
                 data.forEach(function(i) {
-                    //checkboxes[i*2].style.color = '#fff';
                     
                     if ( checkboxes[i*2].firstChild.checked === true )
                         $(checkboxes[i*2]).wrap('<div class="ui negative message"></div>');
@@ -231,7 +186,7 @@ pc.script.create('Question', function (app)
             
             // If they are dead, respawn them
             if ( this.targetPlayer.script.Character_Controller.gameState === 2 ) {
-                alert("Welcome back!");
+                // alert("Welcome back!");
                 this.targetPlayer.script.Character_Controller.spawn();
             }
 
@@ -239,9 +194,8 @@ pc.script.create('Question', function (app)
             // spawn some thing at the box
             
             
-            $('#panel').modal('hide');
             // No matter what, close the panel!
-            //this.closePanel();
+            $('#panel').modal('hide');
         },
 
         closePanel : function () {
@@ -251,28 +205,20 @@ pc.script.create('Question', function (app)
                 return;
             }
 
-            //document.getElementById('panel').style.visibility = 'hidden';
             app.mouse.enablePointerLock();
 
             // Let the Player move again
             this.targetPlayer.script.Player_Input.unlockInput();
             this.targetPlayer.script.Third_Person_Camera.unlockInput();
 
-            console.log(this.targetPlayer.name + " should be able to move now.");
-        },
-
-        isPanelVisible : function () {
-            return document.getElementById('panel').style.visibility === 'visible';
+            // console.log(this.targetPlayer.name + " should be able to move now.");
         },
 
         generate: function ( player, id ) {
-
             this.targetPlayer = player;
-            console.log("WHOOOOOOOO " + this.targetPlayer.name + " hit TreasureBox " + id);
+            // console.log("WHOOOOOOOO " + this.targetPlayer.name + " hit TreasureBox " + id);
 
-            if ( true || !this.isPanelVisible() ) {
-                this.Client.send('new_question', id);
-            }
+            this.Client.send('new_question', id);
         }
     };
 
