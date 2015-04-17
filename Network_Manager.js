@@ -29,6 +29,7 @@ pc.script.create('Network_Manager', function (app) {
             var camera = new pc.Entity();
             camera.setName('Camera');
             camera.addComponent('camera');
+            camera.addComponent('audiolistener');
             player.addChild(camera);
             camera.setLocalEulerAngles(160, 0, 180);
 

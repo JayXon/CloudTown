@@ -75,12 +75,26 @@ pc.script.create('Character_Controller', function (app) {
             var tmpQuat = this.entity.getRotation();
             shootDirection = tmpQuat.transformVector(shootDirection);
             
+            /*
             var projectile = new pc.Entity();
             projectile.setPosition( pos.add2(pos, shootDirection.scale(15) ) );
             projectile.setLocalScale( 3, 3, 3 );
             projectile.addComponent("model", { type: 'sphere', });
             projectile.addComponent("collision", { type: 'sphere', radius: 1.5, });
             projectile.addComponent("rigidbody", { type: 'dynamic', });
+            
+            var myBeep = app.assets.find("TestBeep", pc.asset.ASSET_AUDIO);
+            projectile.addComponent("audiosource", { assets: myBeep, loop: true });
+            //  console.log(projectile.audiosource);*/
+
+
+            // Create duplicate Bullet
+            var projectile = app.root.findByName('_Bullet').clone();
+            projectile.setName('Bullet');
+            projectile.setPosition( pos.add2(pos, shootDirection.scale(15) ) );
+            projectile.enabled = true;
+
+
             projectile.rigidbody.applyForce( shootDirection.scale(2500) );
             app.root.addChild(projectile);
             app.systems.script.addComponent(projectile, {

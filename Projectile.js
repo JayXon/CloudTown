@@ -11,8 +11,6 @@
 
 pc.script.create('Projectile', function (app) {
 
-    // vars
-
     var Projectile = function (entity) {
         this.entity = entity;
     };
@@ -39,7 +37,7 @@ pc.script.create('Projectile', function (app) {
                 console.log("No Damagable detected");
 
             // TO DO: Start the destroy timer
-
+            
             this.entity.destroy();
         }
     };
