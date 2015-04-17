@@ -32,6 +32,9 @@ pc.script.create('Player_Input', function (app) {
         // Debug Controls
         this.controller.registerKeys('debug_01', [pc.input.KEY_N]);
         this.controller.registerKeys('debug_02', [pc.input.KEY_M]);
+
+        // Menu
+        app.keyboard.on(pc.EVENT_KEYUP, this.onKeyUp, this);
     };
 
     Player_Input.prototype = {
@@ -41,6 +44,7 @@ pc.script.create('Player_Input', function (app) {
             console.log("Player_Input... Initialized.");
             
             this.Client = app.root.getChildren()[0].script.Client;
+            this.User_Interface = app.root.getChildren()[0].script.User_Interface;
 
             // this.camera = app.root.findByName('Camera');
             this.camera = this.entity.findByName('Camera');
@@ -51,6 +55,11 @@ pc.script.create('Player_Input', function (app) {
 
         update: function (dt)
         {
+            if (this.controller.wasPressed('menu')) {
+                console.log('escape!!');
+                this.User_Interface.showMenu();
+            }
+
             if ( this.isInputLocked ) {
                 this.character.script.Character_Controller.move(new pc.Vec3(0, 0, 0));
                 return;
@@ -145,6 +154,17 @@ pc.script.create('Player_Input', function (app) {
                     console.log("Right!");
                 
             }
+        },
+
+        onKeyUp: function (event) {
+            // Check event.key to detect which key has been pressed
+            if (event.key === pc.KEY_ESCAPE) {
+                this.User_Interface.showMenu();
+            }
+
+            // When the space bar is pressed this scrolls the window.
+            // Calling preventDefault() on the original browser event stops this.
+            event.event.preventDefault();
         }
     }
 

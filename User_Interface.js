@@ -27,7 +27,7 @@ pc.script.create('User_Interface', function (app) {
             }
 
             var buttonMenu = document.createElement('div');
-            buttonMenu.id = 'buttMenu';
+            buttonMenu.id = 'mainMenu';
             buttonMenu.style.position = 'absolute';
             buttonMenu.style.left = '45%';
             buttonMenu.style.top = '35%';
@@ -37,7 +37,7 @@ pc.script.create('User_Interface', function (app) {
             playButton.style.width = '200px';
             playButton.style.margin = '10px';
             playButton.id = 'PlayButton';
-            playButton.innerHTML = "<i class=\"play icon\"></i> Play Game ";
+            playButton.innerHTML = "<i class=\"play icon\"></i> Play";
             playButton.onclick = this.playGame.bind(this);
             buttonMenu.appendChild(playButton);
 
@@ -132,7 +132,7 @@ pc.script.create('User_Interface', function (app) {
             console.log("show uiPanel");
 
             document.getElementById('uiTitle').innerHTML = "Credits";
-            //document.getElementById('buttMenu').style.visibility = 'hidden';
+            //document.getElementById('mainMenu').style.visibility = 'hidden';
             document.getElementById('desc').innerHTML = "The game \"STEM PARADISE\" was developed by Frank Dicola, Sen Jiang and Svyatoslav Turets. \
                                                          All of them have been graduate students in Stevens Institute of Technology. \"STEM PARADISE\" was their master project in software engineering program.";
 
@@ -143,7 +143,7 @@ pc.script.create('User_Interface', function (app) {
             console.log("show uiPanel");
 
             document.getElementById('uiTitle').innerHTML = "Settings";
-            //document.getElementById('buttMenu').style.visibility = 'hidden';
+            //document.getElementById('mainMenu').style.visibility = 'hidden';
             document.getElementById('desc').innerHTML = "";
 
             $('#uiPanel').modal('show');
@@ -153,7 +153,7 @@ pc.script.create('User_Interface', function (app) {
             console.log("show uiPanel");
 
             document.getElementById('uiTitle').innerHTML = "Help";
-            //document.getElementById('buttMenu').style.visibility = 'hidden';
+            //document.getElementById('mainMenu').style.visibility = 'hidden';
             document.getElementById('desc').innerHTML = "The goal of the game is to provide high school students with  basic knowledge in C++. The player \
                                                           has to bump into the treasury chests to get questions. The treasury box provides either ammunition or health \
                                                            in case the player answers the question correctly.";
@@ -171,28 +171,51 @@ pc.script.create('User_Interface', function (app) {
         },
 
         playGame: function() {
-            document.getElementById('buttMenu').style.visibility = 'hidden';
+            document.getElementById('mainMenu').style.visibility = 'hidden';
             var player = app.root.findByName('Player');
             player.script.Third_Person_Camera.unlockInput();
             player.script.Player_Input.unlockInput();
 
-            // random position and angle
-            var x = Math.random() * 250 - 175;
-            var y = Math.random() * 25;
-            var z = Math.random() * 250 - 75;
-            var ey = Math.random() * 360;
+            if (player.script.Character_Controller.gameState === 0) {
+                // random position and angle
+                var x = Math.random() * 250 - 175;
+                var y = Math.random() * 25;
+                var z = Math.random() * 250 - 75;
+                var ey = Math.random() * 360;
 
-            player.rigidbody.teleport(x, y, z, 0, ey, 0);
+                player.rigidbody.teleport(x, y, z, 0, ey, 0);
 
-            var data = {
-                x : x,
-                y : y,
-                z : z,
-                ex : 0,
-                ey : ey
+                var data = {
+                    x : x,
+                    y : y,
+                    z : z,
+                    ex : 0,
+                    ey : ey
+                }
+                // send join message to server
+                app.root.getChildren()[0].script.Client.send('player_joined', data);
+                player.script.Character_Controller.gameState = 1;
             }
-            // send join message to server
-            app.root.getChildren()[0].script.Client.send('player_joined', data);
+        },
+
+        showMenu: function() {
+            if ($('#panel').modal('is active'))
+                return;
+            
+            var player = app.root.findByName('Player');
+            if (player.script.Character_Controller.gameState === 0) {
+                document.getElementById('PlayButton').innerHTML = '<i class="play icon"></i> Play';
+            } else {
+                document.getElementById('PlayButton').innerHTML = '<i class="play icon"></i> Resume';
+                if (document.getElementById('mainMenu').style.visibility === 'visible') {
+                    this.playGame();
+                    return;
+                }
+            }
+            document.getElementById('mainMenu').style.visibility = 'visible';
+            player.script.Third_Person_Camera.lockInput();
+            player.script.Player_Input.lockInput();
+
         }
     };
 

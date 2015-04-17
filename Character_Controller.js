@@ -39,7 +39,7 @@ pc.script.create('Character_Controller', function (app) {
             this.question_script = app.root.getChildren()[0].script.Question;
             this.User_Interface = app.root.getChildren()[0].script.User_Interface;
 
-            this.gameState = GAME_STATES.Alive;
+            this.gameState = GAME_STATES.MainMenu;
 
             this.bullets = 50;
         },
