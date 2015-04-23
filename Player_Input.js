@@ -51,6 +51,8 @@ pc.script.create('Player_Input', function (app) {
             this.character = this.entity;
             this.characterController = 'Character_Controller';
             this.isInputLocked = true;
+
+            this.treasureBoxID = -1;
         },
 
         update: function (dt)
@@ -160,6 +162,9 @@ pc.script.create('Player_Input', function (app) {
             // Check event.key to detect which key has been pressed
             if (event.key === pc.KEY_ESCAPE) {
                 this.User_Interface.showMenu();
+            } else if (event.key === pc.KEY_E && this.treasureBoxID >= 0) {
+                var TreasureBox = app.root.findByName('Treasure_' + this.treasureBoxID);
+                TreasureBox.script.Treasure_Box.generateQuestion();
             }
 
             // When the space bar is pressed this scrolls the window.

@@ -21,6 +21,7 @@ pc.script.create('Treasure_Box', function (app)
         initialize: function () {
             console.log("Treasure_Box... Initialized.");
             this.entity.collision.on('collisionstart', this.onCollisionStart, this);
+            this.entity.collision.on('collisionend', this.onCollisionEnd, this);
 
             this.Question = app.root.getChildren()[0].script.Question;
 
@@ -32,22 +33,36 @@ pc.script.create('Treasure_Box', function (app)
         update: function (dt) {
         },
 
-        onCollisionStart: function (result)
-        {
+        onCollisionStart: function (result) {
             if (result.other.name === "Player")
             {
                 // Save a reference to THIS Player
                 this.targetPlayer = result.other;
-                console.log(this.targetPlayer);
+                // console.log(this.targetPlayer);
 
-                // Generate a new question
-                this.Question.generate(this.targetPlayer, this.id);
+                this.targetPlayer.script.Player_Input.treasureBoxID = this.id;
 
-                // Stop the Player that touched us from moving. (Should be it's own function, probably)
-                console.log(result.other.name + " should be unable to move now.");
-                this.targetPlayer.script.Player_Input.lockInput();
-                this.targetPlayer.script.Third_Person_Camera.lockInput();
+                $('#msg').show();
             }
+        },
+
+        onCollisionEnd: function (other) {
+            if (other.name === "Player")
+                $('#msg').hide();
+        },
+
+        generateQuestion: function () {
+            // set it back to -1
+            this.targetPlayer.script.Player_Input.treasureBoxID = -1;
+
+            $('#msg').hide();
+
+            // Generate a new question
+            this.Question.generate(this.targetPlayer, this.id);
+
+            // Stop the Player that touched us from moving. (Should be it's own function, probably)
+            this.targetPlayer.script.Player_Input.lockInput();
+            this.targetPlayer.script.Third_Person_Camera.lockInput();
         }
     };
 

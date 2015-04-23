@@ -115,6 +115,16 @@ pc.script.create('User_Interface', function (app) {
 
             document.querySelector('body').appendChild(uiPanel);
 
+            var Msg = document.createElement('div');
+            Msg.id = 'msg';
+            Msg.className = 'ui floating compact message';
+            Msg.innerHTML = 'Press E to Unlock';
+            Msg.style.display = 'none';
+            // Msg.style.top = '30%';
+            Msg.style.left = '45%';
+
+            document.querySelector('body').appendChild(document.createElement('br'));
+            document.querySelector('body').appendChild(Msg);
         },
 
         update: function (dt) {
