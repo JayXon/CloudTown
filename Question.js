@@ -73,10 +73,12 @@ pc.script.create('Question', function (app)
 
         present: function (data) {
             console.log(data);
+            console.log("present function");
             this.data = data;
-
+            
             document.getElementById('question').innerHTML = data.question;
-
+             
+             console.log("multiple choice questions");
             document.getElementById('question').appendChild(document.createElement('br'));
             var title = document.createElement('div');
             title.id = 'title';
@@ -87,6 +89,7 @@ pc.script.create('Question', function (app)
             var answer_div = document.getElementById('answer');
             answer_div.innerHTML = "";
 
+            if (data.type === 0){
             data.answers.forEach(function(answer) {
                 var checkbox = document.createElement('div');
                 checkbox.className = 'ui checkbox';
@@ -104,41 +107,68 @@ pc.script.create('Question', function (app)
                 var divider = document.createElement('div');
                 divider.className = 'ui hidden divider';
                 answer_div.appendChild(divider);
-            });
+                });
 
-            // initialize checkbox
-            $('.ui.checkbox').checkbox();
+                // initialize checkbox
+                $('.ui.checkbox').checkbox();
 
-            // hide or show hint button
-            if (data.hint.length !== 0) {
+
+             } else { 
+
+                   //data.answers.forEach(function(answer) {
+                   //var checkbox = document.createElement('div');
+                   //checkbox.className = 'ui checkbox';
+
+                    var input = document.createElement('div');
+                    input.id = 'input';
+                    input.className = 'ui input';
+                    input.innerHTML = "<input type= \"text\" placeholder = \"Answer\">"; 
+                    answer_div.appendChild(input);
+
+                   //var label = document.createElement('label');
+                   //label.innerHTML = answer;
+                   //checkbox.appendChild(label);
+
+                   //answer_div.appendChild(checkbox);
+
+                   var divider = document.createElement('div');
+                   divider.className = 'ui hidden divider';
+                   answer_div.appendChild(divider);
+               }           
+                // hide or show hint button
+                if (data.hint.length !== 0) {
                 document.getElementById('hint').style.visibility = 'inherit';
-            } else {
+                } else {
                 document.getElementById('hint').style.visibility = 'hidden';
-            }
+                }
 
-            // enable submit button
-            $('#submit').removeClass('disabled');
-            // Hide close button if player is dead
-            if (this.targetPlayer.script.Character_Controller.gameState === 2)
+                // enable submit button
+               $('#submit').removeClass('disabled');
+               // Hide close button if player is dead
+               if (this.targetPlayer.script.Character_Controller.gameState === 2)
                 $('#panel>.close').hide();
 
-            // document.getElementById('panel').style.visibility = 'visible';
-            $('#panel').modal({
+               // document.getElementById('panel').style.visibility = 'visible';
+               $('#panel').modal({
                 closable  : this.targetPlayer.script.Character_Controller.gameState !== 2,
                 onHide : this.closePanel.bind(this),
                 onApprove : function() {
                     return false;
                 }
-            }).modal('show');
+               }).modal('show');
 
             // unlock mouse
             if ( pc.input.Mouse.isPointerLocked() )
                 app.mouse.disablePointerLock();
+              
         },
 
         submit : function () {
             // send the index of selected answers to server
             var selected = [];
+            
+            if (this.data.type === 0){
+            
             var checkboxes = document.getElementById('answer').childNodes;
             for (var i = 0; i*2 < checkboxes.length; i++) {
                 if (checkboxes[i*2].firstChild.checked) {
@@ -146,7 +176,12 @@ pc.script.create('Question', function (app)
                 }
             }
             this.Client.send('submit_answer', selected);
-
+            } 
+            else{
+                 var answer = document.getElementById('input').childNodes[0].value;
+                 console.log(answer);
+                 this.Client.send('submit_answer', answer);
+            }
             // disable submit button
             $('#submit').addClass('disabled');
             // Show close button
@@ -162,9 +197,11 @@ pc.script.create('Question', function (app)
         feedback : function (data) {
 
             var checkboxes = document.getElementById('answer').childNodes;
+             console.log(data);
+            if (this.data.type === 0){
             if (data.length === 0) {
                 // the answers are correct!
-
+               
                 this.reward();
             } else {
                 // the answers are wrong :(
@@ -180,6 +217,29 @@ pc.script.create('Question', function (app)
                 this.correct = false;
                 // this.punish();
             }
+           }
+
+           if (this.data.type === 1){
+            if (data.length === 0) {
+                // the answers are correct!
+               
+                this.reward();
+            } else {
+                // the answers are wrong :(
+                // mark the wrong answers as red
+                var answer = document.getElementById('input').childNodes[0];
+                $(answer).wrap('<div class="ui negative message"></div>');
+                //$(checkboxes[i*2]).wrap('<div class="ui positive message"></div>');
+                var answer_div = document.getElementById('answer');
+                var correct_ans = document.createElement('div');
+                correct_ans.className = 'ui green message';
+                correct_ans.innerHTML = data; 
+                answer_div.appendChild(correct_ans);  
+                
+                this.correct = false;
+                // this.punish();
+            }
+           }
         },
         
         reward : function () {
