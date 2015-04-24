@@ -188,6 +188,7 @@ pc.script.create('Network_Manager', function (app) {
             TreasuryBox.setName('Treasure_' + data.i);
             TreasuryBox.setPosition(data.x, data.y, data.z);
             TreasuryBox.enabled = true;
+            TreasuryBox.script.Treasure_Box.setDifficulty( data.type );
             app.root.addChild(TreasuryBox);
         },
 

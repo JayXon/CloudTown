@@ -62,7 +62,7 @@ pc.script.create('User_Interface', function (app) {
             helpButton.style.width = '200px';
             helpButton.style.margin = '10px';
             helpButton.id = 'helpButton';
-            helpButton.innerHTML = "<i class=\"help icon\"></i> Help";
+            helpButton.innerHTML = "<i class=\"laptop icon\"></i> Controls";
             helpButton.onclick = this.showHelpPanel.bind(this);
             buttonMenu.appendChild(helpButton);
 
@@ -147,8 +147,7 @@ pc.script.create('User_Interface', function (app) {
 
             document.getElementById('uiTitle').innerHTML = "Credits";
             //document.getElementById('mainMenu').style.visibility = 'hidden';
-            document.getElementById('desc').innerHTML = "The game \"STEM PARADISE\" was developed by Frank Dicola, Sen Jiang and Svyatoslav Turets. \
-                                                         All of them have been graduate students in Stevens Institute of Technology. \"STEM PARADISE\" was their master project in software engineering program.";
+            document.getElementById('desc').innerHTML = "Frank DiCola - Art and Development<br>Sen Jiang - Development<br>Svyatoslav Turets - Development<br>Adam Gincel - Original Music and Audio<br><br><br>Prof. Gregg Vesonder - Faculty Advisor";
 
             $('#uiPanel').modal('show');
         },
@@ -166,11 +165,9 @@ pc.script.create('User_Interface', function (app) {
         showHelpPanel: function () {
             console.log("show uiPanel");
 
-            document.getElementById('uiTitle').innerHTML = "Help";
+            document.getElementById('uiTitle').innerHTML = "Controls";
             //document.getElementById('mainMenu').style.visibility = 'hidden';
-            document.getElementById('desc').innerHTML = "The goal of the game is to provide high school students with  basic knowledge in C++. The player \
-                                                          has to bump into the treasury chests to get questions. The treasury box provides either ammunition or health \
-                                                           in case the player answers the question correctly.";
+            document.getElementById('desc').innerHTML = "WASD - Move your character<br>Spacebar - Jump<br>Mouse - Aim Weapon<br>Left Click - Fire Weapon<br>E - Unlock Treasure Box";
 
             $('#uiPanel').modal('show');
         },
@@ -192,32 +189,8 @@ pc.script.create('User_Interface', function (app) {
 
             if (player.script.Character_Controller.gameState === 0) {
 
-            	// console.log(this.Network_Manager);
             	this.Network_Manager.spawnYourPlayer( player );
 
-                /*
-                // Array of possible player colors
-                // var colors = [ redSkin, blueSkin, greenSkin, yellowSkin, orangeSkin ]
-
-                // random position and angle
-                var x = Math.random() * 250 - 175;
-                var y = Math.random() * 25;
-                var z = Math.random() * 250 - 75;
-                var ey = Math.random() * 360;
-                var colorIndex = Math.floor(Math.random() * 8);
-
-                player.rigidbody.teleport(x, y, z, 0, ey, 0);
-
-                var data = {
-                    x : x,
-                    y : y,
-                    z : z,
-                    ex : 0,
-                    ey : ey
-                }
-                
-                // send join message to server
-                //app.root.getChildren()[0].script.Client.send('player_joined', data);	*/
                 player.script.Character_Controller.gameState = 1;
             }
         },

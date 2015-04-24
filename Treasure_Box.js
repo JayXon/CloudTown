@@ -7,6 +7,8 @@
 //
 // Authors: Frank DiCola, Sen Jiang, Slavik Turets
 
+pc.script.attribute('materials', 'asset', [], { type: 'material' });
+
 pc.script.create('Treasure_Box', function (app)
 {
     var targetPlayer;
@@ -27,6 +29,9 @@ pc.script.create('Treasure_Box', function (app)
 
             // console.log(this.entity.name);
             this.id = parseInt(this.entity.name.slice(9));
+
+            // Treasure Box has no difficulty by default
+            this.difficulty = -1;
         },
 
         // Called every frame, dt is time in seconds since last update
@@ -63,6 +68,30 @@ pc.script.create('Treasure_Box', function (app)
             // Stop the Player that touched us from moving. (Should be it's own function, probably)
             this.targetPlayer.script.Player_Input.lockInput();
             this.targetPlayer.script.Third_Person_Camera.lockInput();
+        },
+
+        setDifficulty: function ( type ) {
+            this.difficulty = type;
+
+            if (this.difficulty == 0) {
+                console.log("Easy moed");
+
+                // Set difficulty to easy
+                var boxColor = app.assets.getAssetById(this.materials[0]).resource;
+                this.entity.model.model.meshInstances[0].material = boxColor;
+            }
+            else if ( this.difficulty == 1 ) {
+                console.log("hard mode");
+
+                // Set difficulty to hard
+                var boxColor = app.assets.getAssetById(this.materials[1]).resource;
+                this.entity.model.model.meshInstances[0].material = boxColor;
+            }
+            else {
+                console.log("NOOOOOOOOO");
+
+                // Set difficulty to error
+            }
         }
     };
 
