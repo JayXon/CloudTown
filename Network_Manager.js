@@ -119,6 +119,9 @@ pc.script.create('Network_Manager', function (app) {
             // Set his/her color
             this.setPlayerColor( player, data.colorIndex );
 
+            // Set the bullets
+            player.script.Character_Controller.adjustBullets(data.bullets - 50);
+
             app.root.addChild(player);
         },
 
