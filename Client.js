@@ -22,7 +22,7 @@ pc.script.create('Client', function (app)
             this.socket.on('answer_received', question.feedback.bind(question));
 
             var network_manager = this.entity.script.Network_Manager;
-            this.socket.on('player_joined', network_manager.newPlayer);
+            this.socket.on('player_joined', network_manager.newPlayer.bind(network_manager));
             this.socket.on('player_quit', network_manager.deletePlayer);
             this.socket.on('player_moved', network_manager.movePlayer);
             this.socket.on('Create TB', network_manager.newTreasury);

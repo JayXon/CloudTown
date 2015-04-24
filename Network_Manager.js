@@ -116,6 +116,9 @@ pc.script.create('Network_Manager', function (app) {
             player.rigidbody.type = pc.BODYTYPE_KINEMATIC;
             player.enabled = true;
 
+            // Set his/her color
+            this.setPlayerColor( player, data.colorIndex );
+
             app.root.addChild(player);
         },
 
@@ -207,21 +210,32 @@ pc.script.create('Network_Manager', function (app) {
             var y = Math.random() * 25;
             var z = Math.random() * 250 - 75;
             var ey = Math.random() * 360;
-            var colorIndex = Math.floor(Math.random() * 8);
+            var colorIndex = Math.floor(Math.random() * this.materials.length);
 
             player.rigidbody.teleport(x, y, z, 0, ey, 0);
-            player.model.materialAsset = this.materials[0];
+
+            // Find the Player's Torso and Hands and change their material
+            this.setPlayerColor( player, colorIndex );
 
             var data = {
                 x : x,
                 y : y,
                 z : z,
                 ex : 0,
-                ey : ey
+                ey : ey,
+                colorIndex : colorIndex
             }
 
             // Send join message to the server
             app.root.getChildren()[0].script.Client.send('player_joined', data);
+        },
+
+        setPlayerColor: function ( player, index )
+        {
+            var playerSkin = app.assets.getAssetById(this.materials[index]).resource;
+            player.findByName("Player-Torso").model.model.meshInstances[0].material = playerSkin;
+            player.findByName("Hands-Pistol").model.model.meshInstances[0].material = playerSkin;
+            player.findByName("Hands-Pistol").model.model.meshInstances[3].material = playerSkin;
         }
     };
 
