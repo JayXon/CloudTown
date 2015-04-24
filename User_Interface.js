@@ -19,6 +19,9 @@ pc.script.create('User_Interface', function (app) {
         initialize: function () {
             console.log("User_Interface... Initialized.");
 
+            // Find the Network Manager
+            this.Network_Manager = app.root.getChildren()[0].script.Network_Manager;
+
             this.loadcss('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.6/semantic.min.css');
 
             if ( pc.input.Mouse.isPointerLocked() ) {
@@ -120,8 +123,9 @@ pc.script.create('User_Interface', function (app) {
             Msg.className = 'ui floating compact message';
             Msg.innerHTML = 'Press E to Unlock';
             Msg.style.display = 'none';
-            // Msg.style.top = '30%';
+            Msg.style.top = '20%';
             Msg.style.left = '45%';
+            Msg.style.position = 'absolute';
 
             document.querySelector('body').appendChild(document.createElement('br'));
             document.querySelector('body').appendChild(Msg);
@@ -187,11 +191,20 @@ pc.script.create('User_Interface', function (app) {
             player.script.Player_Input.unlockInput();
 
             if (player.script.Character_Controller.gameState === 0) {
+
+            	// console.log(this.Network_Manager);
+            	this.Network_Manager.spawnYourPlayer( player );
+
+                /*
+                // Array of possible player colors
+                // var colors = [ redSkin, blueSkin, greenSkin, yellowSkin, orangeSkin ]
+
                 // random position and angle
                 var x = Math.random() * 250 - 175;
                 var y = Math.random() * 25;
                 var z = Math.random() * 250 - 75;
                 var ey = Math.random() * 360;
+                var colorIndex = Math.floor(Math.random() * 8);
 
                 player.rigidbody.teleport(x, y, z, 0, ey, 0);
 
@@ -202,8 +215,9 @@ pc.script.create('User_Interface', function (app) {
                     ex : 0,
                     ey : ey
                 }
+                
                 // send join message to server
-                app.root.getChildren()[0].script.Client.send('player_joined', data);
+                //app.root.getChildren()[0].script.Client.send('player_joined', data);	*/
                 player.script.Character_Controller.gameState = 1;
             }
         },

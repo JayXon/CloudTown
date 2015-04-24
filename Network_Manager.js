@@ -7,11 +7,13 @@
 //
 // Authors: Frank DiCola, Sen Jiang, Slavik Turets
 
+pc.script.attribute('materials', 'asset', [], { type: 'material' });
 
 pc.script.create('Network_Manager', function (app) {
 
     var Network_Manager = function (entity) {
         this.entity = entity;
+        // this.possiblePlayerColors = {}
     };
 
     Network_Manager.prototype = {
@@ -193,8 +195,34 @@ pc.script.create('Network_Manager', function (app) {
             TreasuryBox.destroy();
             TreasuryBox.enabled = false;
             console.log(TreasuryBox);
-        }
+        },
 
+        spawnYourPlayer: function ( player )
+        {
+            console.log("Spawning your dude...");
+            console.log( player );
+
+            // Random position and angle
+            var x = Math.random() * 250 - 175;
+            var y = Math.random() * 25;
+            var z = Math.random() * 250 - 75;
+            var ey = Math.random() * 360;
+            var colorIndex = Math.floor(Math.random() * 8);
+
+            player.rigidbody.teleport(x, y, z, 0, ey, 0);
+            player.model.materialAsset = this.materials[0];
+
+            var data = {
+                x : x,
+                y : y,
+                z : z,
+                ex : 0,
+                ey : ey
+            }
+
+            // Send join message to the server
+            app.root.getChildren()[0].script.Client.send('player_joined', data);
+        }
     };
 
     return Network_Manager;
