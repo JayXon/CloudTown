@@ -156,6 +156,27 @@ pc.script.create('User_Interface', function (app) {
         showSettingsPanel: function () {
             console.log("show uiPanel");
 
+            var sensitivity = app.root.findByName('Player').script.Third_Person_Camera.verticalSensitivity;
+
+            document.getElementById('desc').innerHTML = "";
+
+            var applyButton = document.createElement('div');
+            applyButton.id = 'apply'
+            applyButton.className = 'ui right approve primary button';
+            applyButton.innerHTML = 'Apply';
+            //applyButton.onclick = this.applySettings.bind(this);
+            
+            var sliderInput = document.createElement('input');
+            sliderInput.id = "sliderInput";
+            sliderInput.type = "range";
+            sliderInput.min = 1;
+            sliderInput.max = 10;
+            sliderInput.defaultValue = Math.abs(sensitivity); 
+           
+            var actionsDiv = document.createElement('div');
+            actionsDiv.className = 'actions';
+            actionsDiv.appendChild(applyButton);
+
             var checkBox = document.createElement('div');
             checkBox.className = "ui checkbox";
             checkBox.id = 'settingscheckbox';
@@ -167,14 +188,48 @@ pc.script.create('User_Interface', function (app) {
             var label = document.createElement('label');
             label.innerHTML = "Invert Mouse Look";
             checkBox.appendChild(label);
+             
+            var cont = document.createElement('div');
+            cont.id = "cont";
+            cont.className = 'ui content form';
+            cont.appendChild(checkBox); 
 
             //checkBox.innerHTML = "<i class=\"settings icon\"></i> Settings";
             document.getElementById('uiTitle').innerHTML = "Settings";
             //document.getElementById('mainMenu').style.visibility = 'hidden';
-            document.getElementById('desc').innerHTML = "";
-            document.getElementById('uiPanel').appendChild(checkBox);  
+    
+            document.getElementById('desc').appendChild(cont); 
+
+            var divider = document.createElement('div');
+            divider.className = 'ui hidden divider';
+            cont.appendChild(divider);
+
+
+
+            document.getElementById('cont').appendChild(sliderInput);
+            document.getElementById('uiPanel').appendChild(actionsDiv); 
             
-            $('#uiPanel').modal('show');
+            $('.ui.checkbox').checkbox();
+            if (sensitivity < 0)
+                $('#settingscheckbox').checkbox('check');
+            else
+                $('#settingscheckbox').checkbox('uncheck');
+            $('#uiPanel').modal({
+                onHide : this.applySettings.bind(this)
+            }).modal('show');
+        },
+
+        applySettings: function(){
+                
+            var sensitivity = document.getElementById('sliderInput').value;
+
+            if ($('#settingscheckbox').checkbox('is checked'))
+                sensitivity *= -1;
+            console.log(sensitivity);
+            app.root.findByName('Player').script.Third_Person_Camera.verticalSensitivity = sensitivity;      
+
+           var uiPanel = document.getElementById('uiPanel');
+           uiPanel.removeChild(uiPanel.childNodes[3]);
         },
 
         showHelpPanel: function () {
