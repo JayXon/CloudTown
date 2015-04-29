@@ -53,6 +53,7 @@ pc.script.create('User_Interface', function (app) {
             settingsButton.id = 'settingsButton';
             settingsButton.innerHTML = "<i class=\"settings icon\"></i> Settings";
             settingsButton.onclick = this.showSettingsPanel.bind(this);
+            
             buttonMenu.appendChild(settingsButton);
 
             buttonMenu.appendChild(document.createElement('br'));
@@ -155,10 +156,24 @@ pc.script.create('User_Interface', function (app) {
         showSettingsPanel: function () {
             console.log("show uiPanel");
 
+            var checkBox = document.createElement('div');
+            checkBox.className = "ui checkbox";
+            checkBox.id = 'settingscheckbox';
+            
+            var input = document.createElement('input');
+            input.type = 'checkbox';
+            checkBox.appendChild(input);
+
+            var label = document.createElement('label');
+            label.innerHTML = "Invert Mouse Look";
+            checkBox.appendChild(label);
+
+            //checkBox.innerHTML = "<i class=\"settings icon\"></i> Settings";
             document.getElementById('uiTitle').innerHTML = "Settings";
             //document.getElementById('mainMenu').style.visibility = 'hidden';
             document.getElementById('desc').innerHTML = "";
-
+            document.getElementById('uiPanel').appendChild(checkBox);  
+            
             $('#uiPanel').modal('show');
         },
 
