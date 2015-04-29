@@ -28,14 +28,13 @@ pc.script.create('Damagable', function (app) {
 
             // Find the camera
             this.camera = app.root.findByName("Camera");
-            // console.log(this.camera);
 
             // Update our graphics
             this.adjustHealth(0);
         },
 
         update: function (dt) {
-        	if ( this.entity.name !== "Player" && this.healthBar )
+        	if ( this.entity.name !== "Player" && this.healthBar)
         	{
         		// Turn HealthBar to face the camera
         		this.healthBar.lookAt(this.camera.getPosition());
@@ -59,7 +58,7 @@ pc.script.create('Damagable', function (app) {
             // If this is YOUR Player, update the HTML Graphics thing with current health
             if ( this.entity.name === "Player" )
                 this.User_Interface.setHealthDisplay( this.currentHealth );
-            else if (this.healthBar)
+            else if ( this.healthBar )
             	this.healthBar.setLocalScale( this.currentHealth / 10, 1, 1 );
         },
 

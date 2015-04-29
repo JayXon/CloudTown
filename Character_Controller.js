@@ -194,10 +194,14 @@ pc.script.create('Character_Controller', function (app) {
         },
 
         setState: function ( state ) {
+
             this.gameState = state;
 
-            // Aesthetics
-            this.Music_Controller.switchSong( state );
+            if ( this.entity.name === "Player" )
+            {
+                // Your Aesthetics
+                this.Music_Controller.switchSong( state );
+            }
         }
     };
 

@@ -120,6 +120,9 @@ pc.script.create('Network_Manager', function (app) {
             // Set his/her color
             this.setPlayerColor( player, data.colorIndex );
 
+            // Set his/her hat
+            this.setPlayerHat( player, data.hatIndex );
+
             // Set the bullets
             player.script.Character_Controller.adjustBullets(data.bullets - 50);
 
@@ -223,13 +226,17 @@ pc.script.create('Network_Manager', function (app) {
             // Find the Player's Torso and Hands and change their material
             this.setPlayerColor( player, colorIndex );
 
+            // Add a Hat to the Player
+            this.setPlayerHat( player, hatIndex );
+
             var data = {
                 x : x,
                 y : y,
                 z : z,
                 ex : 0,
                 ey : ey,
-                colorIndex : colorIndex
+                colorIndex : colorIndex,
+                hatIndex : hatIndex
             }
 
             // Send join message to the server
@@ -242,6 +249,13 @@ pc.script.create('Network_Manager', function (app) {
             player.findByName("Player-Torso").model.model.meshInstances[0].material = playerSkin;
             player.findByName("Hands-Pistol").model.model.meshInstances[0].material = playerSkin;
             player.findByName("Hands-Pistol").model.model.meshInstances[3].material = playerSkin;
+        },
+
+        setPlayerHat: function ( player, index )
+        {
+            var playerHat = app.assets.getAssetById(this.hats[index]).resource;
+            console.log("adding this hat: " + playerHat);
+            player.findByName("Player-Hat").model.model = playerHat;
         }
     };
 
