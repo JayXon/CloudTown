@@ -17,10 +17,19 @@ pc.script.create('Music_Controller', function (app) {
         initialize: function () {
             console.log("Music_Controller... Initialized.");
 
-            
+            // this.entity.audiosource.loop = false;
         },
 
         update: function (dt) {
+        },
+
+        switchSong: function ( state ) {
+            if ( state === 0 )
+                this.entity.audiosource.play("MainMenu");
+            else if ( state === 1 )
+                this.entity.audiosource.play("In-Game");
+            else if ( state === 2 )
+                this.entity.audiosource.play("GuitarSong");
         }
     };
 

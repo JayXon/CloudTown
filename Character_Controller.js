@@ -38,6 +38,7 @@ pc.script.create('Character_Controller', function (app) {
             this.camera_script = this.entity.script.Third_Person_Camera;
             this.question_script = app.root.getChildren()[0].script.Question;
             this.User_Interface = app.root.getChildren()[0].script.User_Interface;
+            this.Music_Controller = app.root.getChildren()[0].script.Music_Controller;
 
             this.gameState = GAME_STATES.MainMenu;
 
@@ -51,10 +52,7 @@ pc.script.create('Character_Controller', function (app) {
             {
                 // Apply gravity manually for more tuning control
                 this.entity.rigidbody.applyForce(0, -9000, 0);
-                //console.log(this.gameState.toString());
             }
-
-            // console.log(this.entity.rigidbody.linearVelocity.toString());
         },
 
         // Attack with the equipped weapon in the direction
@@ -127,7 +125,7 @@ pc.script.create('Character_Controller', function (app) {
             }
 
             // Set state to "Dead"
-            this.gameState = GAME_STATES.Dead;
+            this.setState( GAME_STATES.Dead );
             console.log("I JUST DIED, SEE? " + this.gameState );
 
             this.entity.getChildren().forEach( function (child) {
@@ -163,7 +161,7 @@ pc.script.create('Character_Controller', function (app) {
             this.entity.rigidbody.enabled = true;
             
             // Set state to Alive
-            this.gameState = GAME_STATES.Alive;
+            this.setState( GAME_STATES.Alive );
         },
 
         jump: function ( ) {
@@ -193,6 +191,13 @@ pc.script.create('Character_Controller', function (app) {
             rayEnd.add2(pos, groundCheckRay);
             self.onGround = false;
             app.systems.rigidbody.raycastFirst(pos, rayEnd, function(result) { self.onGround = true; });
+        },
+
+        setState: function ( state ) {
+            this.gameState = state;
+
+            // Aesthetics
+            this.Music_Controller.switchSong( state );
         }
     };
 

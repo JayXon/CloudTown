@@ -191,7 +191,8 @@ pc.script.create('User_Interface', function (app) {
 
             	this.Network_Manager.spawnYourPlayer( player );
 
-                player.script.Character_Controller.gameState = 1;
+                //player.script.Character_Controller.gameState = 1;
+                player.script.Character_Controller.setState( 1 );
             }
         },
 

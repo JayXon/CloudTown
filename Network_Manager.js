@@ -8,6 +8,7 @@
 // Authors: Frank DiCola, Sen Jiang, Slavik Turets
 
 pc.script.attribute('materials', 'asset', [], { type: 'material' });
+pc.script.attribute('hats', 'asset', [], { type: 'model' });
 
 pc.script.create('Network_Manager', function (app) {
 
@@ -215,6 +216,7 @@ pc.script.create('Network_Manager', function (app) {
             var z = Math.random() * 250 - 75;
             var ey = Math.random() * 360;
             var colorIndex = Math.floor(Math.random() * this.materials.length);
+            var hatIndex = Math.floor(Math.random() * this.hats.length);
 
             player.rigidbody.teleport(x, y, z, 0, ey, 0);
 
