@@ -118,8 +118,11 @@ pc.script.create('Character_Controller', function (app) {
                 // Generate a Question to respawn
                 this.question_script.generate(this.entity, -1);
 
-                // Send him to HELL
-                this.entity.rigidbody.teleport( 0, -100, -10, 0, 0, 0 );
+                // Send him to Heaven
+                this.entity.rigidbody.teleport( -350, 150, -350, 0, 0, 0 );
+                this.entity.setEulerAngles(0, 45, 0);
+                console.log("Right now I am at..." + this.entity.getPosition().toString());
+                console.log("Right now I'm looking..." + this.entity.getEulerAngles().toString());
                 this.move( new pc.Vec3(0,0,0) );
                 this.entity.rigidbody.enabled = false;
             }

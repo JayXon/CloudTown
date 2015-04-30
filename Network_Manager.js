@@ -34,7 +34,7 @@ pc.script.create('Network_Manager', function (app) {
             camera.addComponent('camera');
             camera.addComponent('audiolistener');
             player.addChild(camera);
-            camera.setLocalEulerAngles(160, 0, 180);
+            camera.setLocalEulerAngles(160, 0, 180);    // Set this only after spawn
 
             // add script to player
             app.systems.script.addComponent(player, {
@@ -52,8 +52,9 @@ pc.script.create('Network_Manager', function (app) {
             // Remove unnecessary things from Player
             player.findByName("HealthBar").destroy();
 
-            player.setPosition(0, -100, -10);
-            player.setEulerAngles(0, 0, 0);
+            player.rigidbody.type = pc.BODYTYPE_STATIC;
+            player.setPosition(-350, 150, -350);
+            player.setEulerAngles(0, 45, 0);
             player.enabled = true;
 
             app.root.addChild(player);
@@ -69,6 +70,12 @@ pc.script.create('Network_Manager', function (app) {
                 ez : 0,
                 ey : 0
             };
+
+            // Hide him!
+            player.getChildren().forEach( function (child) {
+                if ( child.name !== "Camera")
+                    child.enabled = false;
+            });
         },
 
         update: function (dt) {
@@ -222,12 +229,18 @@ pc.script.create('Network_Manager', function (app) {
             var hatIndex = Math.floor(Math.random() * this.hats.length);
 
             player.rigidbody.teleport(x, y, z, 0, ey, 0);
+            player.rigidbody.type = pc.BODYTYPE_DYNAMIC;
 
             // Find the Player's Torso and Hands and change their material
             this.setPlayerColor( player, colorIndex );
 
             // Add a Hat to the Player
             this.setPlayerHat( player, hatIndex );
+
+            // Show everything
+            player.getChildren().forEach( function (child) {
+                child.enabled = true;
+            });
 
             var data = {
                 x : x,
@@ -253,7 +266,7 @@ pc.script.create('Network_Manager', function (app) {
 
         setPlayerHat: function ( player, index )
         {
-            var playerHat = app.assets.getAssetById(this.hats[index]).resource;
+            var playerHat = app.assets.getAssetById(this.hats[index]).resource.clone();
             console.log("adding this hat: " + playerHat);
             player.findByName("Player-Hat").model.model = playerHat;
         }

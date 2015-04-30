@@ -31,7 +31,7 @@ pc.script.create('Projectile', function (app) {
             // Find the other's Damagable and adjust it's health
             if ( result.other.script && result.other.script.Damagable )
             {
-                result.other.script.Damagable.adjustHealth( -25 );
+                result.other.script.Damagable.adjustHealth( -15 );
             }
             else
                 console.log("No Damagable detected");
