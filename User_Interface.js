@@ -148,7 +148,7 @@ pc.script.create('User_Interface', function (app) {
 
             document.getElementById('uiTitle').innerHTML = "Credits";
             //document.getElementById('mainMenu').style.visibility = 'hidden';
-            document.getElementById('desc').innerHTML = "Frank DiCola - Art and Development<br>Sen Jiang - Development<br>Svyatoslav Turets - Development<br>Adam Gincel - Original Music and Audio<br><br><br>Prof. Gregg Vesonder - Faculty Advisor";
+            document.getElementById('desc').innerHTML = "Frank DiCola - Art and Development<br>Sen Jiang - Development<br>Svyatoslav Turets - Development<br>Adam Gincel - Original Music and Audio<br>Prof. Gregg Vesonder - Faculty Advisor<br><br>This game was developed as a part of the Master's Capstone course for Software Engineering at Stevens Institute of Technology.<br>All rights reserved.";
 
             $('#uiPanel').modal('show');
         },
@@ -252,7 +252,7 @@ pc.script.create('User_Interface', function (app) {
 
             document.getElementById('uiTitle').innerHTML = "Controls";
             //document.getElementById('mainMenu').style.visibility = 'hidden';
-            document.getElementById('desc').innerHTML = "WASD - Move your character<br>Spacebar - Jump<br>Mouse - Aim Weapon<br>Left Click - Fire Weapon<br>E - Unlock Treasure Box";
+            document.getElementById('desc').innerHTML = "Explore Cloud Town and try not to get horribly killed! Invite your friends to play by sharing the link with them.<br><br>WASD - Move your character<br>Spacebar - Jump<br>Mouse - Aim Weapon<br>Left Click - Fire Weapon<br>E - Unlock Treasure Box<br>Esc - Game Menu";
 
             $('#uiPanel').modal('show');
         },
