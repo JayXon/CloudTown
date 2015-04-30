@@ -172,6 +172,8 @@ pc.script.create('Character_Controller', function (app) {
 
             if ( this.onGround ) {
                 this.entity.rigidbody.applyImpulse( this.jumpPower, origin );
+                
+                app.root.findByName('Sound').audiosource.play("Jump1");
             }
         },
 

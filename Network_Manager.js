@@ -177,6 +177,8 @@ pc.script.create('Network_Manager', function (app) {
             }
 
             player.script.Damagable.adjustHealth(data.hp);
+            
+            app.root.findByName('Sound').audiosource.play("getHealth");
         },
         
         playerBullets : function (data) {
@@ -190,6 +192,8 @@ pc.script.create('Network_Manager', function (app) {
             }
 
             player.script.Character_Controller.adjustBullets(data.bullets);
+            
+            app.root.findByName('Sound').audiosource.play("getBullet");
         },
 
         newTreasury: function (data) {
