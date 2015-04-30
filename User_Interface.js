@@ -220,8 +220,11 @@ pc.script.create('User_Interface', function (app) {
         },
 
         applySettings: function(){
-                
-            var sensitivity = document.getElementById('sliderInput').value;
+            var slider = document.getElementById('sliderInput');
+            if (!slider)
+                return;
+
+            var sensitivity = slider.value;
 
             if ($('#settingscheckbox').checkbox('is checked'))
                 sensitivity *= -1;
