@@ -166,12 +166,18 @@ pc.script.create('User_Interface', function (app) {
             applyButton.innerHTML = 'Apply';
             //applyButton.onclick = this.applySettings.bind(this);
             
+            // Sensitivity
+            var sliderLabel = document.createElement('label');
+            sliderLabel.innerHTML = "Slow";
+            var sliderLabel2 = document.createElement('label');
+            sliderLabel2.innerHTML = "Fast";
             var sliderInput = document.createElement('input');
             sliderInput.id = "sliderInput";
             sliderInput.type = "range";
-            sliderInput.min = 1;
-            sliderInput.max = 10;
-            sliderInput.defaultValue = Math.abs(sensitivity); 
+            sliderInput.min = 10;
+            sliderInput.max = 40;
+            sliderInput.style.margin = "0px 20px";
+            sliderInput.defaultValue = Math.abs(100 / sensitivity); 
            
             var actionsDiv = document.createElement('div');
             actionsDiv.className = 'actions';
@@ -205,8 +211,9 @@ pc.script.create('User_Interface', function (app) {
             cont.appendChild(divider);
 
 
-
-            document.getElementById('cont').appendChild(sliderInput);
+            cont.appendChild(sliderLabel);
+            cont.appendChild(sliderInput);
+            cont.appendChild(sliderLabel2);
             document.getElementById('uiPanel').appendChild(actionsDiv); 
             
             $('.ui.checkbox').checkbox();
@@ -224,12 +231,17 @@ pc.script.create('User_Interface', function (app) {
             if (!slider)
                 return;
 
-            var sensitivity = slider.value;
+            var sensitivity = 100 / slider.value;
+
+            // Horizontal
+            app.root.findByName('Player').script.Third_Person_Camera.horizontalSensitivity = sensitivity;
 
             if ($('#settingscheckbox').checkbox('is checked'))
                 sensitivity *= -1;
             console.log(sensitivity);
-            app.root.findByName('Player').script.Third_Person_Camera.verticalSensitivity = sensitivity;      
+
+            // Vertical
+            app.root.findByName('Player').script.Third_Person_Camera.verticalSensitivity = sensitivity;     
 
            var uiPanel = document.getElementById('uiPanel');
            uiPanel.removeChild(uiPanel.childNodes[3]);
